@@ -76,40 +76,37 @@ public class RatingServiceImplTests {
     }
 
     @Test
-    void create_should_callRepository_when_initiatorIsAdmin(){
-        //Arrange
-        Rating mockRating = Helpers.createMockRating();
-        User initiator = Helpers.createMockAdmin();
-        Mockito.when(mockRepository.create(initiator, mockRating)).thenReturn(mockRating);
-
-        // Act
-        service.create(initiator, mockRating);
-
-        // Assert
-        Mockito.verify(mockRepository, Mockito.times(1))
-                .create(initiator, mockRating);
-    }
-
-    @Test
-    void create_should_callRepository_when_initiatorIsTeacher(){
-        //Arrange
-        Rating mockRating = Helpers.createMockRating();
-        User initiator = Helpers.createMockTeacher();
-        Mockito.when(mockRepository.create(initiator, mockRating)).thenReturn(mockRating);
-
-        // Act
-        service.create(initiator, mockRating);
-
-        // Assert
-        Mockito.verify(mockRepository, Mockito.times(1))
-                .create(initiator, mockRating);
-    }
-
-    @Test
-    void create_should_throwException_when_initiatorIsNotAdminOrTeacher(){
+    void create_should_callRepository_when_initiatorIsNotAdmin(){
         //Arrange
         Rating mockRating = Helpers.createMockRating();
         User initiator = Helpers.createMockStudent();
+        Mockito.when(mockRepository.create(initiator, mockRating)).thenReturn(mockRating);
+
+        // Act
+        service.create(initiator, mockRating);
+
+        // Assert
+        Mockito.verify(mockRepository, Mockito.times(1))
+                .create(initiator, mockRating);
+    }
+
+
+    @Test
+    void create_should_throwException_when_initiatorIsAdmin(){
+        //Arrange
+        Rating mockRating = Helpers.createMockRating();
+        User initiator = Helpers.createMockAdmin();
+
+        // Assert
+        Assertions.assertThrows(UnauthorizedOperationException.class,
+                () -> service.create(initiator,mockRating));
+    }
+
+    @Test
+    void create_should_throwException_when_initiatorIsTeacher(){
+        //Arrange
+        Rating mockRating = Helpers.createMockRating();
+        User initiator = Helpers.createMockTeacher();
 
         // Assert
         Assertions.assertThrows(UnauthorizedOperationException.class,

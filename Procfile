@@ -1,0 +1,1 @@
+web: java -jar build/libs/Virtual_Teacher-0.0.1-SNAPSHOT.jar
