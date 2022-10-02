@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:border-radius="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <!-- Mobile Specific Metas
+  ================================================== -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="Construction Html5 Template">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <meta name="author" content="Themefisher">
+    <meta name="generator" content="Themefisher Educenter HTML Template v1.0">
+
+    <!-- ** ../plugins Needed for the Project ** -->
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="/plugins/bootstrap/bootstrap.min.css" th:href="@{/plugins/bootstrap/bootstrap.min.css}">
+    <!-- slick slider -->
+    <link rel="stylesheet" href="/plugins/slick/slick.css" th:href="@{/plugins/slick/slick.css}">
+    <!-- themefy-icon -->
+    <link rel="stylesheet" href="/plugins/themify-icons/themify-icons.css" th:href="@{/plugins/themify-icons/themify-icons.css}">
+    <!-- animation css -->
+    <link rel="stylesheet" href="/plugins/animate/animate.css" th:href="@{/plugins/animate/animate.css}">
+    <!-- aos -->
+    <link rel="stylesheet" href="/plugins/aos/aos.css" th:href="@{/plugins/aos/aos.css}">
+    <!-- venobox popup -->
+    <link rel="stylesheet" href="/plugins/venobox/venobox.css" th:href="@{/plugins/venobox/venobox.css}">
+
+    <!-- Main Stylesheet -->
+    <link href="/css/style.css" rel="stylesheet" th:href="@{/css/style.css}">
+    <link href="/css/style.css" rel="stylesheet" th:href="@{/css/styleUsers.css}">
+
+    <link href="/js/script.js" rel="script" th:href="@{/js/script.js}">
+
+    <!--Favicon-->
+    <link rel="shortcut icon" href="/images/favicon.png" type="image/x-icon" th:href="@{/images/favicon.png}">
+    <link rel="icon" href="/images/favicon.png" type="image/x-icon" th:href="@{/images/favicon.png}">
+
+</head>
+<body>
+
+<header th:fragment="header" class="fixed-top header">
+    <!-- top header -->
+    <div class="top-header py-2 bg-white">
+        <div class="container">
+            <div class="row no-gutters">
+                <div class="col-lg-4 text-center text-lg-left">
+                    <a class="text-color mr-3" href="tel:+443003030266"><strong>CALL</strong> +359 878 123 768</a>
+                    <ul class="list-inline d-inline">
+                        <li class="list-inline-item mx-0"><a class="d-inline-block p-2 text-color" href="https://facebook.com/themefisher/"><i class="ti-facebook"></i></a></li>
+                        <li class="list-inline-item mx-0"><a class="d-inline-block p-2 text-color" href="https://twitter.com/themefisher"><i class="ti-twitter-alt"></i></a></li>
+                        <li class="list-inline-item mx-0"><a class="d-inline-block p-2 text-color" href="https://github.com/themefisher"><i class="ti-github"></i></a></li>
+                        <li class="list-inline-item mx-0"><a class="d-inline-block p-2 text-color" href="https://instagram.com/themefisher/"><i class="ti-instagram"></i></a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-8 text-center text-lg-right">
+                    <ul class="list-inline">
+                        <li class="list-inline-item"><a class="text-uppercase text-color p-sm-2 py-2 px-0 d-inline-block" th:unless="${isAuthenticated}" th:href="@{/auth/login}">login</a></li>
+                        <li class="list-inline-item"><a class="text-uppercase text-color p-sm-2 py-2 px-0 d-inline-block" th:unless="${isAuthenticated}" th:href="@{/auth/register}">register</a></li>
+                        <li class="list-inline-item"><a class="text-uppercase text-color p-sm-2 py-2 px-0 d-inline-block" th:if="${isAuthenticated && !session.isAdmin && !session.isTeacher && !session.isAppliedForTeacher}" id="myBtn">Teacher Application</a></li>
+                        <div id="myModal" class="modal-application">
+                            <!-- Modal content -->
+                            <div class="modal-content-application" style="text-align: center; background-color: white">
+                                <div>
+                                <p style="text-align:center">Why do you want to apply for teacher?</p>
+                                    <span class="close" style="margin-top: -24px;">&times;</span>
+                                </div>
+                                <form th:action="@{/users/applyForTeacher}" method="post">
+                                    <textarea id="w3review" name="motivationalLetter" rows="10" cols="150" minlength="30" maxlength="1000"></textarea>
+                                    <br>
+                                    <input class="btn btn-primary" type="submit" style="margin-top: 10px; margin-bottom: 10px; width: 40%;" value="Submit">
+                                </form>
+
+                            </div>
+                        </div>
+
+                        <div style="float: right" class="dropdown list-inline-item" >
+                            <button style="float: right" class="dropbtn" ><img th:if="${isAuthenticated}" th:src="@{${currentUser.getImage()}}"  alt="Avatar"/></button>
+                            <div class="dropdown-content" style="position: absolute; z-index: 2">
+                                <a class="text-uppercase text-color p-sm-2 py-2 px-0" th:if="${isAuthenticated && !session.isAdmin}" th:href="@{/users/{id}/update(id=${currentUser.getId()})}">Profile</a>
+                                <a class="text-uppercase text-color p-sm-2 py-2 px-0" th:if="${isAuthenticated && session.isAdmin}" th:href="@{/users/{id}/update(id=${currentUser.getId()})}">Profile</a>
+                                <a class="text-uppercase text-color p-sm-2 py-2 px-0" th:if="${isAuthenticated}" th:href="@{/auth/logout}">Logout</a>
+                            </div>
+                        </div>
+                    </ul>
+                    <h4 class="list-inline-item" th:if="${isAuthenticated}" th:text="${'Welcome ' + currentUser.getFirstName() + '!'}">Welcome</h4>
+                </div>
+            </div>
+        </div>
+        <div th:replace="fragments/portalHeader :: portal"></div>
+    </div>
+
+
+
+    <!-- navbar -->
+    <div class="navigation w-100">
+        <div class="container">
+            <nav class="navbar navbar-expand-lg navbar-dark p-0">
+                <a class="navbar-brand" href="index.html" th:href="@{/}"><img src="/images/logo.png" alt="logo" th:src="@{/images/logo.png}"></a>
+                <button class="navbar-toggler rounded-0" type="button" data-toggle="collapse" data-target="#navigation"
+                        aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navigation">
+                    <ul  class="navbar-nav ml-auto text-center">
+                        <li class="nav-item @@home" th:classappend="${#httpServletRequest.getRequestURI() == '/' ? 'active':''}">
+                            <a class="nav-link" href="index.html" th:href="@{/}">Home</a>
+                        </li>
+                        <li class="nav-item @@about">
+                            <a class="nav-link" href="about.html" th:href="@{/about}">About</a>
+                        </li>
+                        <li class="nav-item @@courses" th:classappend="${#httpServletRequest.getRequestURI() == '/courses' ? 'active':''}">
+                            <a class="nav-link" href="courses.html" th:href="@{/courses}">COURSES</a>
+                        </li>
+                        <li class="nav-item @@contact">
+                            <a class="nav-link" href="teacher.html" th:href="@{/about/teachers}">TEACHERS</a>
+                        </li>
+                        <li class="nav-item @@contact">
+                            <a class="nav-link" href="contact.html" th:href="@{/about/contacts}">CONTACT</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+    </div>
+</header>
+
+<footer th:fragment="footer">
+    <!-- footer content -->
+    <div class="footer bg-footer section border-bottom">
+        <div class="container" style="margin-top: -6cm">
+            <div class="row">
+                <div class="col-lg-4 col-sm-8 mb-5 mb-lg-0">
+                    <!-- logo -->
+                    <a class="logo-footer" href="index.html"><img class="img-fluid mb-4" src="/images/logo.png" alt="logo"></a>
+                    <ul class="list-unstyled">
+                        <li class="text-color" >felerik@academy.com</li>
+                    </ul>
+                </div>
+                <!-- company -->
+                <div class="col-lg-2 col-md-3 col-sm-4 col-6 mb-5 mb-md-0">
+                    <h4 class="text-white mb-5">COMPANY</h4>
+                    <ul class="list-unstyled">
+                        <li class="mb-3"><a class="text-color" href="about.html">About Us</a></li>
+                        <li class="mb-3"><a class="text-color" href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                <!-- links -->
+                <div class="col-lg-2 col-md-3 col-sm-4 col-6 mb-5 mb-md-0">
+                    <h4 class="text-white mb-5">LINKS</h4>
+                    <ul class="list-unstyled">
+                        <li class="mb-3"><a class="text-color" href="events.html" th:href="@{/courses}">Courses</a></li>
+                        <li class="mb-3"><a class="text-color" href="teacher.html" th:href="@{/about/teachers}">Our Teachers</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- copyright -->
+    <div  class="copyright py-4 bg-footer">
+        <div class="container">
+            <div class="row"  >
+                <div class="col-sm-7 text-sm-left text-center">
+                    <p class="mb-0">Copyright &copy;
+                        <script>
+                            var CurrentYear = new Date().getFullYear()
+                            document.write(CurrentYear)
+                        </script>
+                        , designed & developed by <a class="text-muted">A39 Java Group 07</a>
+                    </p>
+                </div>
+                <div class="col-sm-5 text-sm-right text-center">
+                    <ul class="list-inline">
+                        <li class="list-inline-item"><a class="d-inline-block p-2" href="https://gitlab.com/group_team_07/virtual_teacher_07"><i class="ti-linkedin text-primary"></i></a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/plugins/jQuery/jquery.min.js" th:href="@{/plugins/jQuery/jquery.min.js}"></script>
+<!-- Bootstrap JS -->
+<script src="/plugins/bootstrap/bootstrap.min.js" th:href="@{/plugins/bootstrap/bootstrap.min.js}"></script>
+<!-- slick slider -->
+<script src="/plugins/slick/slick.min.js" th:href="@{/plugins/slick/slick.min.js}"></script>
+<!-- aos -->
+<script src="/plugins/aos/aos.js" th:href="@{/plugins/aos/aos.js}"></script>
+<!-- venobox popup -->
+<script src="/plugins/venobox/venobox.min.js" th:href="@{/plugins/venobox/venobox.min.js}"></script>
+<!-- filter -->
+<script src="/plugins/filterizr/jquery.filterizr.min.js" th:href="@{/plugins/filterizr/jquery.filterizr.min.js}"></script>
+<!-- google map -->
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCcABaamniA6OL5YvYSpB3pFMNrXwXnLwU"></script>
+<script src="/plugins/google-map/gmap.js" th:href="@{/plugins/google-map/gmap.js}"></script>
+
+<!-- Main Script -->
+<script src="/js/script.js" th:href="@{/js/script.js}"></script>
+
+</body>
+</html>

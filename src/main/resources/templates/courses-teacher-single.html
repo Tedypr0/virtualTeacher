@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+
+    <!-- Basic Page Needs
+      ================================================== -->
+    <meta charset="utf-8">
+    <title>Courses</title>
+
+    <!-- Mobile Specific Metas
+      ================================================== -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="Construction Html5 Template">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <meta name="author" content="Themefisher">
+    <meta name="generator" content="Themefisher Educenter HTML Template v1.0">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+
+
+    <!-- ** ../plugins Needed for the Project ** -->
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="/plugins/bootstrap/bootstrap.min.css"
+          th:href="@{/plugins/bootstrap/bootstrap.min.css}">
+    <!-- slick slider -->
+    <link rel="stylesheet" href="/plugins/slick/slick.css" th:href="@{/plugins/slick/slick.css}">
+    <!-- themefy-icon -->
+    <link rel="stylesheet" href="/plugins/themify-icons/themify-icons.css"
+          th:href="@{/plugins/themify-icons/themify-icons.css}">
+    <!-- animation css -->
+    <link rel="stylesheet" href="/plugins/animate/animate.css" th:href="@{/plugins/animate/animate.css}">
+    <!-- aos -->
+    <link rel="stylesheet" href="/plugins/aos/aos.css" th:href="@{/plugins/aos/aos.css}">
+    <!-- venobox popup -->
+    <link rel="stylesheet" href="/plugins/venobox/venobox.css" th:href="@{/plugins/venobox/venobox.css}">
+    <!-- Responsive stylesheet -->
+
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" href="/css/responsive.css" th:href="@{/css/responsive.css}">
+    <link rel="stylesheet" href="/css/flaticon.css" th:href="@{/css/flaticon.css}">
+    <link href="/css/styles.css" rel="stylesheet" th:href="@{/css/styles.css}">
+    <link href="/css/style.css" rel="stylesheet" th:href="@{/css/style.css}">
+    <link href="/css/styleUsers.css" rel="stylesheet" th:href="@{/css/styleUsers.css}">
+
+    <!--Favicon-->
+    <link rel="shortcut icon" href="/images/favicon.png" type="image/x-icon" th:href="@{/images/favicon.png}">
+    <link rel="icon" href="/images/favicon.png" type="image/x-icon" th:href="@{/images/favicon.png}">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+</head>
+
+<body>
+<!-- preloader start -->
+<div class="preloader">
+    <img src="/images/preloader.gif" alt="preloader" th:src="@{/images/preloader.gif}">
+</div>
+<!-- preloader end -->
+
+<!-- header -->
+<div th:replace="fragments/headerAndFooter :: header"></div>
+<!-- /header -->
+
+<!-- page title -->
+<section class="page-title-section overlay" data-background="images/backgrounds/page-title.jpg">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8">
+                <ul class="list-inline custom-breadcrumb mb-2">
+                    <li class="list-inline-item"><a class="h2 text-primary font-secondary" href="index.html"
+                                                    th:href="@{/}">Home</a>
+                    </li>
+                    <li class="list-inline-item text-white h3 font-secondary nasted">Browse My Courses</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- /page title -->
+
+<!-- courses -->
+<section class="courses-list pb40">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 col-xl-8 col-xl-12 shadow_box">
+                <div class="row courses_list_heading">
+                    <div class="col-xl-4 p0">
+                        <div class="instructor_search_result style2">
+                            <a style="text-align: center" href="course-single.html" class="btn btn-primary btn-sm"
+                               th:href="@{/courses/new}">Create A New Course</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!--Courses-->
+                <div class="row justify-content-center">
+                    <!-- course item -->
+                    <br>
+                    <div th:each="course : ${singleTeacherCourses}" class="col-lg-4 col-sm-6 mb-5">
+                        <div class="card p-0 border-primary rounded-0 hover-shadow"
+                             style="box-shadow: rgba(6, 24, 44, 0.4) 0px 0px 0px 2px, rgba(6, 24, 44, 0.65) 0px 4px 6px -1px, rgba(255, 255, 255, 0.08) 0px 1px 0px inset;">
+                            <div class="thumb" style="width:17.8cm; margin-top: -1.7cm">
+                                <img class="img-whp" style="border-radius: 10%; margin-left: 0.07cm" src="#"
+                                     th:src="*{course.getTopic().getImgUrl()}" alt="">
+                            </div>
+                            <div class="card-body">
+                                <ul class="list-inline mb-2">
+                                    <li class="list-inline-item ti-calendar mr-1 text-color"
+                                        th:text="${' ' + course.getStartingDate()}">02-14-2018
+                                    </li>
+                                    <div class="tc_footer">
+                                        <ul class="tc_review float-right fn-414" style="margin-top: -0.7cm">
+                                            <li th:if="${course.getAvgRating().intValue()}==0" class="list-inline-item">
+                                                <i class="fa fa-star color-gray"> <i class="fa fa-star color-gray">
+                                                    <i class="fa fa-star color-gray"> <i
+                                                            class="fa fa-star color-gray"> <i
+                                                            class="fa fa-star color-gray"> </i></i></i></i></i></li>
+                                            <li th:if="${course.getAvgRating().intValue()}==1" class="list-inline-item">
+                                                <i class="fa fa-star color-golden"> <i
+                                                        class="fa fa-star color-gray"> <i
+                                                        class="fa fa-star color-gray"> <i
+                                                        class="fa fa-star color-gray"> <i
+                                                        class="fa fa-star color-gray"> </i></i></i></i></i></li>
+                                            <li th:if="${course.getAvgRating().intValue()}==2" class="list-inline-item">
+                                                <i class="fa fa-star color-golden"> <i
+                                                        class="fa fa-star color-golden"> <i
+                                                        class="fa fa-star color-gray"> <i
+                                                        class="fa fa-star color-gray"> <i
+                                                        class="fa fa-star color-gray"> </i></i></i></i></i></li>
+                                            <li th:if="${course.getAvgRating().intValue()}==3" class="list-inline-item">
+                                                <i class="fa fa-star color-golden"> <i
+                                                        class="fa fa-star color-golden"> <i
+                                                        class="fa fa-star color-golden"> <i
+                                                        class="fa fa-star color-gray"> <i
+                                                        class="fa fa-star color-gray"> </i></i></i></i></i></li>
+                                            <li th:if="${course.getAvgRating().intValue()}==4" class="list-inline-item">
+                                                <i class="fa fa-star color-golden"> <i
+                                                        class="fa fa-star color-golden"> <i
+                                                        class="fa fa-star color-golden"> <i
+                                                        class="fa fa-star color-golden"> <i
+                                                        class="fa fa-star color-gray"> </i></i></i></i></i></li>
+                                            <li th:if="${course.getAvgRating().intValue()}==5" class="list-inline-item">
+                                                <i class="fa fa-star color-golden"> <i
+                                                        class="fa fa-star color-golden"> <i
+                                                        class="fa fa-star color-golden"> <i
+                                                        class="fa fa-star color-golden"> <i
+                                                        class="fa fa-star color-golden"> </i></i></i></i></i></li>
+
+                                        </ul>
+                                    </div>
+                                    <div class="details">
+                                        <div class="tc_content">
+                                            <p th:text="${course.getTeacher().getFirstName()} + ' ' + ${course.getTeacher().getLastName()} "></p>
+                                            <h5 style=" overflow: hidden;
+                                             display: -webkit-box;-webkit-line-clamp: 1; -webkit-box-orient: vertical;"
+                                                th:text="${course.getTitle()}"></h5>
+                                            <h6 th:text="${course.getTopic().getTopicName()}"></h6>
+                                        </div>
+                                    </div>
+                                </ul>
+                                <div style="display: inline-flex">
+                                    <a style="margin-top: 1cm;margin-bottom: 8px" href="course-single.html" class="btn btn-primary btn-sm"
+                                       th:href="@{/courses/{id}/lectures(id=${course.getId()})}">Manage Lectures</a>
+                                </div>
+                                <div style="display: inline-flex; margin-left: 1cm">
+                                    <form th:action="@{/courses/{id}/update/status(id=${course.getId()})}" method="post">
+                                        <button class="btn btn-primary btn-sm" type="submit" th:text="${course.getStatus()}"> Status</button>
+                                    </form>
+                                </div>
+                                <div style="display: inline-flex">
+                                    <a style="margin-top: 1cm;margin-bottom: 8px" href="course-single.html" class="btn btn-secondary btn-sm"
+                                       th:href="@{/courses/{id}/update(id=${course.getId()})}"><i
+                                            class="fa fa-edit"></i> Edit</a>
+                                </div>
+                                <div style="display: inline-flex">
+                                    <a style="margin-top: 1cm;margin-bottom: 8px" href="course-single.html" class="btn btn-secondary btn-sm"
+                                       th:href="@{/courses/{id}/delete(id=${course.getId()})}"><i
+                                            class="fa fa-trash"></i> Delete</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /course list -->
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- footer -->
+<div th:replace="fragments/headerAndFooter :: footer"></div>
+<!-- /footer -->
+
+<!-- jQuery -->
+<script src="/plugins/jQuery/jquery.min.js" th:href="@{/plugins/jQuery/jquery.min.js}"></script>
+<!-- Bootstrap JS -->
+<script src="/plugins/bootstrap/bootstrap.min.js" th:href="@{/plugins/bootstrap/bootstrap.min.js}"></script>
+<script type="text/javascript" src="/js/bootstrap-select.min.js" th:href="@{/js/bootstrap-select.min.js}"></script>
+<!-- slick slider -->
+<script src="/plugins/slick/slick.min.js" th:href="@{/plugins/slick/slick.min.js}"></script>
+<!-- aos -->
+<script src="/plugins/aos/aos.js" th:href="@{/plugins/aos/aos.js}"></script>
+<!-- venobox popup -->
+<script src="/plugins/venobox/venobox.min.js" th:href="@{/plugins/venobox/venobox.min.js}"></script>
+<!-- filter -->
+<script src="/plugins/filterizr/jquery.filterizr.min.js"
+        th:href="@{/plugins/filterizr/jquery.filterizr.min.js}"></script>
+<!-- google map -->
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCcABaamniA6OL5YvYSpB3pFMNrXwXnLwU"></script>
+<!-- Wrapper End -->
+<script type="text/javascript" src="/js/progressbar.js" th:href="@{/js/progressbar.js}"></script>
+<!-- Custom script for all pages -->
+<script src="/plugins/google-map/gmap.js" th:href="@{/plugins/google-map/gmap.js}"></script>
+
+
+<!-- Main Script -->
+<script src="/js/script.js" th:href="@{/js/script.js}"></script>
+
+<script>
+    //Call jQuery before below code
+    $('.main-btn').click(function () {
+        $('.search-description').slideToggle(100);
+    });
+    $('.search-description li').click(function () {
+        var target = $(this).html();
+        var toRemove = 'By ';
+        var newTarget = target.replace(toRemove, '');
+        //remove spaces
+        newTarget = newTarget.replace(/\s/g, '');
+        $(".search-large").html(newTarget);
+        $('.search-description').hide();
+        $('.main-input').hide();
+        newTarget = newTarget.toLowerCase();
+        $('.main-' + newTarget).show();
+    });
+    $('#main-submit-mobile').click(function () {
+        $('#main-submit').trigger('click');
+    });
+    $(window).resize(function () {
+        replaceMatches();
+    });
+
+    function replaceMatches() {
+        var width = $(window).width();
+        if (width < 516) {
+            $('.main-location').attr('value', 'City or postal code');
+        } else {
+            $('.main-location').attr('value', 'Search by city or postal code');
+        }
+    };
+    replaceMatches();
+
+    function clearText(thefield) {
+        if (thefield.defaultValue === thefield.value) {
+            thefield.value = ""
+        }
+    }
+
+    function replaceText(thefield) {
+        if (thefield.value === "") {
+            thefield.value = thefield.defaultValue
+        }
+    }
+</script>
+
+</body>
+</html>
+

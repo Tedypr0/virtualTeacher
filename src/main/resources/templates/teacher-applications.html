@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <title>Teacher Applications</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+  <link href="https://netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
+  <link href="/css/style.css" rel="stylesheet" th:href="@{/css/styleUsers.css}">
+  <link href="/js/script.js" rel="script" th:href="@{/js/script.js}">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+  <script src="https://netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+</head>
+<body>
+<link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css">
+<hr>
+<div class="container bootstrap snippets bootdey">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="main-box no-header clearfix">
+        <div class="main-box-body clearfix">
+          <div class="table-responsive">
+            <table class="table user-list">
+              <thead>
+              <tr>
+                <th><span>User</span></th>
+                <th><span>Created</span></th>
+                <th><span>Email</span></th>
+                  <th><span>Application Response</span></th>
+                  <th><span>Motivational Letter</span></th>
+                <th>&nbsp;</th>
+              </tr>
+              </thead>
+
+              <tbody th:if="${teacherApplications.size()>=1}" th:each="user : ${teacherApplications}">
+              <tr>
+                <td>
+                  <img th:src="@{${user.getImage()}}" alt="Image file">
+                  <a href="#" class="user-link" th:text="${user.getFirstName() + ' '+ user.getLastName()}">Full name 1</a>
+                  <span class="user-subhead" th:text="${user.getRole().getRole()}">Member</span>
+                </td>
+                <td th:text="${user.getDate()}">2013/08/12</td>
+
+                <td>
+                  <a href="#" th:text="${user.getEmail()}">marlon@brando.com</a>
+                </td>
+                <td style="width: 20%;">
+                  <a class="table-link bi" style="font-size: 40px;  display:inline-grid">
+                      <form class="table-link bi" style="font-size: 40px" th:action="@{/users/{id}/application(id=${user.getId()})}" method="post">
+                          <button class="bi bi-check" style="border: none; background-color: white" type="submit" value="accept" name="decision"></button>
+                      </form></a>
+                  <a class="table-link bi" style="font-size: 40px;  display:inline-grid">
+                     <form class="table-link bi" style="font-size: 40px" th:action="@{/users/{id}/application(id=${user.getId()})}" method="post">
+                       <button class="bi bi-x" style="border: none; background-color: white" type="submit" value="deny" name="decision"></button>
+                     </form>
+                  </a>
+                </td>
+                <td>
+                  <button type="button" class="btn btn-primary" data-toggle="modal" th:data-target="'#exampleModal'+${user.getId()}">
+                    View Motivational Letter
+                  </button>
+
+                  <!-- Modal -->
+                  <div class="modal fade" th:id="'exampleModal'+${user.getId()}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="exampleModalLabel" style="text-align: center" th:text="'You are viewing '+ ${user.getFirstName()} + ' ' +${user.getLastName()}+ '\'s ' + 'motivational letter'">Modal title</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="margin-top: -25px">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body" th:text="${user.getMotivationalLetter().getMotivationalLetter()}">
+
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                </td>
+              </tr>
+
+              </tbody>
+            </table>
+              <h3 th:if="${teacherApplications.size()==0}" style="text-align: center">Currently there are no applications!</h3>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script type="text/javascript">
+  $('#myModal').on('shown.bs.modal', function () {
+    $('#myInput').trigger('focus')
+  })
+</script>
+</body>
+</html>

@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+
+    <!-- Basic Page Needs
+      ================================================== -->
+    <meta charset="utf-8">
+    <title>Educenter - Education HTML Template</title>
+
+    <!-- Mobile Specific Metas
+      ================================================== -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="Construction Html5 Template">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <meta name="author" content="Themefisher">
+    <meta name="generator" content="Themefisher Educenter HTML Template v1.0">
+
+    <!-- ** ../plugins Needed for the Project ** -->
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="/plugins/bootstrap/bootstrap.min.css"
+          th:href="@{/plugins/bootstrap/bootstrap.min.css}">
+    <!-- slick slider -->
+    <link rel="stylesheet" href="/plugins/slick/slick.css" th:href="@{/plugins/slick/slick.css}">
+    <!-- themefy-icon -->
+    <link rel="stylesheet" href="/plugins/themify-icons/themify-icons.css"
+          th:href="@{/plugins/themify-icons/themify-icons.css}">
+    <!-- animation css -->
+    <link rel="stylesheet" href="/plugins/animate/animate.css" th:href="@{/plugins/animate/animate.css}">
+    <!-- aos -->
+    <link rel="stylesheet" href="/plugins/aos/aos.css" th:href="@{/plugins/aos/aos.css}">
+    <!-- venobox popup -->
+    <link rel="stylesheet" href="/plugins/venobox/venobox.css" th:href="@{/plugins/venobox/venobox.css}">
+
+    <!-- Main Stylesheet -->
+    <link href="/css/style.css" rel="stylesheet" th:href="@{/css/style.css}">
+    <link href="/css/style.css" rel="stylesheet" th:href="@{/css/styleUsers.css}">
+
+    <!--Favicon-->
+    <link rel="shortcut icon" href="/images/favicon.png" type="image/x-icon" th:href="@{/images/favicon.png}">
+    <link rel="icon" href="/images/favicon.png" type="image/x-icon" th:href="@{/images/favicon.png}">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+</head>
+<body>
+<!-- preloader start -->
+<div class="preloader">
+    <img src="/images/preloader.gif" alt="preloader" th:src="@{/images/preloader.gif}">
+</div>
+<!-- preloader end -->
+<div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content rounded-0 border-0 p-4" id="edit">
+        <div class="modal-header border-0">
+            <h3 style="text-align: center">Create A New Course</h3>
+
+        </div>
+        <div class="modal-body">
+            <p class="login">
+            <form class="row" th:action="@{/courses/new}" th:object="${course}" method="post">
+                <div class="col-12">
+                    <input type="text" class="form-control mb-3" id="setTitle" name="setTitle"
+                           placeholder="Course Title"
+                           th:field="*{title}"/>
+                    <label class="error" th:errors="*{title}">Title error
+                        placeholder</label>
+                </div>
+                <div class="col-12">
+                    <select class="main-btn" data-live-search="true" data-size="5" th:field="*{topic}">
+                        <option value="">Select A Topic</option>
+                        <option th:each="topic : ${topics}" class="dropdown-item"
+                                th:text="${topic.topicName}"
+                                th:value="${topic.topicName}">
+                            TopicNameOne
+                        </option>
+                    </select>
+                </div>
+                <br> <br> <br>
+                <div>
+                    <label style="display: block; margin-left: 12px" th:text="#{starting.date}">Starting Date1</label>
+                    <input style="display: block; margin-left: 12px" type="date" id="startDate" field="*{startingDate}"
+                           name="startingDate"
+                           value="00/00/0000" th:field="*{startingDate}"/>
+                </div>
+                <div>
+                    <label style="display: block; margin-left: 12px" th:text="#{end.date}">End Date1</label>
+                    <input style="display: block; margin-left: 12px" type="date" id="endDate" field="*{endDate}"
+                           name="endDate"
+                           value="00/00/0000" th:field="*{endDate}"/>
+                </div>
+                <br>
+                <div class="col-12">
+                    <br>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                    <a class="btn btn-primary" th:href="@{/}">Close</a>
+                </div>
+            </form>
+
+
+        </div>
+    </div>
+</div>
+
+<script>
+    const togglePassword = document.querySelector("#togglePassword");
+    const password = document.querySelector("#editPassword");
+
+    togglePassword.addEventListener("click", function () {
+        // toggle the type attribute
+        const type = password.getAttribute("type") === "password" ? "text" : "password";
+        password.setAttribute("type", type);
+
+        // toggle the icon
+        this.classList.toggle("bi-eye");
+    });
+
+    // prevent form submit
+    const form = document.querySelector("form");
+    form.addEventListener('submit', function (e) {
+        e.preventDefault();
+    });
+</script>
+
+<!-- jQuery -->
+<script src="/plugins/jQuery/jquery.min.js" th:href="@{/plugins/jQuery/jquery.min.js}"></script>
+<!-- Bootstrap JS -->
+<script src="/plugins/bootstrap/bootstrap.min.js" th:href="@{/plugins/bootstrap/bootstrap.min.js}"></script>
+<!-- slick slider -->
+<script src="/plugins/slick/slick.min.js" th:href="@{/plugins/slick/slick.min.js}"></script>
+<!-- aos -->
+<script src="/plugins/aos/aos.js" th:href="@{/plugins/aos/aos.js}"></script>
+<!-- venobox popup -->
+<script src="/plugins/venobox/venobox.min.js" th:href="@{/plugins/venobox/venobox.min.js}"></script>
+<!-- filter -->
+<script src="/plugins/filterizr/jquery.filterizr.min.js"
+        th:href="@{/plugins/filterizr/jquery.filterizr.min.js}"></script>
+<!-- google map -->
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCcABaamniA6OL5YvYSpB3pFMNrXwXnLwU"></script>
+<script src="/plugins/google-map/gmap.js" th:href="@{/plugins/google-map/gmap.js}"></script>
+
+<!-- Main Script -->
+<script src="/js/script.js" th:href="@{/js/script.js}"></script>
+
+<script>
+    $(document).ready(function () {
+        $("#myInput").on("keyup", function () {
+            var value = $(this).val().toLowerCase();
+            $(".dropdown-menu option").filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+</script>
+<script>
+    $(function () {
+        var dtToday = new Date();
+
+        var month = dtToday.getMonth() + 1;
+        var day = dtToday.getDate();
+        var year = dtToday.getFullYear();
+        if (month < 10)
+            month = '0' + month.toString();
+        if (day < 10)
+            day = '0' + day.toString();
+
+        var maxDate = year + '-' + month + '-' + day;
+
+        // or instead:
+        // var maxDate = dtToday.toISOString().substr(0, 10);
+        $('#startDate').attr('min', maxDate);
+    });
+</script>
+<script>
+    $(function () {
+        var dtToday = new Date();
+
+        var month = dtToday.getMonth() + 1;
+        var day = dtToday.getDate();
+        var year = dtToday.getFullYear();
+        if (month < 10)
+            month = '0' + month.toString();
+        if (day < 10)
+            day = '0' + day.toString();
+
+        var maxDate = year + '-' + month + '-' + day;
+
+        // or instead:
+        // var maxDate = dtToday.toISOString().substr(0, 10);
+        $('#endDate').attr('min', maxDate);
+    });
+</script>
+</body>
+</html>

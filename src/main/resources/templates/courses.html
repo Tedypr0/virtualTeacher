@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:border-radius="http://www.w3.org/1999/xhtml">
+<head>
+
+    <!-- Basic Page Needs
+      ================================================== -->
+    <meta charset="utf-8">
+    <title>Courses</title>
+
+    <!-- Mobile Specific Metas
+      ================================================== -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="Construction Html5 Template">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <meta name="author" content="Themefisher">
+    <meta name="generator" content="Themefisher Educenter HTML Template v1.0">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+
+
+    <!-- ** ../plugins Needed for the Project ** -->
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="/plugins/bootstrap/bootstrap.min.css"
+          th:href="@{/plugins/bootstrap/bootstrap.min.css}">
+    <!-- slick slider -->
+    <link rel="stylesheet" href="/plugins/slick/slick.css" th:href="@{/plugins/slick/slick.css}">
+    <!-- themefy-icon -->
+    <link rel="stylesheet" href="/plugins/themify-icons/themify-icons.css"
+          th:href="@{/plugins/themify-icons/themify-icons.css}">
+    <!-- animation css -->
+    <link rel="stylesheet" href="/plugins/animate/animate.css" th:href="@{/plugins/animate/animate.css}">
+    <!-- aos -->
+    <link rel="stylesheet" href="/plugins/aos/aos.css" th:href="@{/plugins/aos/aos.css}">
+    <!-- venobox popup -->
+    <link rel="stylesheet" href="/plugins/venobox/venobox.css" th:href="@{/plugins/venobox/venobox.css}">
+    <!-- Responsive stylesheet -->
+
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" href="/css/responsive.css" th:href="@{/css/responsive.css}">
+    <link rel="stylesheet" href="/css/flaticon.css" th:href="@{/css/flaticon.css}">
+    <link href="/css/styles.css" rel="stylesheet" th:href="@{/css/styles.css}">
+    <link href="/css/style.css" rel="stylesheet" th:href="@{/css/style.css}">
+    <link href="/css/styleUsers.css" rel="stylesheet" th:href="@{/css/styleUsers.css}">
+
+    <!--Favicon-->
+    <link rel="shortcut icon" href="/images/favicon.png" type="image/x-icon" th:href="@{/images/favicon.png}">
+    <link rel="icon" href="/images/favicon.png" type="image/x-icon" th:href="@{/images/favicon.png}">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+</head>
+
+<body>
+<!-- preloader start -->
+<div class="preloader">
+    <img src="/images/preloader.gif" alt="preloader" th:src="@{/images/preloader.gif}">
+</div>
+<!-- preloader end -->
+
+<!-- header -->
+<div th:replace="fragments/headerAndFooter :: header"></div>
+<!-- /header -->
+
+<!-- page title -->
+<section class="page-title-section overlay" data-background="images/backgrounds/page-title.jpg">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8">
+                <ul class="list-inline custom-breadcrumb mb-2">
+                    <li class="list-inline-item"><a class="h2 text-primary font-secondary" href="index.html"
+                                                    th:href="@{/}">Home</a>
+                    </li>
+                    <li class="list-inline-item text-white h3 font-secondary nasted">Our Courses</li>
+                </ul>
+                <p class="text-lighten mb-0">Our courses offer a good compromise between the continuous assessment
+                    favoured by some universities and the emphasis placed on final exams by others.</p>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- /page title -->
+
+<!-- courses -->
+<section class="courses-list pb40">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 col-xl-8 col-xl-9 shadow_box">
+                <div class="row courses_list_heading">
+                    <div>
+                        <div class="candidate_revew_select style2 text-left">
+                            <ul class="mb0">
+
+                                <!--Filter by title and sort-->
+                                <li class="list-inline-item">
+                                    <form class="form-inline my-3 my-lg-0" action="#" th:action="@{/courses}"
+                                          method="post" th:object="${filterOptions}">
+                                        <div>
+                                            <div class="main-form-container">
+                                                <form id="" class="" method="post">
+                                                    <input type="search" class="main-input main-name" name="NAME"
+                                                           placeholder="Search By Title" th:field="*{title}"/>
+                                                    <select class="main-btn" data-live-search="true"
+                                                            data-size="5" th:field="*{sortOrder}">
+                                                        <option value="">Sort Order</option>
+                                                        <option value="asc">Ascending</option>
+                                                        <option value="desc">Descending</option>
+                                                    </select>
+                                                    <select class="main-btn" data-live-search="true"
+                                                            data-size="5" th:field="*{sortBy}">
+                                                        <option value="">Sort By</option>
+                                                        <option value="title">Title</option>
+                                                        <option value="rating">Rating</option>
+                                                    </select>
+                                                    <input id="main-submit" class="btn btn-primary btn-sm" type="submit"
+                                                           value="Search"/>
+                                                </form>
+                                            </div>
+                                        </div>
+                                        <button type="button" class="btn btn-primary btn-sm" id="main-submit-mobile">
+                                            Search
+                                        </button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-xl-4 p0">
+                        <div class="instructor_search_result style2">
+                            <p class="mt10 fz15"><span class="color-dark pr10" th:text="${coursesCount}"></span>Courses&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span
+                                    class="color-dark pr10" th:text="${lectureCount}"></span>Lectures</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!--Courses-->
+                <div class="row justify-content-center">
+                    <!-- course item -->
+                    <br>
+                    <div th:each="course,index : ${coursesFiltered}" class="col-lg-4 col-sm-6 mb-5">
+                        <div class="card p-0 border-primary rounded-0 hover-shadow"
+                             style="box-shadow: rgba(6, 24, 44, 0.4) 0px 0px 0px 2px, rgba(6, 24, 44, 0.65) 0px 4px 6px -1px, rgba(255, 255, 255, 0.08) 0px 1px 0px inset;">
+                            <div class="thumb" style="width:11cm; margin-top: -35px">
+                                <img class="img-whp" style="border-radius: 10%; margin-left: 0.07cm; height: 167px" src="#"
+                                     th:src="*{course.getTopic().getImgUrl()}" alt="">
+                            </div>
+                            <div class="card-body">
+                                <ul class="list-inline mb-2">
+                                    <li class="list-inline-item ti-calendar mr-1 text-color"
+                                        th:text="${' ' + course.getStartingDate()}">02-14-2018
+                                    </li>
+                                    <div class="tc_footer">
+                                        <ul  class="tc_review float-right fn-414" style="margin-top: -0.7cm">
+                                            <li th:if="${course.getAvgRating().intValue()}==0" class="list-inline-item">
+                                                <i class="fa fa-star color-gray"> <i class="fa fa-star color-gray">
+                                                    <i class="fa fa-star color-gray"> <i
+                                                            class="fa fa-star color-gray"> <i
+                                                            class="fa fa-star color-gray"> </i></i></i></i></i></li>
+                                            <li th:if="${course.getAvgRating().intValue()}==1" class="list-inline-item">
+                                                <i class="fa fa-star color-golden"> <i
+                                                        class="fa fa-star color-gray"> <i
+                                                        class="fa fa-star color-gray"> <i
+                                                        class="fa fa-star color-gray"> <i
+                                                        class="fa fa-star color-gray"> </i></i></i></i></i></li>
+                                            <li th:if="${course.getAvgRating().intValue()}==2" class="list-inline-item">
+                                                <i class="fa fa-star color-golden"> <i
+                                                        class="fa fa-star color-golden"> <i
+                                                        class="fa fa-star color-gray"> <i
+                                                        class="fa fa-star color-gray"> <i
+                                                        class="fa fa-star color-gray"> </i></i></i></i></i></li>
+                                            <li th:if="${course.getAvgRating().intValue()}==3" class="list-inline-item">
+                                                <i class="fa fa-star color-golden"> <i
+                                                        class="fa fa-star color-golden"> <i
+                                                        class="fa fa-star color-golden"> <i
+                                                        class="fa fa-star color-gray"> <i
+                                                        class="fa fa-star color-gray"> </i></i></i></i></i></li>
+                                            <li th:if="${course.getAvgRating().intValue()}==4" class="list-inline-item">
+                                                <i class="fa fa-star color-golden"> <i
+                                                        class="fa fa-star color-golden"> <i
+                                                        class="fa fa-star color-golden"> <i
+                                                        class="fa fa-star color-golden"> <i
+                                                        class="fa fa-star color-gray"> </i></i></i></i></i></li>
+                                            <li th:if="${course.getAvgRating().intValue()}==5" class="list-inline-item">
+                                                <i class="fa fa-star color-golden"> <i
+                                                        class="fa fa-star color-golden"> <i
+                                                        class="fa fa-star color-golden"> <i
+                                                        class="fa fa-star color-golden"> <i
+                                                        class="fa fa-star color-golden"> </i></i></i></i></i></li>
+
+                                        </ul>
+                                    </div>
+                                    <div class="details">
+                                        <div class="tc_content">
+                                            <p th:text="${course.getTeacher().getFirstName()} + ' ' + ${course.getTeacher().getLastName()} "></p>
+                                            <h5 style=" overflow: hidden;
+                                             display: -webkit-box;-webkit-line-clamp: 1; -webkit-box-orient: vertical;"
+                                                th:text="${course.getTitle()}"></h5>
+                                            <h6 th:text="${course.getTopic().getTopicName()}"></h6>
+                                        </div>
+                                    </div>
+                                </ul>
+                                <a style="margin-top: 1cm;" href="course-single.html" class="btn btn-primary btn-sm"
+                                   th:href="@{/courses/{id}(id=${course.getId()})}">Enroll Now</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /course list -->
+                </div>
+            </div>
+
+            <!--Filter By Teacher and Topic-->
+            <div class="col-lg-4 col-xl-3">
+                <form class="form-inline my-2 my-lg-0"
+                      th:action="@{/courses}" method="post"
+                      th:object="${filterOptions}">
+                    <div style="width: 800px; box-shadow: rgba(0, 0, 0, 0.17) 0px -23px 25px 0px inset, rgba(0, 0, 0, 0.15) 0px -36px 30px 0px inset, rgba(0, 0, 0, 0.1) 0px -79px 40px 0px inset, rgba(0, 0, 0, 0.06) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px;">
+                        <div class="selected_filter_widget style3 mb30"
+                             style="max-height: 3cm">
+                            <div id="accordion" class="panel-group" style="max-height: 3cm">
+                                <div class="panel" style="max-height: 3cm">
+                                    <div class="panelF-heading" style="max-height: 3cm">
+                                        <h4 class="panel-title" style="max-height: 3cm">
+                                            Teachers
+                                        </h4>
+                                    </div>
+                                    <div class="panel-body" style="max-height: 3cm">
+                                        <div class="cl_skill_checkbox" style="max-height: 3cm">
+                                            <div class="content ui_kit_checkbox style2 text-left"
+                                                 style="box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px, rgb(51, 51, 51) 0px 0px 0px 3px; max-height: 5cm">
+                                                <ul>
+                                                    <li th:each="user : ${users}">
+                                                            <input type="checkbox"
+                                                                   style="margin-top: 0.2cm; margin-left: 0.2cm; font-weight: bold"
+                                                                   th:if="${user.getRole().getId()==2}"
+                                                                   th:field="*{teacherId}"
+                                                                   th:value="${user.getId()}"
+                                                                   th:text="'&nbsp;&nbsp;&nbsp;'+${user.getFirstName()}+' ' + ${user.getLastName()}">
+                                                    </li>
+                                                </ul>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="selected_filter_widget style3 mb30" style="max-height: 3cm; ">
+                            <div id="accordion2" class="panel-group" style="max-height: 3cm">
+                                <div class="panel" style="max-height: 3cm">
+                                    <div class="panelF-heading" style="max-height: 3cm">
+                                        <h4 class="panel-title" style="max-height: 3cm">
+                                            Topics
+                                        </h4>
+                                    </div>
+                                    <div class="panel-body" style="max-height: 3cm">
+                                        <div class="cl_skill_checkbox" style="max-height: 3cm">
+                                            <div class="content ui_kit_checkbox style2 text-left"
+                                                 style="box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px, rgb(51, 51, 51) 0px 0px 0px 3px; max-height: 5cm">
+                                                <ul>
+                                                    <li th:each="topic : ${topics}">
+                                                        <input type="checkbox"
+                                                               style="margin-top: 0.2cm; margin-left: 0.2cm;font-weight: bold"
+                                                               th:field="*{topicId}"
+                                                               th:value="${topic.getId()}"
+                                                               th:text="'&nbsp;&nbsp;&nbsp;'+${topic.getTopicName()}">
+                                                    </li>
+                                                </ul>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="display: inline-flex">
+                        <p th:text="'&nbsp;&nbsp;'"></p>
+                        <div style="display: inline-flex; margin-left: 0.1cm">
+
+                                <button class="btn btn-primary btn-sm" type="submit">Filter
+                                </button>
+
+                        </div>
+                        <div style="display: inline-flex;margin-left: 0.1cm; width: 51%">
+                          <a th:href="@{/courses}" class="btn btn-primary btn-sm" type="submit"
+                                   th:value="#{reset.filters}">Reset Filters</a>
+
+                        </div>
+                    </div>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</section>
+<!-- footer -->
+<div th:replace="fragments/headerAndFooter :: footer"></div>
+<!-- /footer -->
+
+<!-- jQuery -->
+<script src="/plugins/jQuery/jquery.min.js" th:href="@{/plugins/jQuery/jquery.min.js}"></script>
+<!-- Bootstrap JS -->
+<script src="/plugins/bootstrap/bootstrap.min.js" th:href="@{/plugins/bootstrap/bootstrap.min.js}"></script>
+<script type="text/javascript" src="/js/bootstrap-select.min.js" th:href="@{/js/bootstrap-select.min.js}"></script>
+<!-- slick slider -->
+<script src="/plugins/slick/slick.min.js" th:href="@{/plugins/slick/slick.min.js}"></script>
+<!-- aos -->
+<script src="/plugins/aos/aos.js" th:href="@{/plugins/aos/aos.js}"></script>
+<!-- venobox popup -->
+<script src="/plugins/venobox/venobox.min.js" th:href="@{/plugins/venobox/venobox.min.js}"></script>
+<!-- filter -->
+<script src="/plugins/filterizr/jquery.filterizr.min.js"
+        th:href="@{/plugins/filterizr/jquery.filterizr.min.js}"></script>
+<!-- google map -->
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCcABaamniA6OL5YvYSpB3pFMNrXwXnLwU"></script>
+<!-- Wrapper End -->
+<script type="text/javascript" src="/js/progressbar.js" th:href="@{/js/progressbar.js}"></script>
+<!-- Custom script for all pages -->
+<script src="/plugins/google-map/gmap.js" th:href="@{/plugins/google-map/gmap.js}"></script>
+
+
+<!-- Main Script -->
+<script src="/js/script.js" th:href="@{/js/script.js}"></script>
+
+<script>
+    //Call jQuery before below code
+    $('.main-btn').click(function () {
+        $('.search-description').slideToggle(100);
+    });
+    $('.search-description li').click(function () {
+        var target = $(this).html();
+        var toRemove = 'By ';
+        var newTarget = target.replace(toRemove, '');
+        //remove spaces
+        newTarget = newTarget.replace(/\s/g, '');
+        $(".search-large").html(newTarget);
+        $('.search-description').hide();
+        $('.main-input').hide();
+        newTarget = newTarget.toLowerCase();
+        $('.main-' + newTarget).show();
+    });
+    $('#main-submit-mobile').click(function () {
+        $('#main-submit').trigger('click');
+    });
+    $(window).resize(function () {
+        replaceMatches();
+    });
+
+    function replaceMatches() {
+        var width = $(window).width();
+        if (width < 516) {
+            $('.main-location').attr('value', 'City or postal code');
+        } else {
+            $('.main-location').attr('value', 'Search by city or postal code');
+        }
+    };
+    replaceMatches();
+
+    function clearText(thefield) {
+        if (thefield.defaultValue === thefield.value) {
+            thefield.value = ""
+        }
+    }
+
+    function replaceText(thefield) {
+        if (thefield.value === "") {
+            thefield.value = thefield.defaultValue
+        }
+    }
+</script>
+
+</body>
+</html>
+

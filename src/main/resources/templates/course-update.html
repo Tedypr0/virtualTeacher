@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <!-- Mobile Specific Metas
+  ================================================== -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="Construction Html5 Template">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <meta name="author" content="Themefisher">
+    <meta name="generator" content="Themefisher Educenter HTML Template v1.0">
+
+    <!-- ** ../plugins Needed for the Project ** -->
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="/plugins/bootstrap/bootstrap.min.css"
+          th:href="@{/plugins/bootstrap/bootstrap.min.css}">
+    <!-- slick slider -->
+    <link rel="stylesheet" href="/plugins/slick/slick.css" th:href="@{/plugins/slick/slick.css}">
+    <!-- themefy-icon -->
+    <link rel="stylesheet" href="/plugins/themify-icons/themify-icons.css"
+          th:href="@{/plugins/themify-icons/themify-icons.css}">
+    <!-- animation css -->
+    <link rel="stylesheet" href="/plugins/animate/animate.css" th:href="@{/plugins/animate/animate.css}">
+    <!-- aos -->
+    <link rel="stylesheet" href="/plugins/aos/aos.css" th:href="@{/plugins/aos/aos.css}">
+    <!-- venobox popup -->
+    <link rel="stylesheet" href="/plugins/venobox/venobox.css" th:href="@{/plugins/venobox/venobox.css}">
+
+    <!-- Main Stylesheet -->
+    <link href="/css/style.css" rel="stylesheet" th:href="@{/css/style.css}">
+    <link href="/css/style.css" rel="stylesheet" th:href="@{/css/styleUsers.css}">
+
+    <link href="/js/script.js" rel="script" th:href="@{/js/script.js}">
+
+    <!--Favicon-->
+    <link rel="shortcut icon" href="/images/favicon.png" type="image/x-icon" th:href="@{/images/favicon.png}">
+    <link rel="icon" href="/images/favicon.png" type="image/x-icon" th:href="@{/images/favicon.png}">
+
+</head>
+<body>
+
+<!-- header -->
+<header class="fixed-top header">
+    <!-- top header -->
+    <div class="top-header py-2 bg-white">
+        <div class="container">
+            <div class="row no-gutters">
+                <div class="col-lg-4 text-center text-lg-left">
+                    <a class="text-color mr-3" href="tel:+443003030266"><strong>CALL</strong> +44 300 303 0266</a>
+                    <ul class="list-inline d-inline">
+                        <li class="list-inline-item mx-0"><a class="d-inline-block p-2 text-color"
+                                                             href="https://facebook.com/themefisher/"><i
+                                class="ti-facebook"></i></a></li>
+                        <li class="list-inline-item mx-0"><a class="d-inline-block p-2 text-color"
+                                                             href="https://twitter.com/themefisher"><i
+                                class="ti-twitter-alt"></i></a></li>
+                        <li class="list-inline-item mx-0"><a class="d-inline-block p-2 text-color"
+                                                             href="https://github.com/themefisher"><i
+                                class="ti-github"></i></a></li>
+                        <li class="list-inline-item mx-0"><a class="d-inline-block p-2 text-color"
+                                                             href="https://instagram.com/themefisher/"><i
+                                class="ti-instagram"></i></a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-8 text-center text-lg-right">
+                    <ul class="list-inline">
+                        <li class="list-inline-item"><a
+                                class="text-uppercase text-color p-sm-2 py-2 px-0 d-inline-block" href="notice.html">notice</a>
+                        </li>
+                        <li class="list-inline-item"><a
+                                class="text-uppercase text-color p-sm-2 py-2 px-0 d-inline-block" href="research.html">research</a>
+                        </li>
+                        <li class="list-inline-item"><a
+                                class="text-uppercase text-color p-sm-2 py-2 px-0 d-inline-block"
+                                href="scholarship.html">SCHOLARSHIP</a></li>
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- navbar -->
+
+</header>
+
+<div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content rounded-0 border-0 p-4" id="edit">
+        <div class="modal-header border-0">
+            <h3 style="text-align: center">Update Course</h3>
+
+        </div>
+        <div class="modal-body">
+            <p class="login">
+            <form action="#" class="row" th:action="@{__${#httpServletRequest.requestURI}__}" th:object="${course}"
+                  method="post">
+                <div class="col-12">
+                    <input type="text" class="form-control mb-3" id="updateTitle" name="updateTitle" placeholder="Title"
+                           th:field="*{title}">
+                    <label class="error" th:errors="*{title}">Title error
+                        placeholder</label>
+                </div>
+                <div class="col-12">
+                    <input type="text" class="form-control mb-3" id="updateDescription" name="updateDescription"
+                           placeholder="Description" th:field="*{description}">
+                    <label class="error" th:errors="*{description}">Description error
+                        placeholder</label>
+                </div>
+                <div class="col-12">
+                    <select class="main-btn" data-live-search="true" data-size="5" th:field="*{topic}">
+                        <option value="">Select A Topic</option>
+                        <option th:each="topic : ${topics}" class="dropdown-item"
+                                th:text="${topic.topicName}"
+                                th:value="${topic.topicName}">
+                            TopicNameOne
+                        </option>
+                    </select>
+                </div>
+                <br> <br> <br>
+                <div>
+                    <label style="display: block; margin-left: 12px" th:text="#{starting.date}">Starting Date1</label>
+                    <input style="display: block; margin-left: 12px" type="date" id="startDate" field="*{startingDate}"
+                           name="startingDate"
+                           value="00/00/0000" th:field="*{startingDate}"/>
+                </div>
+                <div>
+                    <label style="display: block; margin-left: 12px" th:text="#{end.date}">End Date1</label>
+                    <input style="display: block; margin-left: 12px" type="date" id="endDate" field="*{endDate}"
+                           name="endDate"
+                           value="00/00/0000" th:field="*{endDate}"/>
+                </div>
+                <br> <br> <br>
+                <div class="col-12">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                    <a class="btn btn-primary" th:href="@{/courses/teacher}">Close</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    const togglePassword = document.querySelector("#togglePassword");
+    const password = document.querySelector("#editPassword");
+
+    togglePassword.addEventListener("click", function () {
+        // toggle the type attribute
+        const type = password.getAttribute("type") === "password" ? "text" : "password";
+        password.setAttribute("type", type);
+
+        // toggle the icon
+        this.classList.toggle("bi-eye");
+    });
+
+    // prevent form submit
+    const form = document.querySelector("form");
+    form.addEventListener('submit', function (e) {
+        e.preventDefault();
+    });
+</script>
+<!-- jQuery -->
+<script src="/plugins/jQuery/jquery.min.js" th:href="@{/plugins/jQuery/jquery.min.js}"></script>
+<!-- Bootstrap JS -->
+<script src="/plugins/bootstrap/bootstrap.min.js" th:href="@{/plugins/bootstrap/bootstrap.min.js}"></script>
+<!-- slick slider -->
+<script src="/plugins/slick/slick.min.js" th:href="@{/plugins/slick/slick.min.js}"></script>
+<!-- aos -->
+<script src="/plugins/aos/aos.js" th:href="@{/plugins/aos/aos.js}"></script>
+<!-- venobox popup -->
+<script src="/plugins/venobox/venobox.min.js" th:href="@{/plugins/venobox/venobox.min.js}"></script>
+<!-- filter -->
+<script src="/plugins/filterizr/jquery.filterizr.min.js"
+        th:href="@{/plugins/filterizr/jquery.filterizr.min.js}"></script>
+<!-- google map -->
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCcABaamniA6OL5YvYSpB3pFMNrXwXnLwU"></script>
+<script src="/plugins/google-map/gmap.js" th:href="@{/plugins/google-map/gmap.js}"></script>
+
+<!-- Main Script -->
+<script src="/js/script.js" th:href="@{/js/script.js}"></script>
+
+<script>
+    $(document).ready(function () {
+        $("#myInput").on("keyup", function () {
+            var value = $(this).val().toLowerCase();
+            $(".dropdown-menu option").filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+</script>
+<script>
+    $(function () {
+        var dtToday = new Date();
+
+        var month = dtToday.getMonth() + 1;
+        var day = dtToday.getDate();
+        var year = dtToday.getFullYear();
+        if (month < 10)
+            month = '0' + month.toString();
+        if (day < 10)
+            day = '0' + day.toString();
+
+        var maxDate = year + '-' + month + '-' + day;
+
+        // or instead:
+        // var maxDate = dtToday.toISOString().substr(0, 10);
+        $('#startDate').attr('min', maxDate);
+    });
+</script>
+<script>
+    $(function () {
+        var dtToday = new Date();
+
+        var month = dtToday.getMonth() + 1;
+        var day = dtToday.getDate();
+        var year = dtToday.getFullYear();
+        if (month < 10)
+            month = '0' + month.toString();
+        if (day < 10)
+            day = '0' + day.toString();
+
+        var maxDate = year + '-' + month + '-' + day;
+
+        // or instead:
+        // var maxDate = dtToday.toISOString().substr(0, 10);
+        $('#endDate').attr('min', maxDate);
+    });
+</script>
+</body>
+</html>

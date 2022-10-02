@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+
+    <!-- Basic Page Needs
+      ================================================== -->
+    <meta charset="utf-8">
+    <title>Educenter - Education HTML Template</title>
+
+    <!-- Mobile Specific Metas
+      ================================================== -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="Construction Html5 Template">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <meta name="author" content="Themefisher">
+    <meta name="generator" content="Themefisher Educenter HTML Template v1.0">
+
+    <!-- ** ../plugins Needed for the Project ** -->
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="/plugins/bootstrap/bootstrap.min.css"
+          th:href="@{/plugins/bootstrap/bootstrap.min.css}">
+    <!-- slick slider -->
+    <link rel="stylesheet" href="/plugins/slick/slick.css" th:href="@{/plugins/slick/slick.css}">
+    <!-- themefy-icon -->
+    <link rel="stylesheet" href="/plugins/themify-icons/themify-icons.css"
+          th:href="@{/plugins/themify-icons/themify-icons.css}">
+    <!-- animation css -->
+    <link rel="stylesheet" href="/plugins/animate/animate.css" th:href="@{/plugins/animate/animate.css}">
+    <!-- aos -->
+    <link rel="stylesheet" href="/plugins/aos/aos.css" th:href="@{/plugins/aos/aos.css}">
+    <!-- venobox popup -->
+    <link rel="stylesheet" href="/plugins/venobox/venobox.css" th:href="@{/plugins/venobox/venobox.css}">
+
+    <!-- Main Stylesheet -->
+    <link href="/css/style.css" rel="stylesheet" th:href="@{/css/style.css}">
+    <link href="/css/style.css" rel="stylesheet" th:href="@{/css/styleUsers.css}">
+    <!--Favicon-->
+    <link rel="shortcut icon" href="/images/favicon.png" type="image/x-icon" th:href="@{/images/favicon.png}">
+    <link rel="icon" href="/images/favicon.png" type="image/x-icon" th:href="@{/images/favicon.png}">
+
+</head>
+
+<body>
+<!-- preloader start -->
+<div class="preloader">
+    <img src="/images/preloader.gif" alt="preloader" th:src="@{/images/preloader.gif}">
+</div>
+<!-- preloader end -->>
+
+<!-- header -->
+<div th:replace="fragments/headerAndFooter :: header"></div>
+<!-- /header -->
+<!-- Modal -->
+<div class="modal fade" id="signupModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content rounded-0 border-0 p-4">
+            <div class="modal-header border-0">
+                <h3>Register</h3>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="login">
+                    <form action="#" class="row">
+                        <div class="col-12">
+                            <input type="text" class="form-control mb-3" id="signupPhone" name="signupPhone"
+                                   placeholder="Phone">
+                        </div>
+                        <div class="col-12">
+                            <input type="text" class="form-control mb-3" id="signupName" name="signupName"
+                                   placeholder="Name">
+                        </div>
+                        <div class="col-12">
+                            <input type="email" class="form-control mb-3" id="signupEmail" name="signupEmail"
+                                   placeholder="Email">
+                        </div>
+                        <div class="col-12">
+                            <input type="password" class="form-control mb-3" id="signupPassword" name="signupPassword"
+                                   placeholder="Password">
+                        </div>
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-primary">SIGN UP</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content rounded-0 border-0 p-4">
+            <div class="modal-header border-0">
+                <h3>Login</h3>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="#" class="row">
+                    <div class="col-12">
+                        <input type="text" class="form-control mb-3" id="loginPhone" name="loginPhone"
+                               placeholder="Phone">
+                    </div>
+                    <div class="col-12">
+                        <input type="text" class="form-control mb-3" id="loginName" name="loginName" placeholder="Name">
+                    </div>
+                    <div class="col-12">
+                        <input type="password" class="form-control mb-3" id="loginPassword" name="loginPassword"
+                               placeholder="Password">
+                    </div>
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary">LOGIN</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- page title -->
+<section class="page-title-section overlay" data-background="images/backgrounds/page-title.jpg">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8">
+                <ul class="list-inline custom-breadcrumb mb-2">
+                    <li class="list-inline-item"><a class="h2 text-primary font-secondary" href="index.html">Home</a>
+                    </li>
+                    <li class="list-inline-item text-white h3 font-secondary nasted">Our Courses</li>
+                </ul>
+                <p class="text-lighten mb-0">Our courses offer a good compromise between the continuous assessment
+                    favoured by some universities and the emphasis placed on final exams by others.</p>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- /page title -->
+
+<!-- courses -->
+<section class="section">
+    <div class="container">
+        <div class="row justify-content-center">
+            <h3>Create a new lecture</h3>
+        </div>
+        <div class="row justify-content-center button-margin">
+            <li><a class="btn btn-primary btn-sm" href="lecture-single.html"
+                   th:href="@{/courses/{courseId}/lectures/new(courseId=${course.getId()})}">Create</a></li>
+        </div>
+        <!-- course list -->
+        <div class="row justify-content-center">
+            <!-- course item -->
+            <div class="col-6 mb-5">
+                <div th:each="lecture : ${lectures}">
+                    <div class="card p-0 border-primary rounded-0 hover-shadow">
+                        <div class="card-body">
+                            <ul class="list-inline mb-2">
+                            </ul>
+                            <a href="lecture-single.html">
+                                <h3 class="card-title" th:text="${lecture.title}">Lecture 1</h3>
+                            </a>
+                            <div class="row">
+                                <li><a class="btn btn-primary btn-sm lecture-buttons" href="lecture-single.html"
+                                       th:href="@{/courses/{courseId}/lectures/{id}(id=${lecture.getId()}, courseId=${course.getId()})}">Proceed to lecture</a></li>
+                                <li><a class="btn btn-primary btn-sm lecture-buttons" href="lecture-single.html"
+                                       th:href="@{/courses/{courseId}/lectures/{id}/update(courseId=${course.getId()}, id=${lecture.getId()})}">Update</a></li>
+                                <li><a class="btn btn-primary btn-sm" href="lecture-single.html"
+                                       th:href="@{/courses/{courseId}/lectures/{id}/delete(id=${lecture.getId()}, courseId=${course.getId()})}">Delete</a></li>
+                                <!--                                <li><a class="btn btn-primary btn-sm" href="lecture-single.html"-->
+                                <!--                                       th:href="@{/courses/{courseId}/lectures/{id}/addToCourse(courseId=${course.getId()},-->
+                                <!--                                        id=${lecture.getId()})}">Add to course</a></li>-->
+                                <form class="form-inline my-3 my-lg-0" action="#"
+                                      th:action="@{/courses/{courseId}/lectures/{id}/addToCourse(courseId=${course.getId()}, id=${lecture.getId()})}"
+                                      method="post">
+                                    <button class="btn btn-primary btn-sm lecture-buttons" style="margin-top: 8px; margin-left: 22px" type="submit" th:text="${lecture.isAddedToCourse()} ? 'Remove from course' : 'Add to course'"> Add to course Button</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /course list -->
+            <!-- course list -->
+            <div class="row justify-content-center">
+                <!-- /course list -->
+            </div>
+        </div>
+    </div>
+</section>
+<!-- /courses -->
+
+<!-- footer -->
+<div th:replace="fragments/headerAndFooter :: footer"></div>
+<!-- /footer -->
+
+<!-- jQuery -->
+<script src="/plugins/jQuery/jquery.min.js" th:href="@{/plugins/jQuery/jquery.min.js}"></script>
+<!-- Bootstrap JS -->
+<script src="/plugins/bootstrap/bootstrap.min.js" th:href="@{/plugins/bootstrap/bootstrap.min.js}"></script>
+<!-- slick slider -->
+<script src="/plugins/slick/slick.min.js" th:href="@{/plugins/slick/slick.min.js}"></script>
+<!-- aos -->
+<script src="/plugins/aos/aos.js" th:href="@{/plugins/aos/aos.js}"></script>
+<!-- venobox popup -->
+<script src="/plugins/venobox/venobox.min.js" th:href="@{/plugins/venobox/venobox.min.js}"></script>
+<!-- filter -->
+<script src="/plugins/filterizr/jquery.filterizr.min.js"
+        th:href="@{/plugins/filterizr/jquery.filterizr.min.js}"></script>
+<!-- google map -->
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCcABaamniA6OL5YvYSpB3pFMNrXwXnLwU"></script>
+<script src="/plugins/google-map/gmap.js" th:href="@{/plugins/google-map/gmap.js}"></script>
+
+<!-- Main Script -->
+<script src="/js/script.js" th:href="@{/js/script.js}"></script>
+
+</body>
+</html>

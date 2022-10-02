@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+
+    <!-- Basic Page Needs
+      ================================================== -->
+    <meta charset="utf-8">
+    <title>Educenter - Education HTML Template</title>
+
+    <!-- Mobile Specific Metas
+      ================================================== -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="Construction Html5 Template">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <meta name="author" content="Themefisher">
+    <meta name="generator" content="Themefisher Educenter HTML Template v1.0">
+
+    <!-- ** ../plugins Needed for the Project ** -->
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="/plugins/bootstrap/bootstrap.min.css"
+          th:href="@{/plugins/bootstrap/bootstrap.min.css}">
+    <!-- slick slider -->
+    <link rel="stylesheet" href="/plugins/slick/slick.css" th:href="@{/plugins/slick/slick.css}">
+    <!-- themefy-icon -->
+    <link rel="stylesheet" href="/plugins/themify-icons/themify-icons.css"
+          th:href="@{/plugins/themify-icons/themify-icons.css}">
+    <!-- animation css -->
+    <link rel="stylesheet" href="/plugins/animate/animate.css" th:href="@{/plugins/animate/animate.css}">
+    <!-- aos -->
+    <link rel="stylesheet" href="/plugins/aos/aos.css" th:href="@{/plugins/aos/aos.css}">
+    <!-- venobox popup -->
+    <link rel="stylesheet" href="/plugins/venobox/venobox.css" th:href="@{/plugins/venobox/venobox.css}">
+
+    <!-- Main Stylesheet -->
+    <link href="/css/style.css" rel="stylesheet" th:href="@{/css/style.css}">
+    <link href="/css/style.css" rel="stylesheet" th:href="@{/css/styleUsers.css}">
+
+    <!--Favicon-->
+    <link rel="shortcut icon" href="/images/favicon.png" type="image/x-icon" th:href="@{/images/favicon.png}">
+    <link rel="icon" href="/images/favicon.png" type="image/x-icon" th:href="@{/images/favicon.png}">
+
+</head>
+
+<body>
+<!-- preloader start -->
+<div class="preloader">
+    <img src="/images/preloader.gif" alt="preloader" th:src="@{/images/preloader.gif}">
+</div>
+<!-- preloader end -->
+
+<!-- header -->
+<div th:replace="fragments/headerAndFooter :: header"></div>
+<!-- /header -->
+
+<!-- page title -->
+<section class="page-title-section overlay" data-background="images/backgrounds/page-title.jpg">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8">
+                <ul class="list-inline custom-breadcrumb mb-2">
+                    <li class="list-inline-item"><a class="h2 text-primary font-secondary" href="lectures.html"
+                                                    th:href="@{/lectures}">Our
+                        Lectures</a></li>
+                    <li class="list-inline-item text-white h3 font-secondary nasted" th:text="${lecture.getTitle()}">
+                        Lecture Title
+                    </li>
+                </ul>
+                <p class="text-lighten mb-0">Our lectures will provide you with extensive knowledge
+                    in the field you applied for. Please watch the complete videos and make sure
+                    to read the assignments descriptions carefully and submit your homework.</p>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- /page title -->
+
+<!-- section -->
+<section class="section-sm">
+    <div class="container">
+        <div class="row">
+            <div class="col-4">
+                <!-- course thumb -->
+                <img src="images/courses/course-5.jpg" class="lecture-main-picture"
+                     th:src="@{/images/courses/course-5.jpg}">
+            </div>
+            <!-- course info -->
+            <div class="col-8">
+                <div class="row align-items-center">
+                    <div class=" order-1 mb-4 mb-xl-0">
+                        <h2 th:text="${lecture.getTitle()}">Lecture Title</h2>
+                    </div>
+                </div>
+                    <div class=" order-sm-3 order-6 order-2">
+                        <ul class="list-inline">
+                            <li class="list-inline-item mb-3 mb-sm-0">
+                                <div class="row">
+                                    <div class=" d-flex align-items-center">
+                                        <i class="ti-book text-primary icon-md mr-2"></i>
+                                        <div class="text-left">
+                                            <h6 class="mb-0">LECTURE MATERIALS</h6>
+                                            <p class="mb-0">1 video/1 assignment</p>
+                                        </div>
+                                    </div>
+                            </li>
+                            <li class="list-inline-item mr-4 mb-3 mb-sm-0">
+                                <div class="col-6 d-flex align-items-center">
+                                    <i class="ti-alarm-clock text-primary icon-md mr-2"></i>
+                                    <div class="text-left">
+                                        <h6 class="mb-0">DURATION</h6>
+                                        <p class="mb-0">1 Hour</p>
+                                    </div>
+                                </div>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+            <!-- border -->
+            <div class="col-12 mt-4 order-4">
+                <div class="border-bottom border-primary"></div>
+            </div>
+        </div>
+    </div>
+    <!-- course details -->
+    <div class="row">
+        <div class="col-12 mb-4">
+            <h3 th:unless="${lecture.getDescription().getDescription() == null}">About Lecture</h3>
+            <p th:unless="${lecture.getDescription().getDescription() == null}" th:text="${lecture.getDescription()
+                .getDescription()}">Lecture Description </p>
+            <br>
+            <br>
+            <br>
+        </div>
+
+        <!-- teacher -->
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center flex-wrap">
+                <div class="media mb-2 mb-sm-0">
+                    <img class="mr-4 img-fluid user-image" src="images/teacher.jpg" alt="Teacher"
+                         th:src="@{${currentUser.getImage()}}" style="width:90px; height:90px;">
+                    <style>
+                        img {
+                            border-radius: 50%;
+                        }
+                    </style>
+                    <div class="media-body">
+                        <h4 class="mt-0" th:text="${lecture.getTeacher().getFirstName()
+                             + ' '+ lecture.getTeacher().getLastName()}">Neda Marinova</h4>
+                        Teacher
+                    </div>
+                </div>
+            </div>
+            <div class="video-space">
+                <br>
+                <br>
+                <br>
+                <h3>Lecture Video</h3>
+                <iframe width="420" height="315"
+                        th:src="${video}" allowfullscreen>
+                </iframe>
+            </div>
+            <form style="display:inline-block" action="#" th:object="${note}"
+                  th:action="@{/courses/{courseId}/lectures{id}/notes/new(courseId=${courseId}, id=${id})}" method="post">
+                <div class="text-area">
+                        <textarea type="text" th:field="*{note}" placeholder="You can take notes here..." cols="60"
+                                  rows="12"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary" style="margin-bottom: 50px">Save</button>
+            </form>
+            <div>
+                <br>
+                <br>
+                <br>
+                <h3>Lecture Assignment</h3>
+                <a th:href="@{${lecture.getAssignment()}}" download>Download</a>
+
+            </div>
+            <div class="border-bottom border-primary mt-4"></div>
+        </div>
+    </div>
+    </div>
+
+    <form method="post" enctype="multipart/form-data" th:action="@{/courses/{courseId}/lectures/{id}/uploadHomework(courseId=${courseId}, id=${id})}"
+          name="documentFile" id="documentFile">
+        <div class="col-12">
+            <br>
+            <pre class="tab"><h3>Lecture Homework</h3> </pre>
+            <input type="file"
+                   onchange="document.getElementById('blah').src = window.URL.createObjectURL(this.files[0])"
+                   accept=".doc, .docx" value="CLICK ME" id="selectedDocument" name="documentFile" style="width: 10%">
+            <label for="selectedDocument">Click me to select a document</label>
+            <br>
+            <img id="blah" src="#" alt=""/>
+            <button type="submit" class="btn btn-primary">Upload</button>
+        </div>
+    </form>
+    <br>
+    <br>
+    <br>
+
+    <h3>Comments</h3>
+    <form action="#" class="row" th:object="${newComment}"
+          th:action="@{/courses/{courseId}/lectures/{lectureId}/comments/createComment(lectureId=${lectureId}, courseId=${courseId})}" name="comment" method="post">
+        <div class="col-12">
+            <textarea name="comment" id="comment" th:field="${newComment.content}" class="form-control mb-4"
+                      placeholder="Comment Here..." required></textarea>
+        </div>
+        <div class="col-12">
+            <button type="submit" value="send" class="btn btn-primary">post comment</button>
+        </div>
+    </form>
+    <br>
+    <br>
+    <div th:unless="${comments.size() == 0}" th:each="comment : ${comments}">
+        <div class="comment-container">
+            <header class="text-left">
+                <div class="comment-user secondary-text">
+                        <span th:text="${comment.getUser().getFirstName() +' '+ comment.getUser().getLastName()}">
+                            Neda Marinova</span>
+                    |
+                    <time class="comment-date fa fa-clock-o secondary-text" datetime="16-12-2014 01:05"
+                          th:text="${comment.getCreationDate()}"><i></i> Dec 16, 2014
+                    </time>
+                </div>
+            </header>
+            <div class="comment-post mt-1">
+                <p class="primary-text" th:text="${comment.getContent()}">
+                    Comment Content
+                </p>
+            </div>
+            <div class="text-right">
+                <a th:if="${comment.getUser().getId() == user.getId() || session.isAdmin}">
+                    <a href="#" class="btn-secondary btn-sm comment-button"
+                       th:href="@{/courses/{courseId}/lectures/{lectureId}/comments/{commentId}/update(courseId=${courseId}, lectureId=${lectureId}, commentId=${comment.getId()})}">
+                        Edit
+                    </a>
+                </a>
+                <a th:if="${comment.getUser().getId() == user.getId() || session.isAdmin}">
+                    <a href="#" class="btn-secondary btn-sm"
+                       th:href="@{/courses/{courseId}/lectures/{lectureId}/comments/{commentId}/delete(courseId=${courseId}, lectureId=${lectureId}, commentId=${comment.getId()})}"><i
+                            class="fa fa-trash"></i> Delete</a>
+                </a></div>
+        </div>
+    </div>
+</section>
+<!-- /section -->
+
+<!-- footer -->
+<div th:replace="fragments/headerAndFooter :: footer"></div>
+<!-- /footer -->
+
+<!-- jQuery -->
+<script src="/plugins/jQuery/jquery.min.js" th:href="@{/plugins/jQuery/jquery.min.js}"></script>
+<!-- Bootstrap JS -->
+<script src="/plugins/bootstrap/bootstrap.min.js" th:href="@{/plugins/bootstrap/bootstrap.min.js}"></script>
+<!-- slick slider -->
+<script src="/plugins/slick/slick.min.js" th:href="@{/plugins/slick/slick.min.js}"></script>
+<!-- aos -->
+<script src="/plugins/aos/aos.js" th:href="@{/plugins/aos/aos.js}"></script>
+<!-- venobox popup -->
+<script src="/plugins/venobox/venobox.min.js" th:href="@{/plugins/venobox/venobox.min.js}"></script>
+<!-- filter -->
+<script src="/plugins/filterizr/jquery.filterizr.min.js"
+        th:href="@{/plugins/filterizr/jquery.filterizr.min.js}"></script>
+<!-- google map -->
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCcABaamniA6OL5YvYSpB3pFMNrXwXnLwU"></script>
+<script src="/plugins/google-map/gmap.js" th:href="@{/plugins/google-map/gmap.js}"></script>
+
+<!-- Main Script -->
+<script src="/js/script.js" th:href="@{/js/script.js}"></script>
+
+</body>
+</html>
