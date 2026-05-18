@@ -1,75 +1,8 @@
+-- 1. Independent tables (no foreign keys)
 insert into roles
 values (1, 'Student'),
        (2, 'Teacher'),
        (3, 'Admin');
-
-insert into users
-values (1, 'Neda', 'Marinova', 'neda@neda.com', '123456789Tt$', 2, 1, 0, now()),
-       (2, 'Teodor', 'Zhelyazkov', 'teo@teo.com', '123456789Tt$', 1, 1, 0, now()),
-       (3, 'Mehmed', 'Ukov', 'mehmed@mehmed.com', '123456789Tt$', 1, 1, 0, now()),
-       (4, 'Tedyy', 'Tedyyy', 'testtedy@abv.bg', '123456789Tt$', 1, 1, 0, now()),
-       (5, 'Admin', 'Admin', 'admin@abv.bg', '123456789Tt$', 3, 1, 0, now()),
-       (6, 'Teacher', 'Teacher', 'teacher@abv.bg', '123456789Tt$', 2, 1, 0, now()),
-       (7, 'Student', 'Student', 'student@abv.bg', '123456789Tt$', 1, 1, 0, now());
-
-
-insert into videos
-values (1, 'https://www.youtube.com/embed/GoXwIVyNvX0', 0),
-       (2, 'https://www.youtube.com/embed/xzjZy-dHHLw', 0),
-       (3, 'https://www.youtube.com/embed/cCgOESMQe44', 0),
-       (4, 'https://www.youtube.com/embed/aqcJsKdjjvU', 0),
-       (5, 'https://www.youtube.com/embed/RWyY3n9nTf8', 0),
-       (6, 'https://www.youtube.com/embed/bDPRWJdVzfs', 0),
-       (7, 'https://www.youtube.com/embed/9CGY0s-uCUE', 0),
-       (8, 'https://www.youtube.com/embed/pfRTAI6Anhk', 0),
-       (9, 'https://www.youtube.com/embed/YoSghxkxBVQ', 0),
-       (10, 'https://www.youtube.com/embed/jDif8oXM7mI', 0),
-       (11, 'https://www.youtube.com/embed/h7piyWnQbZA', 0),
-       (12, 'https://www.youtube.com/embed/cU94So54cr8', 0),
-       (13, 'https://www.youtube.com/embed/j1RjRwQPvzY', 0),
-       (14, 'https://www.youtube.com/embed/pDTNUS8mgc0', 0),
-       (15, 'https://www.youtube.com/embed/k57PtwQKFoA', 0);
-
-insert into lectures
-values (1, 'Java Basics Introduction', 1, 0, 1, 1),
-       (2, 'Arrays', 2, 0, 1, 1),
-       (3, 'Methods', 3, 0, 1, 1),
-       (4, 'Debugging', 4, 0, 1, 1),
-       (5, 'Angles', 5, 0, 6, 1),
-       (6, 'Sine', 6, 0, 6, 1),
-       (7, 'Cosine', 7, 0, 6, 1),
-       (8, 'Tangent', 8, 0, 6, 1),
-       (9, 'Inheritance and Polymorphism', 9, 0, 1, 1),
-       (10, 'Abstract Classes and Interfaces', 10, 0, 1, 1),
-       (11, 'Collections & Generics', 11, 0, 1, 1),
-       (12, 'Encapsulation', 12, 0, 1, 1),
-       (13, 'Algorithms Analysis & Linear Data Structures', 13, 0, 6, 1),
-       (14, 'Set, Map and Hash Table', 14, 0, 6, 1),
-       (15, 'Searching and Sorting', 15, 0, 6, 1);
-
-
-
-insert into lectures_descriptions
-values (1, 'In this lecture you will be introduced to the world of Java', 1, 0),
-       (2, 'We will learn how to use methods in Java', 3, 0),
-       (3, 'Your code is not working? Let us teach you how to debug it', 4, 0),
-       (4, 'Today we will learn what angles are and how to use them', 5, 0),
-       (6, 'Let us teach you how to use abstraction and interfaces', 10, 0),
-       (7, 'Time to introduce Collections and Generics', 11, 0);
-
-insert into lectures_comments
-values (1, 1, 1, 'This lecture is awesome', now(), 0),
-       (2, 1, 2, 'I am not impressed but it was good', now(), 0),
-       (3, 2, 3, 'Great', now(), 0),
-       (4, 2, 4, 'It was really interesting', now(), 0),
-       (5, 2, 1, 'Somebody else who could not do the homework?', now(), 0),
-       (6, 3, 2, 'Hey, I would like to consult on this with somebody', now(), 0),
-       (7, 4, 3, 'Perfect', now(), 0),
-       (8, 4, 4, 'Great lecture, a lot of useful information', now(), 0),
-       (9, 4, 1, 'It is so easy to study when you watch videos', now(), 0),
-       (10, 4, 2, 'Please help, I cannot submit my homework', now(), 0),
-       (11, 4, 3, 'I am here to meet new people', now(), 0),
-       (12, 4, 4, 'Awesome', now(), 0);
 
 insert into topics
 values (1, 'Mathematics', 'https://www.filepicker.io/api/file/kIJhurteRNWyd3qvUo22'),
@@ -89,6 +22,35 @@ values (1, 'Mathematics', 'https://www.filepicker.io/api/file/kIJhurteRNWyd3qvUo
        (12, 'Machine Learning',
         'https://www.simplilearn.com/ice9/free_resources_article_thumb/Deep-Learning-vs-Machine-Learning.jpg');
 
+insert into videos
+values (1, 'https://www.youtube.com/embed/GoXwIVyNvX0', 0),
+       (2, 'https://www.youtube.com/embed/xzjZy-dHHLw', 0),
+       (3, 'https://www.youtube.com/embed/cCgOESMQe44', 0),
+       (4, 'https://www.youtube.com/embed/aqcJsKdjjvU', 0),
+       (5, 'https://www.youtube.com/embed/RWyY3n9nTf8', 0),
+       (6, 'https://www.youtube.com/embed/bDPRWJdVzfs', 0),
+       (7, 'https://www.youtube.com/embed/9CGY0s-uCUE', 0),
+       (8, 'https://www.youtube.com/embed/pfRTAI6Anhk', 0),
+       (9, 'https://www.youtube.com/embed/YoSghxkxBVQ', 0),
+       (10, 'https://www.youtube.com/embed/jDif8oXM7mI', 0),
+       (11, 'https://www.youtube.com/embed/h7piyWnQbZA', 0),
+       (12, 'https://www.youtube.com/embed/cU94So54cr8', 0),
+       (13, 'https://www.youtube.com/embed/j1RjRwQPvzY', 0),
+       (14, 'https://www.youtube.com/embed/pDTNUS8mgc0', 0),
+       (15, 'https://www.youtube.com/embed/k57PtwQKFoA', 0);
+
+-- 2. Tables depending on roles
+INSERT INTO users (user_id, first_name, last_name, email, password, role_id, is_active, is_deleted, creation_date)
+VALUES
+    (1, 'Neda', 'Marinova', 'neda@neda.com', '123456789Tt$', 2, 1, 0, now()),
+    (2, 'Teodor', 'Zhelyazkov', 'teo@teo.com', '123456789Tt$', 1, 1, 0, now()),
+    (3, 'Mehmed', 'Ukov', 'mehmed@mehmed.com', '123456789Tt$', 1, 1, 0, now()),
+    (4, 'Tedyy', 'Tedyyy', 'testtedy@abv.bg', '123456789Tt$', 1, 1, 0, now()),
+    (5, 'Admin', 'Admin', 'admin@abv.bg', '123456789Tt$', 3, 1, 0, now()),
+    (6, 'Teacher', 'Teacher', 'teacher@abv.bg', '123456789Tt$', 2, 1, 0, now()),
+    (7, 'Student', 'Student', 'student@abv.bg', '123456789Tt$', 1, 1, 0, now());
+
+-- 3. Tables depending on topics and users
 insert into courses
 values (1, 'Trigonometry', 1, 0, 0, 0, 6, '2022-10-17', '2022-09-01', 4),
        (2, 'Java Basics', 2, 0, 0, 0, 1, '2022-11-19', '2022-10-16', 4.3),
@@ -108,8 +70,25 @@ values (1, 'Trigonometry', 1, 0, 0, 0, 6, '2022-10-17', '2022-09-01', 4),
        (16, 'AI Masterclass', 10, 0, 0, 0, 6, '2022-11-13', '2022-10-13', 5),
        (17, 'Advanced C Programming', 2, 0, 0, 0, 1, '2022-12-13', '2022-10-13', 4);
 
+-- 4. Tables depending on courses and videos
+insert into lectures
+values (1, 'Java Basics Introduction', 1, 0, 1, 1),
+       (2, 'Arrays', 2, 0, 1, 1),
+       (3, 'Methods', 3, 0, 1, 1),
+       (4, 'Debugging', 4, 0, 1, 1),
+       (5, 'Angles', 5, 0, 6, 1),
+       (6, 'Sine', 6, 0, 6, 1),
+       (7, 'Cosine', 7, 0, 6, 1),
+       (8, 'Tangent', 8, 0, 6, 1),
+       (9, 'Inheritance and Polymorphism', 9, 0, 1, 1),
+       (10, 'Abstract Classes and Interfaces', 10, 0, 1, 1),
+       (11, 'Collections & Generics', 11, 0, 1, 1),
+       (12, 'Encapsulation', 12, 0, 1, 1),
+       (13, 'Algorithms Analysis & Linear Data Structures', 13, 0, 6, 1),
+       (14, 'Set, Map and Hash Table', 14, 0, 6, 1),
+       (15, 'Searching and Sorting', 15, 0, 6, 1);
 
-
+-- 5. Tables depending on courses and lectures
 insert into courses_lectures
 values (1, 1, 5),
        (2, 1, 6),
@@ -127,6 +106,39 @@ values (1, 1, 5),
        (14, 4, 15),
        (15, 2, 1);
 
+-- 6. Tables depending on lectures
+insert into lectures_descriptions
+values (1, 'In this lecture you will be introduced to the world of Java', 1, 0),
+       (2, 'We will learn how to use methods in Java', 3, 0),
+       (3, 'Your code is not working? Let us teach you how to debug it', 4, 0),
+       (4, 'Today we will learn what angles are and how to use them', 5, 0),
+       (6, 'Let us teach you how to use abstraction and interfaces', 10, 0),
+       (7, 'Time to introduce Collections and Generics', 11, 0);
+
+-- 7. Tables depending on lectures and users
+insert into lectures_comments
+values (1, 1, 1, 'This lecture is awesome', now(), 0),
+       (2, 1, 2, 'I am not impressed but it was good', now(), 0),
+       (3, 2, 3, 'Great', now(), 0),
+       (4, 2, 4, 'It was really interesting', now(), 0),
+       (5, 2, 1, 'Somebody else who could not do the homework?', now(), 0),
+       (6, 3, 2, 'Hey, I would like to consult on this with somebody', now(), 0),
+       (7, 4, 3, 'Perfect', now(), 0),
+       (8, 4, 4, 'Great lecture, a lot of useful information', now(), 0),
+       (9, 4, 1, 'It is so easy to study when you watch videos', now(), 0),
+       (10, 4, 2, 'Please help, I cannot submit my homework', now(), 0),
+       (11, 4, 3, 'I am here to meet new people', now(), 0),
+       (12, 4, 4, 'Awesome', now(), 0);
+
+insert into notes
+values (1, 7,
+        'Java is a high-level, class-based, object-oriented programming language that is designed to have as few implementation dependencies as possible. It is a general-purpose programming language intended to let programmers write once, run anywhere (WORA)',
+        1, 0),
+       (2, 7,
+        'Encapsulation is one of the four fundamental OOP concepts. The other three are inheritance, polymorphism and abstraction. Encapsulation in Java is a mechanism of wrapping the data (variables) and code acting on the data (methods) together as a single unit.',
+        12, 0);
+
+-- 8. Tables depending on courses and users
 insert into courses_comments
 values (1, 1, 1, 'This course is awesome', now(), 0),
        (2, 2, 2, 'I am not impressed but it was good', now(), 0),
@@ -144,14 +156,6 @@ values (1, 1, 1, 'This course is awesome', now(), 0),
 insert into courses_descriptions
 values (1, 1, 'If you are interested in Mathematics, do not hesitate to apply for the Trigonometry course', 0),
        (2, 2, 'Take a dive in the Java world and start learning how to code', 0);
-
-insert into notes
-values (1, 7,
-        'Java is a high-level, class-based, object-oriented programming language that is designed to have as few implementation dependencies as possible. It is a general-purpose programming language intended to let programmers write once, run anywhere (WORA)',
-        1, 0),
-       (2, 7,
-        'Encapsulation is one of the four fundamental OOP concepts. The other three are inheritance, polymorphism and abstraction. Encapsulation in Java is a mechanism of wrapping the data (variables) and code acting on the data (methods) together as a single unit.',
-        12, 0);
 
 insert into ratings
 values (1, 5, 1, 2,
@@ -197,6 +201,3 @@ insert into users_courses
 values (1, 2, 1),
        (2, 3, 2),
        (3, 7, 3);
-
-
-
