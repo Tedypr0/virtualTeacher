@@ -165,7 +165,7 @@
                                     </div>
                                     <div class="details">
                                         <div class="tc_content">
-                                            <p th:text="${studentCourse.getCourse().getTeacher().getFirstName()} + ' ' + ${course.getCourse().getTeacher().getLastName()} "></p>
+                                            <p th:text="${studentCourse.getCourse().getTeacher().getFirstName()} + ' ' + ${studentCourse.getCourse().getTeacher().getLastName()} "></p>
                                             <h5 style=" overflow: hidden;
                                              display: -webkit-box;-webkit-line-clamp: 1; -webkit-box-orient: vertical;"
                                                 th:text="${studentCourse.getCourse().getTitle()}"></h5>
