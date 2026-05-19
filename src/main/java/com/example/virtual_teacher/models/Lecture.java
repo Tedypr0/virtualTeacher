@@ -4,9 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.checkerframework.checker.optional.qual.OptionalBottom;
 import org.springframework.data.jpa.repository.Query;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Set;

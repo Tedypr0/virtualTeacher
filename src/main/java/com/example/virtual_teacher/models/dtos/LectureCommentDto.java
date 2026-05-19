@@ -1,6 +1,6 @@
 package com.example.virtual_teacher.models.dtos;
 
-import javax.validation.constraints.Size;
+import jakarta.validation.constraints.Size;
 
 public class LectureCommentDto {
 

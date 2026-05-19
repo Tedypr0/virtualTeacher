@@ -2,7 +2,7 @@ package com.example.virtual_teacher.models;
 
 import org.checkerframework.checker.signature.qual.Identifier;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.util.Objects;
 
 @Entity

@@ -5,7 +5,6 @@ import com.example.virtual_teacher.models.User;
 import com.example.virtual_teacher.models.dtos.LectureCommentDto;
 import org.springframework.stereotype.Component;
 
-import javax.xml.stream.events.Comment;
 import java.util.ArrayList;
 import java.util.List;
 

@@ -1,7 +1,7 @@
 package com.example.virtual_teacher.models.dtos;
 
-import javax.persistence.Column;
-import javax.validation.constraints.NotNull;
+import jakarta.persistence.Column;
+import jakarta.validation.constraints.NotNull;
 
 public class NoteDto {
 

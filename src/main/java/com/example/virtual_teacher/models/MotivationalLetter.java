@@ -1,7 +1,7 @@
 package com.example.virtual_teacher.models;
 
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "teacher_applications")
