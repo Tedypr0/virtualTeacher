@@ -51,24 +51,25 @@ VALUES
     (7, 'Student', 'Student', 'student@abv.bg', '123456789Tt$', 1, 1, 0, now());
 
 -- 3. Tables depending on topics and users
-insert into courses
-values (1, 'Trigonometry', 1, 0, 0, 0, 6, '2022-10-17', '2022-09-01', 4),
-       (2, 'Java Basics', 2, 0, 0, 0, 1, '2022-11-19', '2022-10-16', 4.3),
-       (3, 'Java Object-Oriented Programming', 2, 0, 0, 0, 1, '2022-11-13', '2022-09-13', 2.2),
-       (4, 'Java Advanced', 2, 0, 0, 0, 6, '2022-12-12', '2022-09-13', 5),
-       (5, 'Javascript for Beginners', 6, 0, 0, 0, 1, '2022-10-17', '2022-09-01', 4),
-       (6, 'Javascript Advanced', 6, 0, 0, 0, 1, '2022-11-19', '2022-10-16', 4.3),
-       (7, 'Learn C# Programming', 4, 0, 0, 0, 6, '2022-11-13', '2022-09-13', 2.2),
-       (8, 'C# DSA', 4, 0, 0, 0, 6, '2022-12-13', '2022-10-13', 4),
-       (9, 'Python Beyond the Basics', 5, 0, 0, 0, 1, '2022-12-13', '2022-10-13', 5),
-       (10, 'Python for Beginners', 5, 0, 0, 0, 1, '2022-10-13', '2022-09-13', 5),
-       (11, 'C++ Advanced', 3, 0, 0, 0, 6, '2022-12-13', '2022-09-13', 3),
-       (12, 'C++ OOP', 3, 0, 0, 0, 6, '2023-01-13', '2022-12-13', 5),
-       (13, 'Java Spring Security', 1, 0, 0, 0, 1, '2022-12-13', '2022-10-13', 4),
-       (14, 'Alpha Java Program', 1, 0, 0, 0, 1, '2023-04-13', '2022-10-13', 4),
-       (15, 'Introduction to Machine Learning', 11, 0, 0, 0, 6, '2022-11-13', '2022-10-13', 5),
-       (16, 'AI Masterclass', 10, 0, 0, 0, 6, '2022-11-13', '2022-10-13', 5),
-       (17, 'Advanced C Programming', 2, 0, 0, 0, 1, '2022-12-13', '2022-10-13', 4);
+INSERT INTO courses (course_id, title, topic_id, is_completed, is_deleted, is_draft, user_id, starting_date, end_date, avg_rating)
+VALUES
+    (1, 'Trigonometry', 1, 0, 0, 0, 6, '2022-09-01', '2022-10-17', 4),
+    (2, 'Java Basics', 2, 0, 0, 0, 1, '2022-10-16', '2022-11-19', 4.3),
+    (3, 'Java Object-Oriented Programming', 2, 0, 0, 0, 1, '2022-09-13', '2022-11-13', 2.2),
+    (4, 'Java Advanced', 2, 0, 0, 0, 6, '2022-09-13', '2022-12-12', 5),
+    (5, 'Javascript for Beginners', 6, 0, 0, 0, 1, '2022-09-01', '2022-10-17', 4),
+    (6, 'Javascript Advanced', 6, 0, 0, 0, 1, '2022-10-16', '2022-11-19', 4.3),
+    (7, 'Learn C# Programming', 4, 0, 0, 0, 6, '2022-09-13', '2022-11-13', 2.2),
+    (8, 'C# DSA', 4, 0, 0, 0, 6, '2022-10-13', '2022-12-13', 4),
+    (9, 'Python Beyond the Basics', 5, 0, 0, 0, 1, '2022-10-13', '2022-12-13', 5),
+    (10, 'Python for Beginners', 5, 0, 0, 0, 1, '2022-09-13', '2022-10-13', 5),
+    (11, 'C++ Advanced', 3, 0, 0, 0, 6, '2022-09-13', '2022-12-13', 3),
+    (12, 'C++ OOP', 3, 0, 0, 0, 6, '2022-12-13', '2023-01-13', 5),
+    (13, 'Java Spring Security', 1, 0, 0, 0, 1, '2022-10-13', '2022-12-13', 4),
+    (14, 'Alpha Java Program', 1, 0, 0, 0, 1, '2022-10-13', '2023-04-13', 4),
+    (15, 'Introduction to Machine Learning', 11, 0, 0, 0, 6, '2022-10-13', '2022-11-13', 5),
+    (16, 'AI Masterclass', 10, 0, 0, 0, 6, '2022-10-13', '2022-11-13', 5),
+    (17, 'Advanced C Programming', 2, 0, 0, 0, 1, '2022-10-13', '2022-12-13', 4);
 
 -- 4. Tables depending on courses and videos
 insert into lectures
@@ -116,81 +117,59 @@ values (1, 'In this lecture you will be introduced to the world of Java', 1, 0),
        (7, 'Time to introduce Collections and Generics', 11, 0);
 
 -- 7. Tables depending on lectures and users
-insert into lectures_comments
-values (1, 1, 1, 'This lecture is awesome', now(), 0),
-       (2, 1, 2, 'I am not impressed but it was good', now(), 0),
-       (3, 2, 3, 'Great', now(), 0),
-       (4, 2, 4, 'It was really interesting', now(), 0),
-       (5, 2, 1, 'Somebody else who could not do the homework?', now(), 0),
-       (6, 3, 2, 'Hey, I would like to consult on this with somebody', now(), 0),
-       (7, 4, 3, 'Perfect', now(), 0),
-       (8, 4, 4, 'Great lecture, a lot of useful information', now(), 0),
-       (9, 4, 1, 'It is so easy to study when you watch videos', now(), 0),
-       (10, 4, 2, 'Please help, I cannot submit my homework', now(), 0),
-       (11, 4, 3, 'I am here to meet new people', now(), 0),
-       (12, 4, 4, 'Awesome', now(), 0);
+INSERT INTO lectures_comments (lecture_comment_id, lecture_id, user_id, content, creation_date, is_deleted)
+VALUES
+    (1, 1, 1, 'This lecture is awesome', now(), 0),
+    (2, 1, 2, 'I am not impressed but it was good', now(), 0),
+    (3, 2, 3, 'Great', now(), 0),
+    (4, 2, 4, 'It was really interesting', now(), 0),
+    (5, 2, 1, 'Somebody else who could not do the homework?', now(), 0),
+    (6, 3, 2, 'Hey, I would like to consult on this with somebody', now(), 0),
+    (7, 4, 3, 'Perfect', now(), 0),
+    (8, 4, 4, 'Great lecture, a lot of useful information', now(), 0),
+    (9, 4, 1, 'It is so easy to study when you watch videos', now(), 0),
+    (10, 4, 2, 'Please help, I cannot submit my homework', now(), 0),
+    (11, 4, 3, 'I am here to meet new people', now(), 0),
+    (12, 4, 4, 'Awesome', now(), 0);
 
-insert into notes
-values (1, 7,
-        'Java is a high-level, class-based, object-oriented programming language that is designed to have as few implementation dependencies as possible. It is a general-purpose programming language intended to let programmers write once, run anywhere (WORA)',
-        1, 0),
-       (2, 7,
-        'Encapsulation is one of the four fundamental OOP concepts. The other three are inheritance, polymorphism and abstraction. Encapsulation in Java is a mechanism of wrapping the data (variables) and code acting on the data (methods) together as a single unit.',
-        12, 0);
+INSERT INTO notes (note_id, user_id, note, lecture_id, is_deleted)
+VALUES
+    (1, 7, 'Java is a high-level, class-based, object-oriented programming language that is designed to have as few implementation dependencies as possible. It is a general-purpose programming language intended to let programmers write once, run anywhere (WORA)', 1, 0),
+    (2, 7, 'Encapsulation is one of the four fundamental OOP concepts. The other three are inheritance, polymorphism and abstraction. Encapsulation in Java is a mechanism of wrapping the data (variables) and code acting on the data (methods) together as a single unit.', 12, 0);
 
 -- 8. Tables depending on courses and users
-insert into courses_comments
-values (1, 1, 1, 'This course is awesome', now(), 0),
-       (2, 2, 2, 'I am not impressed but it was good', now(), 0),
-       (3, 3, 3, 'Great', now(), 0),
-       (4, 4, 4, 'It was really interesting', now(), 0),
-       (5, 1, 1, 'Somebody else who will take the course?', now(), 0),
-       (6, 2, 2, 'Hey, I would like to ask something about the course', now(), 0),
-       (7, 3, 3, 'Perfect', now(), 0),
-       (8, 4, 4, 'Great course, a lot of useful information', now(), 0),
-       (9, 4, 1, 'It is so easy to study when you watch videos', now(), 0),
-       (10, 1, 2, 'Please help, I cannot apply', now(), 0),
-       (11, 3, 3, 'I am here to meet new people', now(), 0),
-       (12, 2, 4, 'Awesome', now(), 0);
+INSERT INTO courses_comments (course_comment_id, course_id, user_id, content, creation_date, is_deleted)
+VALUES
+    (1, 1, 1, 'This course is awesome', now(), 0),
+    (2, 2, 2, 'I am not impressed but it was good', now(), 0),
+    (3, 3, 3, 'Great', now(), 0),
+    (4, 4, 4, 'It was really interesting', now(), 0),
+    (5, 1, 1, 'Somebody else who will take the course?', now(), 0),
+    (6, 2, 2, 'Hey, I would like to ask something about the course', now(), 0),
+    (7, 3, 3, 'Perfect', now(), 0),
+    (8, 4, 4, 'Great course, a lot of useful information', now(), 0),
+    (9, 4, 1, 'It is so easy to study when you watch videos', now(), 0),
+    (10, 1, 2, 'Please help, I cannot apply', now(), 0),
+    (11, 3, 3, 'I am here to meet new people', now(), 0),
+    (12, 2, 4, 'Awesome', now(), 0);
 
 insert into courses_descriptions
 values (1, 1, 'If you are interested in Mathematics, do not hesitate to apply for the Trigonometry course', 0),
        (2, 2, 'Take a dive in the Java world and start learning how to code', 0);
 
-insert into ratings
-values (1, 5, 1, 2,
-        'The course was very comprehensive and easy to understand. The instructors made sure that they are giving the information in a way that won''t make me confused. Thank you so much for this great course!',
-        '2022-08-13'),
-       (2, 6, 2, 3,
-        'This course has taught me a lot of techniques in searching information for my  academic researches. Thank you to all people behind this, especially to the professors in this course!',
-        '2022-07-05'),
-       (3, 4, 3, 4,
-        'Extremely valuable for researching techniques. Teachers were outstanding. Lectures are to the point without drag-on. Many thanks for the quality of your efforts!',
-        '2022-09-01'),
-       (4, 5, 3, 7,
-        'The course is organised in the best way to support learners in academic information seeking. After the course, I was able to identify my faults which I have done before in conducting research. Thanks to all the amazing instructors.',
-        '2022-06-13'),
-       (5, 6, 2, 7,
-        'This course is very thorough and detailed. As an IT specialist, I have had no exposure to formal research and needed to understand the process. Now I can clearly  and confidently say that I can perform good research and obtain formal information and data on any topic, as opposed to just surfing the internet for genuine knowledge. Great course, well done to the instructors.',
-        '2022-04-12'),
-       (6, 4, 1, 4,
-        'The course is structured with contents meeting the objectives of the course. Special credit to all the teachers, I left as if they were explaining it on the face. The language was very clear and understandable.',
-        '2022-02-10'),
-       (7, 5, 3, 3,
-        'This course is truly one of a kind. Am a matured student planning to go back to study. Trying to navigate and prepare myself for the academic world.',
-        '2022-09-13'),
-       (8, 6, 4, 2,
-        'I loved this course, it was very objective and direct. I''m sure it will be very useful in my life as a student and as a professional.',
-        '2022-09-02'),
-       (9, 5, 2, 2,
-        'I adore everything in this course.  Each explanation works for me and it loads of great knowledge and know-how across defining information needs.',
-        '2022-06-04'),
-       (10, 6, 1, 3,
-        'Amazing course! Incredibly simple, fast-paced and provided a lot of useful information for someone like me, who never was "initiated" in the university academic rigor. Now I can say I have a notion of the principles behind a quality work. Thanks a lot!',
-        '2022-08-22'),
-       (11, 5, 4, 3,
-        'I love this course. It helps me with my teaching and personal development. Besides, I know several reference management tools from this course. Storing the documents is really complicated and makes me in a mess. Thank you for your tutoring and sharing.',
-        '2022-07-23');
+INSERT INTO ratings (rating_id, rating_score, course_id, user_id, review, creation_date)
+VALUES
+    (1, 5, 1, 2, 'The course was very comprehensive and easy to understand. The instructors made sure that they are giving the information in a way that won''t make me confused. Thank you so much for this great course!', '2022-08-13'),
+    (2, 6, 2, 3, 'This course has taught me a lot of techniques in searching information for my  academic researches. Thank you to all people behind this, especially to the professors in this course!', '2022-07-05'),
+    (3, 4, 3, 4, 'Extremely valuable for researching techniques. Teachers were outstanding. Lectures are to the point without drag-on. Many thanks for the quality of your efforts!', '2022-09-01'),
+    (4, 5, 3, 7, 'The course is organised in the best way to support learners in academic information seeking. After the course, I was able to identify my faults which I have done before in conducting research. Thanks to all the amazing instructors.', '2022-06-13'),
+    (5, 6, 2, 7, 'This course is very thorough and detailed. As an IT specialist, I have had no exposure to formal research and needed to understand the process. Now I can clearly  and confidently say that I can perform good research and obtain formal information and data on any topic, as opposed to just surfing the internet for genuine knowledge. Great course, well done to the instructors.', '2022-04-12'),
+    (6, 4, 1, 4, 'The course is structured with contents meeting the objectives of the course. Special credit to all the teachers, I left as if they were explaining it on the face. The language was very clear and understandable.', '2022-02-10'),
+    (7, 5, 3, 3, 'This course is truly one of a kind. Am a matured student planning to go back to study. Trying to navigate and prepare myself for the academic world.', '2022-09-13'),
+    (8, 6, 4, 2, 'I loved this course, it was very objective and direct. I''m sure it will be very useful in my life as a student and as a professional.', '2022-09-02'),
+    (9, 5, 2, 2, 'I adore everything in this course.  Each explanation works for me and it loads of great knowledge and know-how across defining information needs.', '2022-06-04'),
+    (10, 6, 1, 3, 'Amazing course! Incredibly simple, fast-paced and provided a lot of useful information for someone like me, who never was "initiated" in the university academic rigor. Now I can say I have a notion of the principles behind a quality work. Thanks a lot!', '2022-08-22'),
+    (11, 5, 4, 3, 'I love this course. It helps me with my teaching and personal development. Besides, I know several reference management tools from this course. Storing the documents is really complicated and makes me in a mess. Thank you for your tutoring and sharing.', '2022-07-23');
 
 insert into teacher_applications
 values (1, 2,
