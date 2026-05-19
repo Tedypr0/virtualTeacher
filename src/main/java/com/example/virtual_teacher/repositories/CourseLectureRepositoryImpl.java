@@ -23,9 +23,7 @@ public class CourseLectureRepositoryImpl implements CourseLectureRepository {
     @Override
     public void create(CourseLecture courseLecture) {
         try (Session session = sessionFactory.openSession()) {
-
-            session.save(courseLecture);
-
+            session.persist(courseLecture);
         }
     }
 
@@ -33,7 +31,7 @@ public class CourseLectureRepositoryImpl implements CourseLectureRepository {
     public void update(CourseLecture courseLecture) {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
-            session.save(courseLecture);
+            session.persist(courseLecture);
             session.beginTransaction().commit();
         }
     }
@@ -55,7 +53,7 @@ public class CourseLectureRepositoryImpl implements CourseLectureRepository {
         try (Session session = sessionFactory.openSession()) {
             CourseLecture courseLectureToDelete = session.get(CourseLecture.class, id);
             session.beginTransaction();
-            session.delete(courseLectureToDelete);
+            session.remove(courseLectureToDelete);
             session.getTransaction().commit();
         }
     }

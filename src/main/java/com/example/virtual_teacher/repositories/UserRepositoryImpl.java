@@ -58,7 +58,7 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public User create(User user) {
         try (Session session = sessionFactory.openSession()) {
-            session.save(user);
+            session.persist(user);
             return user;
         }
     }
@@ -67,7 +67,7 @@ public class UserRepositoryImpl implements UserRepository {
     public User update(User user) {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
-            session.update(user);
+            session.merge(user);
             session.getTransaction().commit();
             return user;
         }
@@ -81,7 +81,7 @@ public class UserRepositoryImpl implements UserRepository {
                 throw new EntityNotFoundException("User", id);
             }
             session.beginTransaction();
-            session.delete(user);
+            session.remove(user);
             session.getTransaction().commit();
             return user;
         }
@@ -100,7 +100,7 @@ public class UserRepositoryImpl implements UserRepository {
     public void createTeacherApplication(int userId, MotivationalLetter motivationalLetter) {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
-            session.save(motivationalLetter);
+            session.persist(motivationalLetter);
             session.getTransaction().commit();
         }
     }
@@ -110,7 +110,7 @@ public class UserRepositoryImpl implements UserRepository {
         try (Session session = sessionFactory.openSession()) {
             MotivationalLetter motivationalLetter = session.get(MotivationalLetter.class, userId);
             session.beginTransaction();
-            session.delete(motivationalLetter);
+            session.remove(motivationalLetter);
             session.getTransaction().commit();
         }
     }
@@ -129,7 +129,7 @@ public class UserRepositoryImpl implements UserRepository {
     public void enrollToCourse(UsersCourses usersCourses) {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
-            session.save(usersCourses);
+            session.persist(usersCourses);
             session.getTransaction().commit();
         }
     }

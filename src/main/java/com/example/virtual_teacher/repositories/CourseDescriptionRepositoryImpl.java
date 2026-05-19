@@ -49,7 +49,7 @@ public class CourseDescriptionRepositoryImpl implements CourseDescriptionReposit
     @Override
     public CourseDescription create(CourseDescription courseDescription) {
         try (Session session = sessionFactory.openSession()){
-            session.save(courseDescription);
+            session.persist(courseDescription);
         }
         return courseDescription;
     }
@@ -58,7 +58,7 @@ public class CourseDescriptionRepositoryImpl implements CourseDescriptionReposit
     public CourseDescription update(CourseDescription courseDescription) {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
-            session.update(courseDescription);
+            session.merge(courseDescription);
             session.getTransaction().commit();
             return courseDescription;
         }
@@ -73,7 +73,7 @@ public class CourseDescriptionRepositoryImpl implements CourseDescriptionReposit
             }
             courseDescription.setDeleted(true);
             session.beginTransaction();
-            session.update(courseDescription);
+            session.merge(courseDescription);
             session.getTransaction().commit();
             return courseDescription;
         }

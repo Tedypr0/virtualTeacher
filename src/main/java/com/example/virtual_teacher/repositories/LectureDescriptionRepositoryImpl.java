@@ -59,7 +59,7 @@ public class LectureDescriptionRepositoryImpl implements LectureDescriptionRepos
     public LectureDescription create(LectureDescription lectureDescription) {
         try (Session session = sessionFactory.openSession()) {
           session.beginTransaction();
-            session.save(lectureDescription);
+            session.persist(lectureDescription);
             session.getTransaction().commit();
         }
         return lectureDescription;
@@ -69,7 +69,7 @@ public class LectureDescriptionRepositoryImpl implements LectureDescriptionRepos
     public LectureDescription update(LectureDescription lectureDescription) {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
-            session.update(lectureDescription);
+            session.merge(lectureDescription);
             session.getTransaction().commit();
             return lectureDescription;
         }
@@ -83,7 +83,7 @@ public class LectureDescriptionRepositoryImpl implements LectureDescriptionRepos
             }
             lectureDescription.setDeleted(true);
             session.beginTransaction();
-            session.update(lectureDescription);
+            session.merge(lectureDescription);
             session.getTransaction().commit();
             return lectureDescription;
         }

@@ -85,7 +85,7 @@ public class CourseRepositoryImpl implements CourseRepository {
     @Override
     public Course create(Course course) {
         try (Session session = sessionFactory.openSession()) {
-            session.save(course);
+            session.persist(course);
         }
         return course;
     }
@@ -94,7 +94,7 @@ public class CourseRepositoryImpl implements CourseRepository {
     public Course update(Course course) {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
-            session.update(course);
+            session.merge(course);
             session.getTransaction().commit();
             return course;
         }
@@ -109,7 +109,7 @@ public class CourseRepositoryImpl implements CourseRepository {
             }
             courseToDelete.setDeleted(true);
             session.beginTransaction();
-            session.update(courseToDelete);
+            session.merge(courseToDelete);
             session.getTransaction().commit();
             return courseToDelete;
         }

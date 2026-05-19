@@ -31,7 +31,7 @@ public class AssignmentRepositoryImpl implements AssignmentRepository {
     @Override
     public Assignment create(Assignment assignment) {
         try (Session session = sessionFactory.openSession()) {
-            session.save(assignment);
+            session.persist(assignment);
         }
         return assignment;
     }
@@ -40,7 +40,7 @@ public class AssignmentRepositoryImpl implements AssignmentRepository {
     public Assignment update(Assignment assignment) {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
-            session.update(assignment);
+            session.merge(assignment);
             session.getTransaction().commit();
             return assignment;
         }
@@ -55,7 +55,7 @@ public class AssignmentRepositoryImpl implements AssignmentRepository {
             }
             assignment.setDeleted(true);
             session.beginTransaction();
-            session.update(assignment);
+            session.merge(assignment);
             session.getTransaction().commit();
             return assignment;
         }

@@ -54,7 +54,7 @@ public class HomeworkRepositoryImpl implements HomeworkRepository {
     @Override
     public void create(Homework homework) {
         try(Session session = sessionFactory.openSession()){
-            session.save(homework);
+            session.persist(homework);
         }
     }
 
@@ -62,7 +62,7 @@ public class HomeworkRepositoryImpl implements HomeworkRepository {
     public void update(Homework homework) {
         try(Session session = sessionFactory.openSession()){
             session.beginTransaction();
-            session.update(homework);
+            session.merge(homework);
             session.getTransaction().commit();
         }
     }
@@ -72,7 +72,7 @@ public class HomeworkRepositoryImpl implements HomeworkRepository {
         try(Session session = sessionFactory.openSession()){
             Homework homework = session.get(Homework.class,id);
             session.beginTransaction();
-            session.update(homework);
+            session.merge(homework);
             session.getTransaction().commit();
         }
     }

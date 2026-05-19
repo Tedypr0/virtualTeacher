@@ -43,7 +43,7 @@ public class NoteRepositoryImpl implements NoteRepository {
     @Override
     public Note create(Note note) {
         try (Session session = sessionFactory.openSession()) {
-            session.save(note);
+            session.persist(note);
         }
         return note;
     }
@@ -52,7 +52,7 @@ public class NoteRepositoryImpl implements NoteRepository {
     public Note update(Note note) {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
-            session.update(note);
+            session.merge(note);
             session.getTransaction().commit();
             return note;
         }
@@ -67,7 +67,7 @@ public class NoteRepositoryImpl implements NoteRepository {
             }
             note.setDeleted(true);
             session.beginTransaction();
-            session.update(note);
+            session.merge(note);
             session.getTransaction().commit();
             return note;
         }

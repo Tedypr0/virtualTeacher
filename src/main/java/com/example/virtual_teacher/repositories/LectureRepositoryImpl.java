@@ -74,7 +74,7 @@ public class LectureRepositoryImpl implements LectureRepository {
     @Override
     public Lecture create(Lecture lecture) {
         try (Session session = sessionFactory.openSession()) {
-            session.save(lecture);
+            session.persist(lecture);
         }
         return lecture;
     }
@@ -83,7 +83,7 @@ public class LectureRepositoryImpl implements LectureRepository {
     public Lecture update(Lecture lecture) {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
-            session.update(lecture);
+            session.merge(lecture);
             session.getTransaction().commit();
             return lecture;
         }
@@ -98,7 +98,7 @@ public class LectureRepositoryImpl implements LectureRepository {
             }
             lecture.setDeleted(true);
             session.beginTransaction();
-            session.update(lecture);
+            session.merge(lecture);
             session.getTransaction().commit();
             return lecture;
         }

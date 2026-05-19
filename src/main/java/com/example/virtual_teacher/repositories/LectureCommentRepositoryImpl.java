@@ -44,7 +44,7 @@ public class LectureCommentRepositoryImpl implements LectureCommentRepository {
     @Override
     public LectureComment create(LectureComment lectureComment) {
         try (Session session = sessionFactory.openSession()) {
-            session.save(lectureComment);
+            session.persist(lectureComment);
         }
         return lectureComment;
     }
@@ -53,7 +53,7 @@ public class LectureCommentRepositoryImpl implements LectureCommentRepository {
     public LectureComment update(LectureComment lectureComment) {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
-            session.update(lectureComment);
+            session.merge(lectureComment);
             session.getTransaction().commit();
             return lectureComment;
         }
@@ -68,7 +68,7 @@ public class LectureCommentRepositoryImpl implements LectureCommentRepository {
             }
             lectureComment.setDeleted(true);
             session.beginTransaction();
-            session.update(lectureComment);
+            session.merge(lectureComment);
             session.getTransaction().commit();
             return lectureComment;
         }

@@ -58,7 +58,7 @@ public class RoleRepositoryImpl implements RoleRepository {
     @Override
     public UserRole create(UserRole userRole){
         try(Session session = sessionFactory.openSession()){
-            session.save(userRole);
+            session.persist(userRole);
         }
         return userRole;
     }
@@ -67,7 +67,7 @@ public class RoleRepositoryImpl implements RoleRepository {
     public UserRole update(UserRole userRole) {
         try(Session session = sessionFactory.openSession()){
             session.beginTransaction();
-            session.save(userRole);
+            session.persist(userRole);
             session.getTransaction().commit();
         }
         return userRole;
@@ -81,7 +81,7 @@ public class RoleRepositoryImpl implements RoleRepository {
                 throw new EntityNotFoundException("UserRole",id);
             }
             session.beginTransaction();
-            session.delete(roleToDelete);
+            session.remove(roleToDelete);
             session.getTransaction().commit();
             return roleToDelete;
         }

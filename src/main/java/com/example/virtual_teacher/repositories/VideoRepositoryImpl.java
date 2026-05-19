@@ -35,7 +35,7 @@ public class VideoRepositoryImpl implements VideoRepository {
     @Override
     public Video create(Video video) {
         try (Session session = sessionFactory.openSession()) {
-            session.save(video);
+            session.persist(video);
         }
         return video;
     }
@@ -44,7 +44,7 @@ public class VideoRepositoryImpl implements VideoRepository {
     public Video update(Video video) {
         try(Session session = sessionFactory.openSession()){
             session.beginTransaction();
-            session.update(video);
+            session.merge(video);
             session.getTransaction().commit();
         }
         return video;
@@ -59,7 +59,7 @@ public class VideoRepositoryImpl implements VideoRepository {
             }
             video.setDeleted(true);
             session.beginTransaction();
-            session.update(video);
+            session.merge(video);
             session.getTransaction().commit();
             return video;
         }

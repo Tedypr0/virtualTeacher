@@ -35,7 +35,7 @@ public class AuthenticationHelper {
     }
 
     public User tryGetUser(HttpHeaders headers) {
-        if (!headers.containsKey(AUTHENTICATION_HEADER_NAME) || !headers.containsKey(PASSWORD_HEADER_NAME)) {
+        if (!headers.containsHeader(AUTHENTICATION_HEADER_NAME) || !headers.containsHeader(PASSWORD_HEADER_NAME)) {
             ERROR_MESSAGE = RESOURCE_REQUIRES_AUTHORIZATION;
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,
                     RESOURCE_REQUIRES_AUTHORIZATION);

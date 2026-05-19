@@ -62,7 +62,7 @@ public class RatingRepositoryImpl implements RatingRepository {
     public Rating create(User user, Rating rating) {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
-            session.save(rating);
+            session.persist(rating);
             session.getTransaction().commit();
         }
         return rating;
@@ -72,7 +72,7 @@ public class RatingRepositoryImpl implements RatingRepository {
     public Rating update(User user, Rating rating) {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
-            session.update(rating);
+            session.merge(rating);
             session.getTransaction().commit();
             return rating;
         }
@@ -83,7 +83,7 @@ public class RatingRepositoryImpl implements RatingRepository {
         Rating ratingToDelete = getById(courseId);
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
-            session.delete(ratingToDelete);
+            session.remove(ratingToDelete);
             session.getTransaction().commit();
             return ratingToDelete;
         }
