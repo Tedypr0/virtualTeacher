@@ -108,7 +108,13 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public void deleteTeacherApplication(int userId) {
         try (Session session = sessionFactory.openSession()) {
-            MotivationalLetter motivationalLetter = session.get(MotivationalLetter.class, userId);
+            Query<MotivationalLetter> query = session.createQuery(
+                    "from MotivationalLetter where userId = :userId", MotivationalLetter.class);
+            query.setParameter("userId", userId);
+            MotivationalLetter motivationalLetter = query.uniqueResult();
+            if (motivationalLetter == null) {
+                return;
+            }
             session.beginTransaction();
             session.remove(motivationalLetter);
             session.getTransaction().commit();
@@ -154,7 +160,9 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public List<User> getAllTeacherApplications() {
         try (Session session = sessionFactory.openSession()) {
-            Query<User> query = session.createNativeQuery("select * from users inner join teacher_applications ta on users.user_id = ta.user_id", User.class);
+            Query<User> query = session.createQuery(
+                    "from User u where exists (select 1 from MotivationalLetter m where m.userId = u.id)",
+                    User.class);
             return query.getResultList();
         }
     }

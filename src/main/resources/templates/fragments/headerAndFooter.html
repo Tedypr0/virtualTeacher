@@ -103,13 +103,13 @@
 
                 <div class="collapse navbar-collapse" id="navigation">
                     <ul  class="navbar-nav ml-auto text-center">
-                        <li class="nav-item @@home" th:classappend="${#httpServletRequest.getRequestURI() == '/' ? 'active':''}">
+                        <li class="nav-item @@home" th:classappend="${requestURI == '/' ? 'active':''}">
                             <a class="nav-link" href="index.html" th:href="@{/}">Home</a>
                         </li>
                         <li class="nav-item @@about">
                             <a class="nav-link" href="about.html" th:href="@{/about}">About</a>
                         </li>
-                        <li class="nav-item @@courses" th:classappend="${#httpServletRequest.getRequestURI() == '/courses' ? 'active':''}">
+                        <li class="nav-item @@courses" th:classappend="${requestURI == '/courses' ? 'active':''}">
                             <a class="nav-link" href="courses.html" th:href="@{/courses}">COURSES</a>
                         </li>
                         <li class="nav-item @@contact">

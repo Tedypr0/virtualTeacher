@@ -91,7 +91,7 @@
         </div>
         <div class="modal-body">
             <p class="login">
-            <form action="#" class="row" th:action="@{__${#httpServletRequest.requestURI}__}" th:object="${comment}" method="post">
+            <form action="#" class="row" th:action="@{__${requestURI}__}" th:object="${comment}" method="post">
                 <div class="col-12">
                     <input type="text" class="form-control mb-3" id="updateContent" name="updateContent" placeholder="Content" th:field="*{content}">
                     <label class="error" th:errors="*{content}">Content error

@@ -7,11 +7,11 @@ import jakarta.persistence.*;
 @Table(name = "teacher_applications")
 public class MotivationalLetter {
 
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private int id;
 
-    @Id
     @Column(name = "user_id")
     private int userId;
 

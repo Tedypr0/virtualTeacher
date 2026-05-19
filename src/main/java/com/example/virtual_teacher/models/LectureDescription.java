@@ -11,6 +11,7 @@ import jakarta.validation.constraints.Size;
 public class LectureDescription {
 
     @JsonIgnore
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "lecture_description_id")
     private int id;
@@ -22,7 +23,6 @@ public class LectureDescription {
 
     @JsonIgnore
     @NotNull
-    @Id
     @Column(name = "lecture_id")
     private int lectureId;
 
