@@ -154,7 +154,7 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public List<User> getAllTeacherApplications() {
         try (Session session = sessionFactory.openSession()) {
-            Query<User> query = session.createNativeQuery("select * from users inner join virtual_teacher.teacher_applications ta on users.user_id = ta.user_id", User.class);
+            Query<User> query = session.createNativeQuery("select * from users inner join teacher_applications ta on users.user_id = ta.user_id", User.class);
             return query.getResultList();
         }
     }
