@@ -104,85 +104,47 @@
                     <!-- course item -->
                     <br>
                     <div th:each="course : ${singleTeacherCourses}" class="col-lg-4 col-sm-6 mb-5">
-                        <div class="card p-0 border-primary rounded-0 hover-shadow"
-                             style="box-shadow: rgba(6, 24, 44, 0.4) 0px 0px 0px 2px, rgba(6, 24, 44, 0.65) 0px 4px 6px -1px, rgba(255, 255, 255, 0.08) 0px 1px 0px inset;">
-                            <div class="thumb" style="width:17.8cm; margin-top: -1.7cm">
-                                <img class="img-whp" style="border-radius: 10%; margin-left: 0.07cm" src="#"
-                                     th:src="*{course.getTopic().getImgUrl()}" alt="">
+                        <div class="card p-0 border-primary rounded-0 hover-shadow teacher-course-card">
+                            <div class="course-card-thumb">
+                                <img class="course-card-img" src="#"
+                                     th:src="*{course.getTopic().getImgUrl()}"
+                                     th:alt="${course.getTitle()}" alt="">
                             </div>
                             <div class="card-body">
-                                <ul class="list-inline mb-2">
-                                    <li class="list-inline-item ti-calendar mr-1 text-color"
-                                        th:text="${' ' + course.getStartingDate()}">02-14-2018
-                                    </li>
-                                    <div class="tc_footer">
-                                        <ul class="tc_review float-right fn-414" style="margin-top: -0.7cm">
-                                            <li th:if="${course.getAvgRating().intValue()}==0" class="list-inline-item">
-                                                <i class="fa fa-star color-gray"> <i class="fa fa-star color-gray">
-                                                    <i class="fa fa-star color-gray"> <i
-                                                            class="fa fa-star color-gray"> <i
-                                                            class="fa fa-star color-gray"> </i></i></i></i></i></li>
-                                            <li th:if="${course.getAvgRating().intValue()}==1" class="list-inline-item">
-                                                <i class="fa fa-star color-golden"> <i
-                                                        class="fa fa-star color-gray"> <i
-                                                        class="fa fa-star color-gray"> <i
-                                                        class="fa fa-star color-gray"> <i
-                                                        class="fa fa-star color-gray"> </i></i></i></i></i></li>
-                                            <li th:if="${course.getAvgRating().intValue()}==2" class="list-inline-item">
-                                                <i class="fa fa-star color-golden"> <i
-                                                        class="fa fa-star color-golden"> <i
-                                                        class="fa fa-star color-gray"> <i
-                                                        class="fa fa-star color-gray"> <i
-                                                        class="fa fa-star color-gray"> </i></i></i></i></i></li>
-                                            <li th:if="${course.getAvgRating().intValue()}==3" class="list-inline-item">
-                                                <i class="fa fa-star color-golden"> <i
-                                                        class="fa fa-star color-golden"> <i
-                                                        class="fa fa-star color-golden"> <i
-                                                        class="fa fa-star color-gray"> <i
-                                                        class="fa fa-star color-gray"> </i></i></i></i></i></li>
-                                            <li th:if="${course.getAvgRating().intValue()}==4" class="list-inline-item">
-                                                <i class="fa fa-star color-golden"> <i
-                                                        class="fa fa-star color-golden"> <i
-                                                        class="fa fa-star color-golden"> <i
-                                                        class="fa fa-star color-golden"> <i
-                                                        class="fa fa-star color-gray"> </i></i></i></i></i></li>
-                                            <li th:if="${course.getAvgRating().intValue()}==5" class="list-inline-item">
-                                                <i class="fa fa-star color-golden"> <i
-                                                        class="fa fa-star color-golden"> <i
-                                                        class="fa fa-star color-golden"> <i
-                                                        class="fa fa-star color-golden"> <i
-                                                        class="fa fa-star color-golden"> </i></i></i></i></i></li>
-
-                                        </ul>
-                                    </div>
-                                    <div class="details">
-                                        <div class="tc_content">
-                                            <p th:text="${course.getTeacher().getFirstName()} + ' ' + ${course.getTeacher().getLastName()} "></p>
-                                            <h5 style=" overflow: hidden;
-                                             display: -webkit-box;-webkit-line-clamp: 1; -webkit-box-orient: vertical;"
-                                                th:text="${course.getTitle()}"></h5>
-                                            <h6 th:text="${course.getTopic().getTopicName()}"></h6>
-                                        </div>
-                                    </div>
-                                </ul>
-                                <div style="display: inline-flex">
-                                    <a style="margin-top: 1cm;margin-bottom: 8px" href="course-single.html" class="btn btn-primary btn-sm"
+                                <div class="course-card-meta d-flex justify-content-between align-items-center mb-2">
+                                    <span class="ti-calendar text-color"
+                                          th:text="${' ' + course.getStartingDate()}">02-14-2018</span>
+                                    <ul class="list-inline mb-0 course-card-stars">
+                                        <li th:each="star : ${#numbers.sequence(1, 5)}"
+                                            class="list-inline-item">
+                                            <i class="fa fa-star"
+                                               th:classappend="${star <= course.getAvgRating().intValue()} ? ' color-golden' : ' color-gray'"></i>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="course-card-content">
+                                    <p class="mb-1"
+                                       th:text="${course.getTeacher().getFirstName()} + ' ' + ${course.getTeacher().getLastName()}"></p>
+                                    <h5 class="course-card-title" th:text="${course.getTitle()}"></h5>
+                                    <h6 class="text-muted mb-0" th:text="${course.getTopic().getTopicName()}"></h6>
+                                </div>
+                                <div class="course-card-actions d-flex flex-wrap mt-3">
+                                    <a class="btn btn-primary btn-sm"
                                        th:href="@{/courses/{id}/lectures(id=${course.getId()})}">Manage Lectures</a>
-                                </div>
-                                <div style="display: inline-flex; margin-left: 1cm">
-                                    <form th:action="@{/courses/{id}/update/status(id=${course.getId()})}" method="post">
-                                        <button class="btn btn-primary btn-sm" type="submit" th:text="${course.getStatus()}"> Status</button>
+                                    <form th:action="@{/courses/{id}/update/status(id=${course.getId()})}"
+                                          method="post" class="d-inline">
+                                        <button class="btn btn-outline-primary btn-sm" type="submit"
+                                                th:text="${course.getStatus()}">Published</button>
                                     </form>
-                                </div>
-                                <div style="display: inline-flex">
-                                    <a style="margin-top: 1cm;margin-bottom: 8px" href="course-single.html" class="btn btn-secondary btn-sm"
-                                       th:href="@{/courses/{id}/update(id=${course.getId()})}"><i
-                                            class="fa fa-edit"></i> Edit</a>
-                                </div>
-                                <div style="display: inline-flex">
-                                    <a style="margin-top: 1cm;margin-bottom: 8px" href="course-single.html" class="btn btn-secondary btn-sm"
-                                       th:href="@{/courses/{id}/delete(id=${course.getId()})}"><i
-                                            class="fa fa-trash"></i> Delete</a>
+                                    <a class="btn btn-outline-secondary btn-sm"
+                                       th:href="@{/courses/{id}/update(id=${course.getId()})}">
+                                        <i class="fa fa-edit"></i> Edit
+                                    </a>
+                                    <a class="btn btn-outline-danger btn-sm"
+                                       th:href="@{/courses/{id}/delete(id=${course.getId()})}"
+                                       onclick="return confirm('Delete this course?');">
+                                        <i class="fa fa-trash"></i> Delete
+                                    </a>
                                 </div>
                             </div>
                         </div>
