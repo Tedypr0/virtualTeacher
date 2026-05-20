@@ -75,6 +75,7 @@ create table users
     creation_date datetime     null,
     profile_image longblob     null,
     profile_image_content_type varchar(50) null,
+    profile_image_updated_at datetime     null,
     constraint users_email_uindex
         unique (email),
     constraint users_roles_role_id_fk

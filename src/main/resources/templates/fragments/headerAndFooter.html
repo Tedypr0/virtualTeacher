@@ -74,7 +74,7 @@
                         </div>
 
                         <div style="float: right" class="dropdown list-inline-item" >
-                            <button style="float: right" class="dropbtn" ><img th:if="${isAuthenticated}" th:src="@{${currentUser.getImage()}}"  alt="Avatar"/></button>
+                            <button style="float: right" class="dropbtn" ><img th:if="${isAuthenticated}" th:src="${currentUser.getImage()}"  alt="Avatar"/></button>
                             <div class="dropdown-content" style="position: absolute; z-index: 2">
                                 <a class="text-uppercase text-color p-sm-2 py-2 px-0" th:if="${isAuthenticated && !session.isAdmin}" th:href="@{/users/{id}/update(id=${currentUser.getId()})}">Profile</a>
                                 <a class="text-uppercase text-color p-sm-2 py-2 px-0" th:if="${isAuthenticated && session.isAdmin}" th:href="@{/users/{id}/update(id=${currentUser.getId()})}">Profile</a>

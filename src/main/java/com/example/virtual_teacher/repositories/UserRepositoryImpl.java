@@ -12,6 +12,7 @@ import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
@@ -178,6 +179,7 @@ public class UserRepositoryImpl implements UserRepository {
             session.beginTransaction();
             user.setProfileImage(data);
             user.setProfileImageContentType(contentType);
+            user.setProfileImageUpdatedAt(LocalDateTime.now());
             session.merge(user);
             session.getTransaction().commit();
         }

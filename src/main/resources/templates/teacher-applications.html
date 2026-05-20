@@ -35,7 +35,7 @@
               <tbody th:if="${teacherApplications.size()>=1}" th:each="user : ${teacherApplications}">
               <tr>
                 <td>
-                  <img th:src="@{${user.getImage()}}" alt="Image file">
+                  <img th:src="${user.getImage()}" alt="Image file">
                   <a href="#" class="user-link" th:text="${user.getFirstName() + ' '+ user.getLastName()}">Full name 1</a>
                   <span class="user-subhead" th:text="${user.getRole().getRole()}">Member</span>
                 </td>

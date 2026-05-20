@@ -92,6 +92,7 @@ public class UserMvcController {
 
             model.addAttribute("userId", id);
             model.addAttribute("user", updateUserDto);
+            model.addAttribute("profileImageUrl", user.getImage());
             return "update-user";
         } catch (EntityNotFoundException e) {
             model.addAttribute("error", e.getMessage());

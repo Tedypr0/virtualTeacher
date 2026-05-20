@@ -130,7 +130,7 @@
                  accept="image/png, image/gif, image/jpeg" value="CLICK ME" id="selectedImage" name="imageFile" style="width: 10%">
           <label for="selectedImage">Click me to select or change</label>
           <br>
-          <img id="blah" src="#" alt=""/>
+          <img id="blah" th:src="${profileImageUrl}" alt="Profile"/>
           <button type="submit" class="btn btn-primary">Upload</button>
         </div>
 

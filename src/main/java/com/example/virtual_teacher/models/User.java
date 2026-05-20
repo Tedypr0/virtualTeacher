@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Pattern;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
@@ -67,6 +68,10 @@ public class User {
     @JsonIgnore
     @Column(name = "profile_image_content_type")
     private String profileImageContentType;
+
+    @JsonIgnore
+    @Column(name = "profile_image_updated_at")
+    private LocalDateTime profileImageUpdatedAt;
 
     public User() {
         date = LocalDateTime.now();
@@ -160,7 +165,12 @@ public class User {
     }
 
     public String getImage() {
-        return "/users/" + id + "/profile-image";
+        String url = "/users/" + id + "/profile-image";
+        if (profileImageUpdatedAt != null) {
+            long version = profileImageUpdatedAt.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+            return url + "?v=" + version;
+        }
+        return url;
     }
 
     public byte[] getProfileImage() {
@@ -179,7 +189,18 @@ public class User {
         this.profileImageContentType = profileImageContentType;
     }
 
+    public LocalDateTime getProfileImageUpdatedAt() {
+        return profileImageUpdatedAt;
+    }
+
+    public void setProfileImageUpdatedAt(LocalDateTime profileImageUpdatedAt) {
+        this.profileImageUpdatedAt = profileImageUpdatedAt;
+    }
+
     public boolean hasProfileImage() {
+        if (profileImageUpdatedAt != null) {
+            return true;
+        }
         return profileImage != null && profileImage.length > 0;
     }
 
