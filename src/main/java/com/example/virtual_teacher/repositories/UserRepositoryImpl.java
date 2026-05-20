@@ -45,6 +45,18 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
+    public User getByIdForSession(int id) {
+        try (Session session = sessionFactory.openSession()) {
+            User user = session.get(User.class, id);
+            if (user == null) {
+                throw new EntityNotFoundException("User", id);
+            }
+            Hibernate.initialize(user.getRole());
+            return user;
+        }
+    }
+
+    @Override
     public User getByEmail(String email) {
         try (Session session = sessionFactory.openSession()) {
             Query<User> query = session.createQuery("from User where email = :email", User.class);

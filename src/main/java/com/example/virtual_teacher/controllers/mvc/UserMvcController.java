@@ -8,6 +8,7 @@ import com.example.virtual_teacher.helpers.AuthenticationHelper;
 import com.example.virtual_teacher.models.MotivationalLetter;
 import com.example.virtual_teacher.models.User;
 import com.example.virtual_teacher.models.dtos.UpdateUserDto;
+import com.example.virtual_teacher.services.UserServiceImpl;
 import com.example.virtual_teacher.services.contracts.NoteService;
 import com.example.virtual_teacher.services.contracts.RoleService;
 import com.example.virtual_teacher.services.contracts.UserService;
@@ -20,6 +21,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -90,9 +92,11 @@ public class UserMvcController {
                 return "access-denied";
             }
 
+            model.addAttribute("id", id);
             model.addAttribute("userId", id);
             model.addAttribute("user", updateUserDto);
             model.addAttribute("profileImageUrl", user.getImage());
+            model.addAttribute("maxProfileImageBytes", UserServiceImpl.MAX_PROFILE_IMAGE_BYTES);
             return "update-user";
         } catch (EntityNotFoundException e) {
             model.addAttribute("error", e.getMessage());
@@ -140,7 +144,8 @@ public class UserMvcController {
     @PostMapping("/{id}/update/uploadImage")
     public String uploadImage(@PathVariable int id,
                               @RequestParam("imageFile") MultipartFile multipartFile,
-                              HttpSession session) {
+                              HttpSession session,
+                              RedirectAttributes redirectAttributes) {
         User authUser;
         try {
             authUser = authenticationHelper.tryGetUser(session);
@@ -153,12 +158,15 @@ public class UserMvcController {
         try {
             User userToAddImg = userService.getById(id);
             userService.saveImage(multipartFile, userToAddImg);
-            User refreshedUser = userService.getById(id);
+            User refreshedUser = userService.getByIdForSession(id);
             if (authUser.getId() == id) {
                 session.setAttribute("currentUser", refreshedUser);
             }
+            redirectAttributes.addFlashAttribute("imageUploaded", true);
+        } catch (ResponseStatusException e) {
+            throw e;
         } catch (IOException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Could not read image file.");
         }
         return "redirect:/users/" + id + "/update";
     }

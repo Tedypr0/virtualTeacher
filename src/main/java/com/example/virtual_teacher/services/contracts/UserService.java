@@ -14,6 +14,8 @@ public interface UserService {
 
     User getById(int id);
 
+    User getByIdForSession(int id);
+
     User getByEmail(String email);
 
     User create(User user);

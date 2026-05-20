@@ -259,3 +259,58 @@ body {font-family: Arial, Helvetica, sans-serif;}
 .teacher-course-card .course-card-actions form {
   margin: 0;
 }
+
+.file-upload-input {
+  position: absolute;
+  width: 0;
+  height: 0;
+  opacity: 0;
+  overflow: hidden;
+}
+
+.file-upload-control {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.file-upload-name {
+  color: #555;
+}
+
+.file-upload-name.is-error {
+  color: #c0392b;
+}
+
+.profile-image-preview {
+  width: 120px;
+  height: 120px;
+  max-width: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin: 0.75rem 0;
+  display: block;
+}
+
+.profile-crop-modal .modal-body {
+  max-height: 70vh;
+  overflow: hidden;
+}
+
+.profile-crop-container {
+  max-height: 60vh;
+  background: #f0f0f0;
+}
+
+.profile-crop-container img {
+  display: block;
+  max-width: 100%;
+  max-height: 60vh;
+}
+
+.profile-crop-hint {
+  color: #666;
+  font-size: 0.9rem;
+  margin-bottom: 0.75rem;
+}

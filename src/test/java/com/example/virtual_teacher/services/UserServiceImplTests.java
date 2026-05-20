@@ -16,6 +16,9 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import com.example.virtual_teacher.Helpers;
 
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.web.server.ResponseStatusException;
+
 import java.util.ArrayList;
 
 @ExtendWith(MockitoExtension.class)
@@ -201,5 +204,31 @@ public class UserServiceImplTests {
         service.applicationExists(1);
 
         Mockito.verify(mockRepository, Mockito.times(1)).applicationExists(1);
+    }
+
+    @Test
+    void saveImage_persistsToDatabase() throws Exception {
+        User user = Helpers.createMockStudent();
+        MockMultipartFile file = new MockMultipartFile(
+                "imageFile",
+                "avatar.png",
+                "image/png",
+                "pixels".getBytes());
+
+        service.saveImage(file, user);
+
+        Mockito.verify(mockRepository).updateProfileImage(
+                Mockito.eq(user.getId()),
+                Mockito.any(byte[].class),
+                Mockito.eq("image/png"));
+    }
+
+    @Test
+    void saveImage_rejectsNonImage() {
+        User user = Helpers.createMockStudent();
+        MockMultipartFile file = new MockMultipartFile(
+                "imageFile", "doc.pdf", "application/pdf", "data".getBytes());
+
+        Assertions.assertThrows(ResponseStatusException.class, () -> service.saveImage(file, user));
     }
 }

@@ -66,7 +66,12 @@ public class UserServiceImpl implements UserService {
         return userRepository.delete(id);
     }
 
-    private static final long MAX_PROFILE_IMAGE_BYTES = 30 * 1024 * 1024;
+    public static final long MAX_PROFILE_IMAGE_BYTES = 20 * 1024 * 1024;
+
+    @Override
+    public User getByIdForSession(int id) {
+        return userRepository.getByIdForSession(id);
+    }
 
     @Override
     public void saveImage(MultipartFile multipartFile, User user) throws IOException {
@@ -74,14 +79,39 @@ public class UserServiceImpl implements UserService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No image file provided.");
         }
         String contentType = multipartFile.getContentType();
-        if (contentType == null || !contentType.startsWith("image/")) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Only image files are allowed.");
+        String originalFilename = multipartFile.getOriginalFilename();
+        if (!isAllowedImage(contentType, originalFilename)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Only JPEG, PNG, GIF, or WebP images are allowed.");
         }
         byte[] data = multipartFile.getBytes();
         if (data.length > MAX_PROFILE_IMAGE_BYTES) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Image must be smaller than 5MB.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Image must be smaller than 20 MB.");
+        }
+        if (contentType == null || contentType.isBlank()) {
+            contentType = "image/jpeg";
         }
         userRepository.updateProfileImage(user.getId(), data, contentType);
+    }
+
+    private boolean isAllowedImage(String contentType, String filename) {
+        if (contentType != null) {
+            String lower = contentType.toLowerCase();
+            if (lower.startsWith("image/jpeg")
+                    || lower.startsWith("image/png")
+                    || lower.startsWith("image/gif")
+                    || lower.startsWith("image/webp")) {
+                return true;
+            }
+        }
+        if (filename != null) {
+            String lowerName = filename.toLowerCase();
+            return lowerName.endsWith(".jpg")
+                    || lowerName.endsWith(".jpeg")
+                    || lowerName.endsWith(".png")
+                    || lowerName.endsWith(".gif")
+                    || lowerName.endsWith(".webp");
+        }
+        return false;
     }
 
     @Override
