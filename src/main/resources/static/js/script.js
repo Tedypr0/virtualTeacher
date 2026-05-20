@@ -39,9 +39,14 @@ $(document).ready(function() {
 (function ($) {
 	'use strict';
 
-	// Preloader js    
-	$(window).on('load', function () {
+	function hidePreloader() {
 		$('.preloader').fadeOut(700);
+	}
+
+	// Hide preloader when page is ready; fallback if external assets block window "load"
+	$(window).on('load', hidePreloader);
+	$(document).ready(function () {
+		setTimeout(hidePreloader, 2000);
 	});
 
 	// Sticky Menu
@@ -68,12 +73,17 @@ $(document).ready(function() {
 
 	// Background-images
 	$('[data-background]').each(function () {
+		var bg = $(this).data('background');
+		if (bg && bg.indexOf('/') !== 0 && bg.indexOf('http') !== 0) {
+			bg = '/' + bg;
+		}
 		$(this).css({
-			'background-image': 'url(' + $(this).data('background') + ')'
+			'background-image': 'url(' + bg + ')'
 		});
 	});
 
 	//Hero Slider
+	if ($('.hero-slider').length) {
 	$('.hero-slider').slick({
 		autoplay: true,
 		autoplaySpeed: 7500,
@@ -87,6 +97,7 @@ $(document).ready(function() {
 		dots: true
 	});
 	$('.hero-slider').slickAnimation();
+	}
 
 	// venobox popup
 	$(document).ready(function () {
@@ -141,30 +152,27 @@ $(document).ready(function() {
 
 })(jQuery);
 
-		// Teacher Application button logic
+// Teacher Application button logic (header only)
+var modal = document.getElementById("myModal");
+var btn = document.getElementById("myBtn");
+var span = document.getElementsByClassName("close")[0];
 
-	// Get the modal
-	var modal = document.getElementById("myModal");
-
-	// Get the button that opens the modal
-	var btn = document.getElementById("myBtn");
-
-	// Get the <span> element that closes the modal
-                                var span = document.getElementsByClassName("close")[0];
-
-                                // When the user clicks the button, open the modal
-                                btn.onclick = function() {
+if (btn && modal) {
+	btn.onclick = function () {
 		modal.style.display = "block";
-	}
+	};
+}
 
-	// When the user clicks on <span> (x), close the modal
-                                span.onclick = function() {
+if (span && modal) {
+	span.onclick = function () {
+		modal.style.display = "none";
+	};
+}
+
+if (modal) {
+	window.onclick = function (event) {
+		if (event.target === modal) {
 			modal.style.display = "none";
 		}
-
-		// When the user clicks anywhere outside of the modal, close it
-                                window.onclick = function(event) {
-			if (event.target === modal) {
-			modal.style.display = "none";
-		}
-		}
+	};
+}

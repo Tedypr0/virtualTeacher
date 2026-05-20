@@ -31,8 +31,6 @@
   <link href="/css/style.css" rel="stylesheet" th:href="@{/css/style.css}">
   <link href="/css/style.css" rel="stylesheet" th:href="@{/css/styleUsers.css}">
 
-  <link href="/js/script.js" rel="script" th:href="@{/js/script.js}">
-
   <!--Favicon-->
   <link rel="shortcut icon" href="/images/favicon.png" type="image/x-icon" th:href="@{/images/favicon.png}">
   <link rel="icon" href="/images/favicon.png" type="image/x-icon" th:href="@{/images/favicon.png}">
@@ -114,7 +112,7 @@
 </div>
 
 <!-- page title -->
-<section class="page-title-section overlay" data-background="images/backgrounds/page-title.jpg">
+<section class="page-title-section overlay" th:attr="data-background=@{/images/backgrounds/page-title.jpg}">
   <div class="container">
     <div class="row">
       <div class="col-md-8">
@@ -170,23 +168,20 @@
 <!-- /footer -->
 
 <!-- jQuery -->
-<script src="plugins/jQuery/jquery.min.js"></script>
+<script th:src="@{/plugins/jQuery/jquery.min.js}"></script>
 <!-- Bootstrap JS -->
-<script src="plugins/bootstrap/bootstrap.min.js"></script>
+<script th:src="@{/plugins/bootstrap/bootstrap.min.js}"></script>
 <!-- slick slider -->
-<script src="plugins/slick/slick.min.js"></script>
+<script th:src="@{/plugins/slick/slick.min.js}"></script>
 <!-- aos -->
-<script src="plugins/aos/aos.js"></script>
+<script th:src="@{/plugins/aos/aos.js}"></script>
 <!-- venobox popup -->
-<script src="plugins/venobox/venobox.min.js"></script>
+<script th:src="@{/plugins/venobox/venobox.min.js}"></script>
 <!-- filter -->
-<script src="plugins/filterizr/jquery.filterizr.min.js"></script>
-<!-- google map -->
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCcABaamniA6OL5YvYSpB3pFMNrXwXnLwU"></script>
-<script src="plugins/google-map/gmap.js"></script>
+<script th:src="@{/plugins/filterizr/jquery.filterizr.min.js}"></script>
 
 <!-- Main Script -->
-<script src="js/script.js"></script>
+<script th:src="@{/js/script.js}"></script>
 
 </body>
 </html>

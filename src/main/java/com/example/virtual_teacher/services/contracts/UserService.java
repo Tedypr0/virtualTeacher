@@ -1,6 +1,7 @@
 package com.example.virtual_teacher.services.contracts;
 
 import com.example.virtual_teacher.models.MotivationalLetter;
+import com.example.virtual_teacher.models.ProfileImage;
 import com.example.virtual_teacher.models.User;
 import com.example.virtual_teacher.models.UsersCourses;
 import org.springframework.web.multipart.MultipartFile;
@@ -21,7 +22,9 @@ public interface UserService {
 
     User delete(int id);
 
-    void saveImage(MultipartFile multipartFile, User authUser) throws IOException;
+    void saveImage(MultipartFile multipartFile, User user) throws IOException;
+
+    ProfileImage getProfileImage(int userId);
 
     void createTeacherApplication(int userId, MotivationalLetter motivationalLetter);
 

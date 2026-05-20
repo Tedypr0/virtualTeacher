@@ -22,7 +22,7 @@ public class Rating {
     private int ratingScore;
 
     @NotNull
-    @Column(name = "review")
+    @Column(length = 1000, name = "review")
     private String review;
 
     @ManyToOne

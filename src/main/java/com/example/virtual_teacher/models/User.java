@@ -6,9 +6,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Pattern;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
@@ -60,6 +57,16 @@ public class User {
     @OneToOne
     @JoinColumn(name = "user_id")
     private MotivationalLetter motivationalLetter;
+
+    @JsonIgnore
+    @Lob
+    @Basic(fetch = FetchType.LAZY)
+    @Column(name = "profile_image", columnDefinition = "LONGBLOB")
+    private byte[] profileImage;
+
+    @JsonIgnore
+    @Column(name = "profile_image_content_type")
+    private String profileImageContentType;
 
     public User() {
         date = LocalDateTime.now();
@@ -152,18 +159,28 @@ public class User {
         return "Blocked";
     }
 
-    public String getImage(){
-        //check if image exists, if not return defaultImg.
-        StringBuilder sb = new StringBuilder();
-        StringBuilder defaultPath = new StringBuilder();
-        defaultPath.append("\\userImages\\");
-        StringBuilder fileName =  new StringBuilder();
-        fileName.append(getEmail()).append(".jpg");
-        Path path = Paths.get(String.valueOf(sb.append(Paths.get("").toAbsolutePath()).append("\\src\\main\\resources\\static\\userImages\\").append(fileName)));
-        if(Files.exists(path)){
-            return defaultPath.append(fileName).toString();
-        }
-        return  defaultPath.append("defaultImg.jpg").toString();
+    public String getImage() {
+        return "/users/" + id + "/profile-image";
+    }
+
+    public byte[] getProfileImage() {
+        return profileImage;
+    }
+
+    public void setProfileImage(byte[] profileImage) {
+        this.profileImage = profileImage;
+    }
+
+    public String getProfileImageContentType() {
+        return profileImageContentType;
+    }
+
+    public void setProfileImageContentType(String profileImageContentType) {
+        this.profileImageContentType = profileImageContentType;
+    }
+
+    public boolean hasProfileImage() {
+        return profileImage != null && profileImage.length > 0;
     }
 
     public MotivationalLetter getMotivationalLetter() {

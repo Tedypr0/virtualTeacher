@@ -3,18 +3,18 @@ package com.example.virtual_teacher.services;
 import com.example.virtual_teacher.exceptions.DuplicateEntityException;
 import com.example.virtual_teacher.exceptions.EntityNotFoundException;
 import com.example.virtual_teacher.models.MotivationalLetter;
+import com.example.virtual_teacher.models.ProfileImage;
 import com.example.virtual_teacher.models.User;
 import com.example.virtual_teacher.models.UsersCourses;
 import com.example.virtual_teacher.repositories.contracts.UserRepository;
 import com.example.virtual_teacher.services.contracts.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 
 @Service
@@ -66,13 +66,31 @@ public class UserServiceImpl implements UserService {
         return userRepository.delete(id);
     }
 
+    private static final long MAX_PROFILE_IMAGE_BYTES = 30 * 1024 * 1024;
+
     @Override
-    public void saveImage(MultipartFile multipartFile, User authUser) throws IOException {
-        StringBuilder sb = new StringBuilder();
-        sb.append(Paths.get("").toAbsolutePath()).append("\\src\\main\\resources\\static\\userImages\\");
-        byte[] bytes = multipartFile.getBytes();
-        Path path = Paths.get(sb + authUser.getEmail()+".jpg");
-        Files.write(path,bytes);
+    public void saveImage(MultipartFile multipartFile, User user) throws IOException {
+        if (multipartFile == null || multipartFile.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No image file provided.");
+        }
+        String contentType = multipartFile.getContentType();
+        if (contentType == null || !contentType.startsWith("image/")) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Only image files are allowed.");
+        }
+        byte[] data = multipartFile.getBytes();
+        if (data.length > MAX_PROFILE_IMAGE_BYTES) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Image must be smaller than 5MB.");
+        }
+        userRepository.updateProfileImage(user.getId(), data, contentType);
+    }
+
+    @Override
+    public ProfileImage getProfileImage(int userId) {
+        User user = userRepository.getByIdWithProfileImage(userId);
+        if (!user.hasProfileImage()) {
+            return null;
+        }
+        return new ProfileImage(user.getProfileImage(), user.getProfileImageContentType());
     }
 
     @Override

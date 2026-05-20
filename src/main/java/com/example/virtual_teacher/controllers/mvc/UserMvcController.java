@@ -84,7 +84,7 @@ public class UserMvcController {
             if (authUser.isAdmin()) {
                 updateUserDto = userMapper.updateAdminUserToDto(new UpdateUserDto(), user);
                 model.addAttribute("roles", roleService.getAll());
-            } else if (authUser.getId() != id) {
+            } else if (authUser.getId() == id) {
                 updateUserDto = userMapper.objToUserDto(new UpdateUserDto(), authUser);
             } else {
                 return "access-denied";
@@ -152,10 +152,14 @@ public class UserMvcController {
         try {
             User userToAddImg = userService.getById(id);
             userService.saveImage(multipartFile, userToAddImg);
+            User refreshedUser = userService.getById(id);
+            if (authUser.getId() == id) {
+                session.setAttribute("currentUser", refreshedUser);
+            }
         } catch (IOException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
-        return "redirect:/";
+        return "redirect:/users/" + id + "/update";
     }
 
     @PostMapping("/{id}/update/status")

@@ -23,7 +23,7 @@ public class Note {
     @Column(name = "is_deleted")
     private boolean isDeleted;
 
-    @Column(name = "note")
+    @Column(length = 2000, name = "note")
     @NotNull
     private String note;
 

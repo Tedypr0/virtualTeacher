@@ -35,4 +35,8 @@ public interface UserRepository {
 
     long getAllTeachers();
     long getAllStudents();
+
+    void updateProfileImage(int userId, byte[] data, String contentType);
+
+    User getByIdWithProfileImage(int id);
 }

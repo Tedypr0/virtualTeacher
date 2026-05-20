@@ -73,6 +73,8 @@ create table users
     is_active     tinyint(1)   not null,
     is_deleted    tinyint(1)   not null,
     creation_date datetime     null,
+    profile_image longblob     null,
+    profile_image_content_type varchar(50) null,
     constraint users_email_uindex
         unique (email),
     constraint users_roles_role_id_fk

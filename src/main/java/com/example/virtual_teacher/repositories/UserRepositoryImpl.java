@@ -5,6 +5,7 @@ import com.example.virtual_teacher.models.MotivationalLetter;
 import com.example.virtual_teacher.models.User;
 import com.example.virtual_teacher.models.UsersCourses;
 import com.example.virtual_teacher.repositories.contracts.UserRepository;
+import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
@@ -164,6 +165,33 @@ public class UserRepositoryImpl implements UserRepository {
                     "from User u where exists (select 1 from MotivationalLetter m where m.userId = u.id)",
                     User.class);
             return query.getResultList();
+        }
+    }
+
+    @Override
+    public void updateProfileImage(int userId, byte[] data, String contentType) {
+        try (Session session = sessionFactory.openSession()) {
+            User user = session.get(User.class, userId);
+            if (user == null) {
+                throw new EntityNotFoundException("User", userId);
+            }
+            session.beginTransaction();
+            user.setProfileImage(data);
+            user.setProfileImageContentType(contentType);
+            session.merge(user);
+            session.getTransaction().commit();
+        }
+    }
+
+    @Override
+    public User getByIdWithProfileImage(int id) {
+        try (Session session = sessionFactory.openSession()) {
+            User user = session.get(User.class, id);
+            if (user == null) {
+                throw new EntityNotFoundException("User", id);
+            }
+            Hibernate.initialize(user.getProfileImage());
+            return user;
         }
     }
 }
