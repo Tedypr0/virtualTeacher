@@ -104,12 +104,14 @@ public class UserMvcController {
         }
     }
 
-    @PostMapping("/{id}/update")
+    @PostMapping(value = "/{id}/update", consumes = {"application/x-www-form-urlencoded", "multipart/form-data"})
     public String updateUser(@PathVariable int id,
                              @Valid @ModelAttribute("user") UpdateUserDto updateUserDto,
                              BindingResult errors,
+                             @RequestParam(value = "imageFile", required = false) MultipartFile imageFile,
                              Model model,
-                             HttpSession session) {
+                             HttpSession session,
+                             RedirectAttributes redirectAttributes) {
         User authUser;
         try {
             authUser = authenticationHelper.tryGetUser(session);
@@ -117,6 +119,7 @@ public class UserMvcController {
             return "redirect:/auth/login";
         }
         if (errors.hasErrors()) {
+            populateUpdateUserModel(model, id, authUser, updateUserDto);
             return "update-user";
         }
 
@@ -130,14 +133,38 @@ public class UserMvcController {
             } else {
                 return "access-denied";
             }
-            userService.update(authUser, originalUser);
+            userService.update(authUser, updatedUser);
+            if (imageFile != null && !imageFile.isEmpty()) {
+                userService.saveImage(imageFile, updatedUser);
+            }
+            if (authUser.getId() == id) {
+                session.setAttribute("currentUser", userService.getByIdForSession(id));
+            }
+            redirectAttributes.addFlashAttribute("profileSaved", true);
             return "redirect:/";
+        } catch (ResponseStatusException e) {
+            throw e;
+        } catch (IOException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Could not read image file.");
         } catch (DuplicateEntityException e) {
             errors.rejectValue("email", "duplicate_user", e.getMessage());
+            populateUpdateUserModel(model, id, authUser, updateUserDto);
             return "update-user";
         } catch (EntityNotFoundException e) {
             model.addAttribute("error", e.getMessage());
             return "not-found";
+        }
+    }
+
+    private void populateUpdateUserModel(Model model, int id, User authUser, UpdateUserDto updateUserDto) {
+        User user = userService.getById(id);
+        model.addAttribute("id", id);
+        model.addAttribute("userId", id);
+        model.addAttribute("user", updateUserDto);
+        model.addAttribute("profileImageUrl", user.getImage());
+        model.addAttribute("maxProfileImageBytes", UserServiceImpl.MAX_PROFILE_IMAGE_BYTES);
+        if (authUser.isAdmin()) {
+            model.addAttribute("roles", roleService.getAll());
         }
     }
 

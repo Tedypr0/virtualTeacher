@@ -1,6 +1,5 @@
 /**
- * Profile image picker with square crop (Cropper.js).
- * Raw file may be large; uploaded image is resized to outputSize x outputSize JPEG.
+ * Profile image cropper; cropped image is attached to the profile form on Save.
  */
 function initProfileImageCropper(options) {
     const input = document.getElementById(options.inputId);
@@ -12,6 +11,7 @@ function initProfileImageCropper(options) {
     const cropImg = document.getElementById(options.cropImageId);
     const applyBtn = document.getElementById(options.applyBtnId);
     const cancelBtn = document.getElementById(options.cancelBtnId);
+    const saveBtn = options.saveBtnId ? document.getElementById(options.saveBtnId) : null;
     const maxBytes = options.maxBytes || 20 * 1024 * 1024;
     const outputSize = options.outputSize || 512;
 
@@ -23,6 +23,7 @@ function initProfileImageCropper(options) {
     let croppedBlob = null;
     let cropSourceUrl = null;
     let selectedFileName = '';
+    let dynamicImageInput = null;
 
     function revokeCropSource() {
         if (cropSourceUrl) {
@@ -38,6 +39,14 @@ function initProfileImageCropper(options) {
         }
         cropImg.removeAttribute('src');
         revokeCropSource();
+    }
+
+    function removeDynamicImageInput() {
+        if (dynamicImageInput && dynamicImageInput.parentNode) {
+            dynamicImageInput.parentNode.removeChild(dynamicImageInput);
+        }
+        dynamicImageInput = null;
+        form.removeAttribute('enctype');
     }
 
     function closeModal() {
@@ -67,20 +76,37 @@ function initProfileImageCropper(options) {
         fileNameEl.classList.toggle('is-error', !!isError);
     }
 
+    function attachCroppedImageToForm() {
+        removeDynamicImageInput();
+        const file = new File([croppedBlob], 'profile.jpg', { type: 'image/jpeg' });
+        const dataTransfer = new DataTransfer();
+        dataTransfer.items.add(file);
+        dynamicImageInput = document.createElement('input');
+        dynamicImageInput.type = 'file';
+        dynamicImageInput.name = 'imageFile';
+        dynamicImageInput.style.display = 'none';
+        dynamicImageInput.files = dataTransfer.files;
+        form.appendChild(dynamicImageInput);
+        form.enctype = 'multipart/form-data';
+    }
+
     function onFileSelected(file) {
         if (!file) {
             croppedBlob = null;
+            removeDynamicImageInput();
             setFileName('No file selected', false);
             return;
         }
         if (file.size > maxBytes) {
             input.value = '';
             croppedBlob = null;
+            removeDynamicImageInput();
             setFileName('File too large (max ' + Math.round(maxBytes / (1024 * 1024)) + ' MB)', true);
             return;
         }
         selectedFileName = file.name;
         croppedBlob = null;
+        removeDynamicImageInput();
         setFileName('Adjust crop, then click “Use cropped image”', false);
 
         destroyCropper();
@@ -130,6 +156,7 @@ function initProfileImageCropper(options) {
     if (cancelBtn) {
         cancelBtn.addEventListener('click', function () {
             croppedBlob = null;
+            removeDynamicImageInput();
             onCropModalClosed();
         });
     }
@@ -173,7 +200,7 @@ function initProfileImageCropper(options) {
                     previewImg.dataset.previewUrl = previewUrl;
                 }
                 const baseName = selectedFileName.replace(/\.[^.]+$/, '') || 'profile';
-                setFileName(baseName + '-cropped.jpg (ready to upload)', false);
+                setFileName(baseName + '-cropped.jpg (will save on Save)', false);
                 closeModal();
             }, 'image/jpeg', 0.92);
         });
@@ -181,43 +208,15 @@ function initProfileImageCropper(options) {
 
     form.addEventListener('submit', function (e) {
         if (!croppedBlob) {
-            e.preventDefault();
-            setFileName('Choose an image and apply crop before uploading.', true);
+            removeDynamicImageInput();
             return;
         }
         e.preventDefault();
-
-        const formData = new FormData();
-        formData.append('imageFile', croppedBlob, 'profile.jpg');
-
-        const submitBtn = form.querySelector('button[type="submit"]');
-        if (submitBtn) {
-            submitBtn.disabled = true;
-            submitBtn.textContent = 'Uploading…';
+        attachCroppedImageToForm();
+        if (saveBtn) {
+            saveBtn.disabled = true;
+            saveBtn.textContent = 'Saving…';
         }
-
-        fetch(form.action, {
-            method: 'POST',
-            body: formData,
-            redirect: 'follow',
-            credentials: 'same-origin'
-        })
-            .then(function (response) {
-                if (response.redirected) {
-                    window.location.href = response.url;
-                    return;
-                }
-                if (!response.ok) {
-                    throw new Error('Upload failed');
-                }
-                window.location.reload();
-            })
-            .catch(function () {
-                setFileName('Upload failed. Try again.', true);
-                if (submitBtn) {
-                    submitBtn.disabled = false;
-                    submitBtn.textContent = 'Upload image';
-                }
-            });
+        form.submit();
     });
 }

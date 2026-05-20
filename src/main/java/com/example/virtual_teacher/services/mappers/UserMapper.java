@@ -35,14 +35,16 @@ public class UserMapper {
     public User userDtoToObj(UpdateUserDto updateUserDto, User originalUser){
         originalUser.setFirstName(updateUserDto.getFirstName());
         originalUser.setLastName(updateUserDto.getLastName());
-        originalUser.setPassword(updateUserDto.getPassword());
+        if (updateUserDto.getPassword() != null && !updateUserDto.getPassword().isBlank()) {
+            originalUser.setPassword(updateUserDto.getPassword());
+        }
         return originalUser;
     }
 
     public UpdateUserDto objToUserDto(UpdateUserDto updateUserDto, User originalUser){
         updateUserDto.setFirstName(originalUser.getFirstName());
         updateUserDto.setLastName(originalUser.getLastName());
-        updateUserDto.setPassword(originalUser.getPassword());
+        updateUserDto.setPassword("");
         return updateUserDto;
     }
 

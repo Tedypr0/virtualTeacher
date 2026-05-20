@@ -22,10 +22,24 @@
       <h3 style="text-align: center">Edit profile</h3>
     </div>
     <div class="modal-body">
+      <p th:if="${profileSaved}" class="text-success">Profile saved successfully.</p>
       <p th:if="${imageUploaded}" class="text-success">Profile image updated successfully.</p>
 
-      <form class="row" th:action="@{/users/{id}/update(id=${id})}" th:object="${user}" method="post" id="profileForm">
-        <div class="col-12">
+      <div class="col-12 profile-image-section">
+        <h4>Profile image</h4>
+        <img id="profileImagePreview" class="profile-image-preview" th:src="${profileImageUrl}" alt="Profile">
+        <div class="file-upload-control">
+          <input type="file" class="file-upload-input" id="profileImageInput"
+                 accept="image/jpeg,image/png,image/gif,image/webp,.jpg,.jpeg,.png,.gif,.webp">
+          <button type="button" class="btn btn-outline-secondary btn-sm" id="profileImageChooseBtn">Choose image</button>
+          <span id="profileImageFileName" class="file-upload-name">No file selected</span>
+        </div>
+        <p class="profile-crop-hint">Optional: choose a photo and crop it. It will be saved when you click Save.</p>
+      </div>
+
+      <form class="row" th:action="@{/users/{id}/update(id=${id})}" th:object="${user}"
+            method="post" id="profileForm">
+        <div class="col-12 mt-3">
           <input type="text" class="form-control mb-3" id="editFirstname" placeholder="First Name" th:field="*{firstName}">
           <label class="error" th:errors="*{firstName}">First name error</label>
         </div>
@@ -42,26 +56,10 @@
             <option th:each="role : ${roles}" th:text="${role.role}" th:value="${role.id}"></option>
           </select>
         </div>
-        <div class="col-12">
-          <button type="submit" class="btn btn-primary">Save</button>
-          <a class="btn btn-primary" th:href="@{/}">Close</a>
-        </div>
-      </form>
 
-      <form method="post" enctype="multipart/form-data"
-            th:action="@{/users/{id}/update/uploadImage(id=${id})}"
-            id="profileImageUploadForm" class="mt-4">
-        <div class="col-12">
-          <h4>Profile image</h4>
-          <img id="profileImagePreview" class="profile-image-preview" th:src="${profileImageUrl}" alt="Profile">
-          <div class="file-upload-control">
-            <input type="file" class="file-upload-input" id="profileImageInput"
-                   accept="image/jpeg,image/png,image/gif,image/webp,.jpg,.jpeg,.png,.gif,.webp">
-            <button type="button" class="btn btn-outline-secondary btn-sm" id="profileImageChooseBtn">Choose image</button>
-            <span id="profileImageFileName" class="file-upload-name">No file selected</span>
-          </div>
-          <p class="profile-crop-hint">Large images can be cropped to a square before upload.</p>
-          <button type="submit" class="btn btn-primary mt-2" id="profileImageUploadBtn">Upload image</button>
+        <div class="col-12 profile-form-actions">
+          <button type="submit" class="btn btn-primary" id="profileSaveBtn">Save</button>
+          <a class="btn btn-outline-secondary" th:href="@{/}">Close</a>
         </div>
       </form>
     </div>
@@ -73,7 +71,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="profileCropModalLabel">Crop profile image</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="profileCropCancelBtn">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -100,13 +98,14 @@
   initProfileImageCropper({
     inputId: 'profileImageInput',
     chooseBtnId: 'profileImageChooseBtn',
-    formId: 'profileImageUploadForm',
+    formId: 'profileForm',
     fileNameId: 'profileImageFileName',
     previewId: 'profileImagePreview',
     modalId: 'profileCropModal',
     cropImageId: 'profileCropImage',
     applyBtnId: 'profileCropApplyBtn',
     cancelBtnId: 'profileCropCancelBtnFooter',
+    saveBtnId: 'profileSaveBtn',
     maxBytes: /*[[${maxProfileImageBytes}]]*/ 20971520,
     outputSize: 512
   });
