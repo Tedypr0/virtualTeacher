@@ -45,7 +45,11 @@ public class TopicRepositoryImpl implements TopicRepository {
         try (Session session = sessionFactory.openSession()) {
             Query<Topic> query = session.createQuery("from Topic where lower(topicName) = lower(:name)", Topic.class);
             query.setParameter("name", name);
-            return query.getResultList().get(0);
+            List<Topic> topics = query.getResultList();
+            if (topics.isEmpty()) {
+                throw new EntityNotFoundException("Topic", "name", name);
+            }
+            return topics.get(0);
         }
     }
 }

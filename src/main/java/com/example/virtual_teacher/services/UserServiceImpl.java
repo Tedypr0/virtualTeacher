@@ -151,6 +151,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void deleteEnrollmentsByCourseId(int courseId) {
+        userRepository.deleteEnrollmentsByCourseId(courseId);
+    }
+
+    @Override
     public long getAllTeachers() {
         return userRepository.getAllTeachers();
     }

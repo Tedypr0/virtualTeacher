@@ -23,6 +23,8 @@ public interface CourseRepository {
 
     Course update(Course course);
 
+    void updateDraftStatus(int id, boolean isDraft);
+
     Course delete(int id);
 
     List<Course> filter(FilterOptionsCourses filterOptionsCourses);

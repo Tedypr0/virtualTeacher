@@ -5,6 +5,7 @@ import com.example.virtual_teacher.exceptions.UnauthorizedOperationException;
 import com.example.virtual_teacher.models.*;
 import com.example.virtual_teacher.repositories.contracts.CourseRepository;
 import com.example.virtual_teacher.services.contracts.CourseService;
+import com.example.virtual_teacher.services.contracts.UserService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,11 +14,13 @@ import java.util.List;
 public class CourseServiceImpl implements CourseService {
 
     private final CourseRepository courseRepository;
+    private final UserService userService;
     public static final String CREATE_COURSE_ERROR_MESSAGE = "Only owner or admin can create a course!";
     public static final String UPDATE_COURSE_ERROR_MESSAGE = "Only owner or admin can edit or delete a course!";
 
-    public CourseServiceImpl(CourseRepository courseRepository) {
+    public CourseServiceImpl(CourseRepository courseRepository, UserService userService) {
         this.courseRepository = courseRepository;
+        this.userService = userService;
     }
 
 
@@ -88,6 +91,22 @@ public class CourseServiceImpl implements CourseService {
             throw new UnauthorizedOperationException(UPDATE_COURSE_ERROR_MESSAGE);
         }
         return courseRepository.delete(id);
+    }
+
+    @Override
+    public void toggleDraftStatus(User authUser, int courseId) {
+        Course course = courseRepository.getById(courseId);
+        if (course.isDeleted()) {
+            throw new EntityNotFoundException("id", course.getId());
+        }
+        if (!authUser.isAdmin() && authUser.getId() != course.getTeacher().getId()) {
+            throw new UnauthorizedOperationException(UPDATE_COURSE_ERROR_MESSAGE);
+        }
+        boolean newDraftStatus = !course.isDraft();
+        if (newDraftStatus) {
+            userService.deleteEnrollmentsByCourseId(courseId);
+        }
+        courseRepository.updateDraftStatus(courseId, newDraftStatus);
     }
 
     @Override

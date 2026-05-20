@@ -210,6 +210,9 @@ public class CourseMvcController {
         } catch (AuthenticationFailureException e) {
             return "redirect:/auth/login";
         }
+        if (!authUser.isTeacher() && !authUser.isAdmin()) {
+            return "access-denied";
+        }
 
         if (errors.hasErrors()) {
             return "course-new";
@@ -218,13 +221,16 @@ public class CourseMvcController {
         try {
             Course course = courseMapper.newCourseDtoToObj(newCourseDto, authUser);
             courseService.create(authUser, course);
-            return "redirect:/courses";
+            return "redirect:/courses/teacher";
         } catch (DuplicateEntityException e) {
-            errors.rejectValue("name", "duplicate_course", e.getMessage());
+            errors.rejectValue("title", "duplicate_course", e.getMessage());
             return "course-new";
         } catch (EntityNotFoundException e) {
+            errors.rejectValue("topic", "invalid_topic", e.getMessage());
+            return "course-new";
+        } catch (UnauthorizedOperationException e) {
             model.addAttribute("error", e.getMessage());
-            return "not-found";
+            return "access-denied";
         }
     }
 
@@ -259,10 +265,16 @@ public class CourseMvcController {
         } catch (AuthenticationFailureException e) {
             return "redirect:/auth/login";
         }
-        Course originalCourse = courseService.getById(id);
-        originalCourse.setDraft(!originalCourse.isDraft());
-        courseService.update(authUser, originalCourse);
-        return "redirect:/courses/teacher";
+        try {
+            courseService.toggleDraftStatus(authUser, id);
+            return "redirect:/courses/teacher";
+        } catch (EntityNotFoundException e) {
+            model.addAttribute("error", e.getMessage());
+            return "not-found";
+        } catch (UnauthorizedOperationException e) {
+            model.addAttribute("error", e.getMessage());
+            return "access-denied";
+        }
     }
 
     @GetMapping("/{id}/update")

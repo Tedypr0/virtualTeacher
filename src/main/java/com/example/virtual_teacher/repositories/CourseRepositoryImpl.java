@@ -85,7 +85,9 @@ public class CourseRepositoryImpl implements CourseRepository {
     @Override
     public Course create(Course course) {
         try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
             session.persist(course);
+            session.getTransaction().commit();
         }
         return course;
     }
@@ -99,6 +101,19 @@ public class CourseRepositoryImpl implements CourseRepository {
             return course;
         }
     }
+
+    @Override
+    public void updateDraftStatus(int id, boolean isDraft) {
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            session.createMutationQuery("update Course c set c.isDraft = :isDraft where c.id = :id")
+                    .setParameter("isDraft", isDraft)
+                    .setParameter("id", id)
+                    .executeUpdate();
+            session.getTransaction().commit();
+        }
+    }
+
 
     @Override
     public Course delete(int id) {

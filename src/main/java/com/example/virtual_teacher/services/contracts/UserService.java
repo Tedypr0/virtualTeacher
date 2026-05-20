@@ -40,6 +40,8 @@ public interface UserService {
 
     void enrollToCourse(UsersCourses usersCourses);
 
+    void deleteEnrollmentsByCourseId(int courseId);
+
     long getAllTeachers();
     long getAllStudents();
 }

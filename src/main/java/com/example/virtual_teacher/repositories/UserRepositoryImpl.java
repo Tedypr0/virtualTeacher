@@ -155,6 +155,17 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
+    public void deleteEnrollmentsByCourseId(int courseId) {
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            session.createMutationQuery("delete from UsersCourses uc where uc.course.id = :courseId")
+                    .setParameter("courseId", courseId)
+                    .executeUpdate();
+            session.getTransaction().commit();
+        }
+    }
+
+    @Override
     public long getAllTeachers() {
         try(Session session = sessionFactory.openSession()){
             Query<User> query = session.createQuery("from User u where u.role.id = 2", User.class);

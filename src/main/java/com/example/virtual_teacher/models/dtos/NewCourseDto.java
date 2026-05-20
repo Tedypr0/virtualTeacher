@@ -1,7 +1,6 @@
 package com.example.virtual_teacher.models.dtos;
 
-import com.example.virtual_teacher.models.Topic;
-
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.sql.Date;
@@ -11,10 +10,14 @@ public class NewCourseDto {
     @NotNull
     @Size(min = 5, max = 50, message = "Course title must be between 5 and 50 symbols")
     private String title;
+
+    @NotBlank(message = "Please select a topic")
     private String topic;
 
+    @NotNull(message = "Please select a starting date")
     private Date startingDate;
 
+    @NotNull(message = "Please select an end date")
     private Date endDate;
 
     private Double avgRating;

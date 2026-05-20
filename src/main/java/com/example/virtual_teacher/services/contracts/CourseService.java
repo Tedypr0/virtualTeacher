@@ -26,5 +26,7 @@ public interface CourseService {
 
     Course delete(User authUser, int id);
 
+    void toggleDraftStatus(User authUser, int courseId);
+
     List<Course> filter(FilterOptionsCourses filterOptionsCourses);
 }

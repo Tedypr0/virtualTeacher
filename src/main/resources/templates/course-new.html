@@ -72,25 +72,26 @@
                             TopicNameOne
                         </option>
                     </select>
+                    <label class="error" th:errors="*{topic}">Topic error placeholder</label>
                 </div>
                 <br> <br> <br>
                 <div>
                     <label style="display: block; margin-left: 12px" th:text="#{starting.date}">Starting Date1</label>
-                    <input style="display: block; margin-left: 12px" type="date" id="startDate" field="*{startingDate}"
-                           name="startingDate"
-                           value="00/00/0000" th:field="*{startingDate}"/>
+                    <input style="display: block; margin-left: 12px" type="date" id="startDate"
+                           th:field="*{startingDate}"/>
+                    <label class="error" th:errors="*{startingDate}">Starting date error placeholder</label>
                 </div>
                 <div>
                     <label style="display: block; margin-left: 12px" th:text="#{end.date}">End Date1</label>
-                    <input style="display: block; margin-left: 12px" type="date" id="endDate" field="*{endDate}"
-                           name="endDate"
-                           value="00/00/0000" th:field="*{endDate}"/>
+                    <input style="display: block; margin-left: 12px" type="date" id="endDate"
+                           th:field="*{endDate}"/>
+                    <label class="error" th:errors="*{endDate}">End date error placeholder</label>
                 </div>
                 <br>
                 <div class="col-12">
                     <br>
                     <button type="submit" class="btn btn-primary">Save</button>
-                    <a class="btn btn-primary" th:href="@{/}">Close</a>
+                    <a class="btn btn-primary" th:href="@{/courses/teacher}">Close</a>
                 </div>
             </form>
 
@@ -98,26 +99,6 @@
         </div>
     </div>
 </div>
-
-<script>
-    const togglePassword = document.querySelector("#togglePassword");
-    const password = document.querySelector("#editPassword");
-
-    togglePassword.addEventListener("click", function () {
-        // toggle the type attribute
-        const type = password.getAttribute("type") === "password" ? "text" : "password";
-        password.setAttribute("type", type);
-
-        // toggle the icon
-        this.classList.toggle("bi-eye");
-    });
-
-    // prevent form submit
-    const form = document.querySelector("form");
-    form.addEventListener('submit', function (e) {
-        e.preventDefault();
-    });
-</script>
 
 <!-- jQuery -->
 <script src="/plugins/jQuery/jquery.min.js" th:href="@{/plugins/jQuery/jquery.min.js}"></script>
