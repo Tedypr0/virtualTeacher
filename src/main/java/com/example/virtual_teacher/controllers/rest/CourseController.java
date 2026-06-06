@@ -8,6 +8,7 @@ import com.example.virtual_teacher.models.Course;
 import com.example.virtual_teacher.models.User;
 import com.example.virtual_teacher.models.dtos.CourseDto;
 import com.example.virtual_teacher.models.dtos.CourseDtoOut;
+import com.example.virtual_teacher.services.AccessControlService;
 import com.example.virtual_teacher.services.contracts.CourseService;
 import com.example.virtual_teacher.services.mappers.CourseMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,13 +26,16 @@ public class CourseController {
     private final CourseService courseService;
     private final CourseMapper courseMapper;
     private final AuthenticationHelper authenticationHelper;
+    private final AccessControlService accessControlService;
 
     @Autowired
     public CourseController(CourseService courseService, CourseMapper courseMapper,
-                            AuthenticationHelper authenticationHelper) {
+                            AuthenticationHelper authenticationHelper,
+                            AccessControlService accessControlService) {
         this.courseService = courseService;
         this.courseMapper = courseMapper;
         this.authenticationHelper = authenticationHelper;
+        this.accessControlService = accessControlService;
     }
 
     @GetMapping
@@ -40,12 +44,14 @@ public class CourseController {
     }
 
 
-    @GetMapping("/{id}")
-    public CourseDtoOut getById(@PathVariable @Valid int id, @RequestHeader HttpHeaders headers) {
+    @GetMapping("/{publicId}")
+    public CourseDtoOut getByPublicId(@PathVariable String publicId, @RequestHeader HttpHeaders headers) {
         try {
-            authenticationHelper.tryGetUser(headers);
-            return courseMapper.objToDto(courseService.getById(id));
-        } catch (InvalidUsernameOrPasswordException e) {
+            User authUser = authenticationHelper.tryGetUser(headers);
+            Course course = courseService.getByPublicId(publicId);
+            accessControlService.assertCanViewCourse(authUser, course);
+            return courseMapper.objToDto(course);
+        } catch (InvalidUsernameOrPasswordException | UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
@@ -63,11 +69,12 @@ public class CourseController {
         }
     }
 
-    @PutMapping("/{id}")
-    public Course update(@Valid @PathVariable int id, @RequestHeader HttpHeaders headers) {
+    @PutMapping("/{publicId}")
+    public Course update(@PathVariable String publicId, @RequestHeader HttpHeaders headers) {
         try {
             User authUser = authenticationHelper.tryGetUser(headers);
-            Course courseToUpdate = courseService.getById(id);
+            Course courseToUpdate = courseService.getByPublicId(publicId);
+            accessControlService.assertCanModifyCourse(authUser, courseToUpdate);
             return courseService.update(authUser, courseToUpdate);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
@@ -76,11 +83,13 @@ public class CourseController {
         }
     }
 
-    @DeleteMapping("/{id}")
-    public Course delete(@Valid @PathVariable int id, @RequestHeader HttpHeaders headers) {
+    @DeleteMapping("/{publicId}")
+    public Course delete(@PathVariable String publicId, @RequestHeader HttpHeaders headers) {
         try {
             User authUser = authenticationHelper.tryGetUser(headers);
-            return courseService.delete(authUser, id);
+            Course course = courseService.getByPublicId(publicId);
+            accessControlService.assertCanModifyCourse(authUser, course);
+            return courseService.delete(authUser, course.getId());
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (InvalidUsernameOrPasswordException | UnauthorizedOperationException e) {

@@ -5,7 +5,9 @@ import com.example.virtual_teacher.exceptions.EntityNotFoundException;
 import com.example.virtual_teacher.exceptions.UnauthorizedOperationException;
 import com.example.virtual_teacher.helpers.AuthenticationHelper;
 import com.example.virtual_teacher.models.Homework;
+import com.example.virtual_teacher.models.Lecture;
 import com.example.virtual_teacher.models.User;
+import com.example.virtual_teacher.services.AccessControlService;
 import com.example.virtual_teacher.services.contracts.CourseService;
 import com.example.virtual_teacher.services.contracts.HomeworkService;
 import com.example.virtual_teacher.services.mappers.HomeworkMapper;
@@ -27,13 +29,16 @@ public class HomeworkMvcController {
     private final CourseService courseService;
     private final AuthenticationHelper authenticationHelper;
     private final HomeworkMapper homeworkMapper;
+    private final AccessControlService accessControlService;
 
     public HomeworkMvcController(HomeworkService homeworkService, CourseService courseService,
-                                 AuthenticationHelper authenticationHelper, HomeworkMapper homeworkMapper) {
+                                 AuthenticationHelper authenticationHelper, HomeworkMapper homeworkMapper,
+                                 AccessControlService accessControlService) {
         this.homeworkService = homeworkService;
         this.courseService = courseService;
         this.authenticationHelper = authenticationHelper;
         this.homeworkMapper = homeworkMapper;
+        this.accessControlService = accessControlService;
     }
 
     @ModelAttribute("isAuthenticated")
@@ -95,26 +100,36 @@ public class HomeworkMvcController {
         return "users-homeworks";
     }
 
-    @PostMapping("/homeworks/{id}/grade")
-    public String updateStudentsGrade( @PathVariable int id, Model model, HttpSession session, @RequestParam("grade") double grade){
-
-        try{
-            authenticationHelper.tryGetUser(session);
-        }catch (AuthenticationFailureException e){
-            model.addAttribute("error",e.getMessage());
+    @PostMapping("/homeworks/{publicId}/grade")
+    public String updateStudentsGrade(@PathVariable String publicId,
+                                      Model model,
+                                      HttpSession session,
+                                      @RequestParam("grade") double grade) {
+        User authUser;
+        try {
+            authUser = authenticationHelper.tryGetUser(session);
+        } catch (AuthenticationFailureException e) {
+            model.addAttribute("error", e.getMessage());
             return "redirect:/auth/login";
         }
 
         try {
-            Homework homeworkToUpdate = homeworkService.getHomeworkById(id);
+            Homework homeworkToUpdate = homeworkService.getByPublicId(publicId);
+            Lecture lecture = homeworkToUpdate.getLecture();
+            if (lecture == null || lecture.getCourse() == null) {
+                throw new EntityNotFoundException("Homework", publicId);
+            }
+            accessControlService.assertCanGradeHomework(authUser, lecture.getCourse());
             homeworkMapper.updateHomeworkGrade(homeworkToUpdate, grade);
             homeworkService.update(homeworkToUpdate);
-        }catch (EntityNotFoundException e){
+        } catch (EntityNotFoundException e) {
             model.addAttribute("error", e.getMessage());
             return "not-found";
-        }catch (IllegalArgumentException e){
-            model.addAttribute("error",e.getMessage());
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("error", e.getMessage());
             return "redirect:/users/teacher/homeworks";
+        } catch (UnauthorizedOperationException e) {
+            return "access-denied";
         }
 
         return "redirect:/users/teacher/homeworks";

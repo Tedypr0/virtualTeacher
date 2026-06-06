@@ -11,6 +11,7 @@ import com.example.virtual_teacher.models.dtos.NewLectureDto;
 import com.example.virtual_teacher.models.dtos.NoteDto;
 import com.example.virtual_teacher.models.dtos.UpdateLectureDto;
 import com.example.virtual_teacher.repositories.contracts.VideoRepository;
+import com.example.virtual_teacher.services.AccessControlService;
 import com.example.virtual_teacher.services.contracts.*;
 import com.example.virtual_teacher.services.mappers.HomeworkMapper;
 import com.example.virtual_teacher.services.mappers.LectureMapper;
@@ -33,6 +34,7 @@ import java.util.List;
 public class LectureMvcController {
 
     private final AuthenticationHelper authenticationHelper;
+    private final AccessControlService accessControlService;
     private final LectureService lectureService;
     private final VideoRepository videoRepository;
     private final UserService userService;
@@ -45,8 +47,20 @@ public class LectureMvcController {
     private final CourseService courseService;
 
     @Autowired
-    public LectureMvcController(AuthenticationHelper authenticationHelper, LectureService lectureService, VideoRepository videoRepository, UserService userService, VideoService videoService, LectureMapper lectureMapper, LectureCommentService lectureCommentService, HomeworkMapper homeworkMapper, HomeworkService homeworkService, CourseLectureService courseLectureService, CourseService courseService) {
+    public LectureMvcController(AuthenticationHelper authenticationHelper,
+                                AccessControlService accessControlService,
+                                LectureService lectureService,
+                                VideoRepository videoRepository,
+                                UserService userService,
+                                VideoService videoService,
+                                LectureMapper lectureMapper,
+                                LectureCommentService lectureCommentService,
+                                HomeworkMapper homeworkMapper,
+                                HomeworkService homeworkService,
+                                CourseLectureService courseLectureService,
+                                CourseService courseService) {
         this.authenticationHelper = authenticationHelper;
+        this.accessControlService = accessControlService;
         this.lectureService = lectureService;
         this.videoRepository = videoRepository;
         this.userService = userService;
@@ -69,87 +83,109 @@ public class LectureMvcController {
         return session.getAttribute("currentUser");
     }
 
-    @GetMapping("courses/{id}/lectures")
-    public String showAllLectures(Model model, HttpSession session, @PathVariable int id) {
+    @GetMapping("courses/{coursePublicId}/lectures")
+    public String showAllLectures(Model model, HttpSession session, @PathVariable String coursePublicId) {
         User authUser;
         try {
             authUser = authenticationHelper.tryGetUser(session);
+            Course course = courseService.getByPublicId(coursePublicId);
+            accessControlService.assertCanViewCourse(authUser, course);
+            model.addAttribute("course", course);
+            model.addAttribute("coursePublicId", course.getPublicId());
+            model.addAttribute("lectures", lectureService.getAllByTeacherId(authUser.getId()));
+            model.addAttribute("teacherApplicationsNumber", userService.getAllTeacherApplications().size());
+            return "lectures";
         } catch (AuthenticationFailureException e) {
             return "redirect:/auth/login";
+        } catch (EntityNotFoundException e) {
+            model.addAttribute("error", e.getMessage());
+            return "not-found";
+        } catch (UnauthorizedOperationException e) {
+            model.addAttribute("error", e.getMessage());
+            return "access-denied";
         }
-        model.addAttribute("course", courseService.getById(id));
-        model.addAttribute("lectures", lectureService.getAllByTeacherId(authUser.getId()));
-        model.addAttribute("teacherApplicationsNumber", userService.getAllTeacherApplications().size());
-        return "lectures";
     }
 
-    @GetMapping("/courses/{courseId}/lectures/{id}")
-    public String showSingleLecture(@PathVariable int courseId, @PathVariable int id, Model model, HttpSession session) {
+    @GetMapping("/courses/{coursePublicId}/lectures/{lecturePublicId}")
+    public String showSingleLecture(@PathVariable String coursePublicId,
+                                    @PathVariable String lecturePublicId,
+                                    Model model,
+                                    HttpSession session) {
         try {
             User user = authenticationHelper.tryGetUser(session);
-            Lecture lecture = lectureService.getById(id);
+            Course course = courseService.getByPublicId(coursePublicId);
+            Lecture lecture = lectureService.getByPublicId(lecturePublicId);
+            accessControlService.assertCanViewLecture(user, course, lecture);
             String video = videoRepository.getById(lecture.getVideo().getVideoId()).getVideoUrl();
-            List<LectureComment> lectureComments = lectureCommentService.getAll(id);
+            List<LectureComment> lectureComments = lectureCommentService.getAll(lecture.getId());
+            model.addAttribute("course", course);
+            model.addAttribute("coursePublicId", course.getPublicId());
             model.addAttribute("lecture", lecture);
-            model.addAttribute("lectureId", id);
+            model.addAttribute("lecturePublicId", lecture.getPublicId());
+            model.addAttribute("lectureId", lecture.getId());
             model.addAttribute("video", video);
             model.addAttribute("newComment", new LectureCommentDto());
             model.addAttribute("comments", lectureComments);
             model.addAttribute("user", user);
             model.addAttribute("note", new NoteDto());
-
             return "lecture-single";
         } catch (AuthenticationFailureException e) {
             return "redirect:/auth/login";
         } catch (EntityNotFoundException e) {
             model.addAttribute("error", e.getMessage());
             return "not-found";
+        } catch (UnauthorizedOperationException e) {
+            model.addAttribute("error", e.getMessage());
+            return "access-denied";
         }
     }
 
-    @PostMapping("/courses/{courseId}/lectures/{id}/update/uploadFile")
-    public String uploadFile(@PathVariable int courseId,
-                             @PathVariable int id,
+    @PostMapping("/courses/{coursePublicId}/lectures/{lecturePublicId}/update/uploadFile")
+    public String uploadFile(@PathVariable String coursePublicId,
+                             @PathVariable String lecturePublicId,
                              @RequestParam("documentFile") MultipartFile multipartFile,
                              HttpSession session) {
         User authUser;
         try {
             authUser = authenticationHelper.tryGetUser(session);
+            Course course = courseService.getByPublicId(coursePublicId);
+            Lecture lecture = lectureService.getByPublicId(lecturePublicId);
+            accessControlService.assertCanModifyLecture(authUser, course, lecture);
+            lectureService.saveFile(multipartFile, lecture);
+            return "redirect:/courses/" + coursePublicId + "/lectures/" + lecturePublicId + "/update";
         } catch (AuthenticationFailureException e) {
             return "redirect:/auth/login";
-        }
-        if (!authUser.isAdmin() && authUser.getId() != lectureService.getById(id).getTeacher().getId()) {
-            return "access-denied";
-        }
-        try {
-            Lecture lecture = lectureService.getById(id);
-            lectureService.saveFile(multipartFile, lecture);
         } catch (IOException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        } catch (UnauthorizedOperationException e) {
+            return "access-denied";
         }
-        return String.format("redirect:/courses/%d/lectures/%d/update", courseId, id);
     }
 
-    @GetMapping("/courses/{courseId}/lectures/new")
-    public String showNewLecturePage(@PathVariable int courseId, Model model, HttpSession session) {
+    @GetMapping("/courses/{coursePublicId}/lectures/new")
+    public String showNewLecturePage(@PathVariable String coursePublicId, Model model, HttpSession session) {
         User authUser;
         try {
             authUser = authenticationHelper.tryGetUser(session);
+            Course course = courseService.getByPublicId(coursePublicId);
+            accessControlService.assertCanModifyCourse(authUser, course);
+            model.addAttribute("lecture", new NewLectureDto());
+            model.addAttribute("coursePublicId", course.getPublicId());
+            return "lecture-new";
         } catch (AuthenticationFailureException e) {
             return "redirect:/auth/login";
-        }
-        if (!authUser.isTeacher() && !authUser.isAdmin()) {
+        } catch (EntityNotFoundException e) {
+            model.addAttribute("error", e.getMessage());
+            return "not-found";
+        } catch (UnauthorizedOperationException e) {
             return "access-denied";
         }
-        model.addAttribute("lecture", new NewLectureDto());
-        model.addAttribute("courseId", courseId);
-        return "lecture-new";
     }
 
-    @PostMapping("/courses/{courseId}/lectures/new")
-    public String createLecture(@PathVariable int courseId,
+    @PostMapping("/courses/{coursePublicId}/lectures/new")
+    public String createLecture(@PathVariable String coursePublicId,
                                 @Valid @ModelAttribute("lecture") NewLectureDto newLectureDto,
                                 BindingResult errors,
                                 Model model,
@@ -157,11 +193,19 @@ public class LectureMvcController {
         User authUser;
         try {
             authUser = authenticationHelper.tryGetUser(session);
+            Course course = courseService.getByPublicId(coursePublicId);
+            accessControlService.assertCanModifyCourse(authUser, course);
         } catch (AuthenticationFailureException e) {
             return "redirect:/auth/login";
+        } catch (EntityNotFoundException e) {
+            model.addAttribute("error", e.getMessage());
+            return "not-found";
+        } catch (UnauthorizedOperationException e) {
+            return "access-denied";
         }
 
         if (errors.hasErrors()) {
+            model.addAttribute("coursePublicId", coursePublicId);
             return "lecture-new";
         }
 
@@ -171,9 +215,10 @@ public class LectureMvcController {
             videoService.create(video);
             Lecture lecture = lectureMapper.newLectureDtoToObj(newLectureDto, authUser, video);
             lectureService.create(lecture, authUser);
-            return "redirect:/courses/{courseId}/lectures";
+            return "redirect:/courses/" + coursePublicId + "/lectures";
         } catch (DuplicateEntityException e) {
             errors.rejectValue("title", "duplicate_lecture_title", e.getMessage());
+            model.addAttribute("coursePublicId", coursePublicId);
             return "lecture-new";
         } catch (EntityNotFoundException e) {
             model.addAttribute("error", e.getMessage());
@@ -181,36 +226,35 @@ public class LectureMvcController {
         }
     }
 
-    @GetMapping("/courses/{courseId}/lectures/{id}/update")
-    public String showUpdatePage(@PathVariable int courseId,
-                                 @PathVariable int id,
+    @GetMapping("/courses/{coursePublicId}/lectures/{lecturePublicId}/update")
+    public String showUpdatePage(@PathVariable String coursePublicId,
+                                 @PathVariable String lecturePublicId,
                                  Model model,
                                  HttpSession session) {
         User authUser;
         try {
             authUser = authenticationHelper.tryGetUser(session);
+            Course course = courseService.getByPublicId(coursePublicId);
+            Lecture lecture = lectureService.getByPublicId(lecturePublicId);
+            accessControlService.assertCanModifyLecture(authUser, course, lecture);
+            UpdateLectureDto updateLectureDto = lectureMapper.updateLectureObjToDto(lecture);
+            model.addAttribute("coursePublicId", course.getPublicId());
+            model.addAttribute("lecturePublicId", lecture.getPublicId());
+            model.addAttribute("lecture", updateLectureDto);
+            return "update-lecture";
         } catch (AuthenticationFailureException e) {
             return "redirect:/auth/login";
-        }
-        try {
-            Lecture lecture = lectureService.getById(id);
-            if (authUser.getId() == lecture.getTeacher().getId() || authUser.isAdmin()) {
-                UpdateLectureDto updateLectureDto = lectureMapper.updateLectureObjToDto(lecture);
-                model.addAttribute("lectureId", id);
-                model.addAttribute("lecture", updateLectureDto);
-
-                return "update-lecture";
-            }
-            return "access-denied";
         } catch (EntityNotFoundException e) {
             model.addAttribute("error", e.getMessage());
             return "not-found";
+        } catch (UnauthorizedOperationException e) {
+            return "access-denied";
         }
     }
 
-    @PostMapping("/courses/{courseId}/lectures/{id}/update")
-    public String updateLecture(@PathVariable int courseId,
-                                @PathVariable int id,
+    @PostMapping("/courses/{coursePublicId}/lectures/{lecturePublicId}/update")
+    public String updateLecture(@PathVariable String coursePublicId,
+                                @PathVariable String lecturePublicId,
                                 @Valid @ModelAttribute("lecture") UpdateLectureDto updateLectureDto,
                                 BindingResult errors,
                                 Model model,
@@ -222,11 +266,15 @@ public class LectureMvcController {
             return "redirect:/auth/login";
         }
         if (errors.hasErrors()) {
+            model.addAttribute("coursePublicId", coursePublicId);
+            model.addAttribute("lecturePublicId", lecturePublicId);
             return "update-lecture";
         }
 
         try {
-            Lecture originalLecture = lectureService.getById(id);
+            Course course = courseService.getByPublicId(coursePublicId);
+            Lecture originalLecture = lectureService.getByPublicId(lecturePublicId);
+            accessControlService.assertCanModifyLecture(authUser, course, originalLecture);
             Video originalVideo = originalLecture.getVideo();
             if (!originalVideo.getVideoUrl().contains(updateLectureDto.getVideoUrl())) {
                 originalVideo.setVideoUrl(updateLectureDto.getVideoUrl());
@@ -234,25 +282,7 @@ public class LectureMvcController {
             Lecture updatedLecture = lectureMapper.updateLectureDtoToObj(originalLecture, updateLectureDto);
             videoService.update(updatedLecture.getVideo(), authUser);
             lectureService.update(updatedLecture, authUser);
-            return String.format("redirect:/courses/%d/lectures/%d", courseId, id);
-        } catch (EntityNotFoundException | UnauthorizedOperationException e) {
-            model.addAttribute("error", e.getMessage());
-            return "access-denied";
-        }
-    }
-
-    @GetMapping("/courses/{courseId}/lectures/{id}/delete")
-    public String deleteLecture(@PathVariable int courseId, @PathVariable int id, Model model, HttpSession session) {
-        User authUser;
-        try {
-            authUser = authenticationHelper.tryGetUser(session);
-        } catch (AuthenticationFailureException e) {
-            return "redirect:/auth/login";
-        }
-
-        try {
-            lectureService.delete(authUser, id);
-            return "redirect:/courses/{courseId}/lectures";
+            return "redirect:/courses/" + coursePublicId + "/lectures/" + lecturePublicId;
         } catch (EntityNotFoundException e) {
             model.addAttribute("error", e.getMessage());
             return "not-found";
@@ -262,46 +292,79 @@ public class LectureMvcController {
         }
     }
 
-    @PostMapping("/courses/{courseId}/lectures/{id}/uploadHomework")
-    public String uploadHomework(@PathVariable int courseId,
-                                 @PathVariable int id,
+    @GetMapping("/courses/{coursePublicId}/lectures/{lecturePublicId}/delete")
+    public String deleteLecture(@PathVariable String coursePublicId,
+                                @PathVariable String lecturePublicId,
+                                Model model,
+                                HttpSession session) {
+        User authUser;
+        try {
+            authUser = authenticationHelper.tryGetUser(session);
+            Course course = courseService.getByPublicId(coursePublicId);
+            Lecture lecture = lectureService.getByPublicId(lecturePublicId);
+            accessControlService.assertCanModifyLecture(authUser, course, lecture);
+            lectureService.delete(authUser, lecture.getId());
+            return "redirect:/courses/" + coursePublicId + "/lectures";
+        } catch (AuthenticationFailureException e) {
+            return "redirect:/auth/login";
+        } catch (EntityNotFoundException e) {
+            model.addAttribute("error", e.getMessage());
+            return "not-found";
+        } catch (UnauthorizedOperationException e) {
+            model.addAttribute("error", e.getMessage());
+            return "access-denied";
+        }
+    }
+
+    @PostMapping("/courses/{coursePublicId}/lectures/{lecturePublicId}/uploadHomework")
+    public String uploadHomework(@PathVariable String coursePublicId,
+                                 @PathVariable String lecturePublicId,
                                  @RequestParam("documentFile") MultipartFile multipartFile,
                                  HttpSession session) {
         User authUser;
         try {
             authUser = authenticationHelper.tryGetUser(session);
-        } catch (AuthenticationFailureException e) {
-            return "redirect:/auth/login";
-        }
-        try {
-            Lecture lecture = lectureService.getById(id);
+            Course course = courseService.getByPublicId(coursePublicId);
+            Lecture lecture = lectureService.getByPublicId(lecturePublicId);
+            accessControlService.assertCanViewLecture(authUser, course, lecture);
             String fileName = lectureService.saveHomework(multipartFile, lecture, authUser);
             Homework homework = homeworkMapper.createObjFromParams(authUser, lecture, fileName);
             homeworkService.create(homework);
+            return "redirect:/courses/" + coursePublicId + "/lectures/" + lecturePublicId;
+        } catch (AuthenticationFailureException e) {
+            return "redirect:/auth/login";
         } catch (IOException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        } catch (UnauthorizedOperationException e) {
+            return "access-denied";
         }
-        return String.format("redirect:/courses/%d/lectures/%d", courseId, id);
     }
 
-    @PostMapping("/courses/{courseId}/lectures/{id}/addToCourse")
-    public String addLectureToCourse(@PathVariable int courseId,
-                                     @PathVariable int id,
+    @PostMapping("/courses/{coursePublicId}/lectures/{lecturePublicId}/addToCourse")
+    public String addLectureToCourse(@PathVariable String coursePublicId,
+                                     @PathVariable String lecturePublicId,
                                      Model model,
                                      HttpSession session) {
         try {
             User authUser = authenticationHelper.tryGetUser(session);
+            Course course = courseService.getByPublicId(coursePublicId);
+            Lecture lecture = lectureService.getByPublicId(lecturePublicId);
+            accessControlService.assertCanModifyLecture(authUser, course, lecture);
+            CourseLecture courseLecture = new CourseLecture();
+            courseLecture.setLectureId(lecture.getId());
+            courseLecture.setCourseId(course.getId());
+            courseLectureService.createOrDeleteCourseLecture(courseLecture);
+            model.addAttribute("courseLecture", courseLecture);
+            return "redirect:/courses/" + coursePublicId + "/lectures";
         } catch (AuthenticationFailureException e) {
             return "redirect:/auth/login";
+        } catch (EntityNotFoundException e) {
+            model.addAttribute("error", e.getMessage());
+            return "not-found";
+        } catch (UnauthorizedOperationException e) {
+            return "access-denied";
         }
-
-        CourseLecture courseLecture = new CourseLecture();
-        courseLecture.setLectureId(id);
-        courseLecture.setCourseId(courseId);
-        courseLectureService.createOrDeleteCourseLecture(courseLecture);
-        model.addAttribute("courseLecture", courseLecture);
-        return "redirect:/courses/{courseId}/lectures";
     }
 }

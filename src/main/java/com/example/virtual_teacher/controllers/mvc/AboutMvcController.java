@@ -53,8 +53,8 @@ public class AboutMvcController {
         return "teacher";
     }
 
-    @GetMapping("/teachers/{id}")
-    public String showSingleTeacherPage(@PathVariable int id, Model model) {
+    @GetMapping("/teachers/{publicId}")
+    public String showSingleTeacherPage(@PathVariable String publicId, Model model) {
         model.addAttribute("userList", userService.getAll());
         model.addAttribute("teacherApplicationsNumber", userService.getAllTeacherApplications().size());
         return "teacher-single";

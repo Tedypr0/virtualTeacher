@@ -1,7 +1,14 @@
 package com.example.virtual_teacher.controllers.mvc;
 
+import com.example.virtual_teacher.exceptions.AuthenticationFailureException;
+import com.example.virtual_teacher.exceptions.EntityNotFoundException;
+import com.example.virtual_teacher.exceptions.UnauthorizedOperationException;
+import com.example.virtual_teacher.helpers.AuthenticationHelper;
 import com.example.virtual_teacher.models.ProfileImage;
+import com.example.virtual_teacher.models.User;
+import com.example.virtual_teacher.services.AccessControlService;
 import com.example.virtual_teacher.services.contracts.UserService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.CacheControl;
 import org.springframework.http.HttpStatus;
@@ -22,24 +29,41 @@ public class UserProfileImageController {
     private static final String DEFAULT_IMAGE_URL = "/userImages/defaultImg.jpg";
 
     private final UserService userService;
+    private final AuthenticationHelper authenticationHelper;
+    private final AccessControlService accessControlService;
 
     @Autowired
-    public UserProfileImageController(UserService userService) {
+    public UserProfileImageController(UserService userService,
+                                      AuthenticationHelper authenticationHelper,
+                                      AccessControlService accessControlService) {
         this.userService = userService;
+        this.authenticationHelper = authenticationHelper;
+        this.accessControlService = accessControlService;
     }
 
-    @GetMapping("/{id}/profile-image")
-    public ResponseEntity<?> getProfileImage(@PathVariable int id) {
-        ProfileImage profileImage = userService.getProfileImage(id);
-        if (profileImage != null) {
-            return ResponseEntity.ok()
-                    .contentType(MediaType.parseMediaType(profileImage.contentType()))
-                    .cacheControl(CacheControl.noCache().mustRevalidate())
-                    .body(profileImage.data());
+    @GetMapping("/{publicId}/profile-image")
+    public ResponseEntity<?> getProfileImage(@PathVariable String publicId, HttpSession session) {
+        try {
+            User authUser = authenticationHelper.tryGetUser(session);
+            User targetUser = userService.getByPublicId(publicId);
+            accessControlService.assertCanViewProfileImage(authUser, targetUser);
+            ProfileImage profileImage = userService.getProfileImage(targetUser.getId());
+            if (profileImage != null) {
+                return ResponseEntity.ok()
+                        .contentType(MediaType.parseMediaType(profileImage.contentType()))
+                        .cacheControl(CacheControl.noCache().mustRevalidate())
+                        .body(profileImage.data());
+            }
+            return ResponseEntity.status(HttpStatus.FOUND)
+                    .location(URI.create(DEFAULT_IMAGE_URL))
+                    .cacheControl(CacheControl.maxAge(1, TimeUnit.HOURS))
+                    .build();
+        } catch (AuthenticationFailureException e) {
+            return ResponseEntity.status(HttpStatus.FOUND).location(URI.create("/auth/login")).build();
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        } catch (UnauthorizedOperationException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
-        return ResponseEntity.status(HttpStatus.FOUND)
-                .location(URI.create(DEFAULT_IMAGE_URL))
-                .cacheControl(CacheControl.maxAge(1, TimeUnit.DAYS).cachePublic())
-                .build();
     }
 }

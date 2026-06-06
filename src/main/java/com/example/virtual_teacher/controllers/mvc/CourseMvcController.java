@@ -7,6 +7,7 @@ import com.example.virtual_teacher.exceptions.UnauthorizedOperationException;
 import com.example.virtual_teacher.helpers.AuthenticationHelper;
 import com.example.virtual_teacher.models.*;
 import com.example.virtual_teacher.models.dtos.*;
+import com.example.virtual_teacher.services.AccessControlService;
 import com.example.virtual_teacher.services.contracts.*;
 import com.example.virtual_teacher.services.mappers.CourseCommentMapper;
 import com.example.virtual_teacher.services.mappers.CourseMapper;
@@ -38,13 +39,15 @@ public class CourseMvcController {
     private final UsersCoursesMapper usersCoursesMapper;
     private final CourseCommentMapper courseCommentMapper;
     private final AuthenticationHelper authenticationHelper;
+    private final AccessControlService accessControlService;
 
     @Autowired
     public CourseMvcController(CourseService courseService, UserService userService, LectureService lectureService,
                                RatingService ratingService, TopicService topicService,
                                CourseCommentService courseCommentService, CourseMapper courseMapper,
                                UsersCoursesMapper usersCoursesMapper, CourseCommentMapper courseCommentMapper,
-                               AuthenticationHelper authenticationHelper) {
+                               AuthenticationHelper authenticationHelper,
+                               AccessControlService accessControlService) {
         this.courseService = courseService;
         this.lectureService = lectureService;
         this.ratingService = ratingService;
@@ -54,6 +57,7 @@ public class CourseMvcController {
         this.usersCoursesMapper = usersCoursesMapper;
         this.courseCommentMapper = courseCommentMapper;
         this.authenticationHelper = authenticationHelper;
+        this.accessControlService = accessControlService;
         this.userService = userService;
     }
 
@@ -132,35 +136,37 @@ public class CourseMvcController {
         return "courses-teacher-single";
     }
 
-    @GetMapping("/{id}")
-    public String showSingleCourse(@PathVariable int id, Model model, HttpSession session) {
+    @GetMapping("/{publicId}")
+    public String showSingleCourse(@PathVariable String publicId, Model model, HttpSession session) {
         try {
             List<Course> courses = courseService.getAll();
             ratingService.updateAvgRatingOfCourses(courses);
-            Course course = courseService.getById(id);
+            Course course = courseService.getByPublicId(publicId);
+            User user = authenticationHelper.tryGetUser(session);
+            accessControlService.assertCanViewCourse(user, course);
             if (courseService.getAll().size() < 3) {
                 model.addAttribute("relatedCourses", courses);
             } else {
                 courses = courses.subList(0, 3);
                 model.addAttribute("relatedCourses", courses);
             }
-            User user = authenticationHelper.tryGetUser(session);
             model.addAttribute("course", course);
-            model.addAttribute("courseId", id);
+            model.addAttribute("courseId", course.getId());
+            model.addAttribute("coursePublicId", course.getPublicId());
             model.addAttribute("user", user);
             model.addAttribute("teacherApplicationsNumber", userService.getAllTeacherApplications().size());
-            model.addAttribute("avgRating", ratingService.getAvgRatingByCourseId(id));
+            model.addAttribute("avgRating", ratingService.getAvgRatingByCourseId(course.getId()));
             model.addAttribute("newReview", new RatingDto());
-            model.addAttribute("ratingsByCourseId", ratingService.getByCourseId(id));
-            model.addAttribute("ratingsCount", ratingService.getRatingsCount(id));
-            model.addAttribute("lectures", lectureService.getByCourseId(id));
-            model.addAttribute("commentsByCourseId", courseCommentService.getByCourseId(id));
+            model.addAttribute("ratingsByCourseId", ratingService.getByCourseId(course.getId()));
+            model.addAttribute("ratingsCount", ratingService.getRatingsCount(course.getId()));
+            model.addAttribute("lectures", lectureService.getByCourseId(course.getId()));
+            model.addAttribute("commentsByCourseId", courseCommentService.getByCourseId(course.getId()));
             model.addAttribute("newComment", new CourseCommentDto());
             model.addAttribute("userGrade", user);
 
-            boolean isEnrolled = userService.isEnrolled(id, user.getId());
+            boolean isEnrolled = userService.isEnrolled(course.getId(), user.getId());
             Date currentDate = new Date(System.currentTimeMillis());
-            model.addAttribute("isEnrolled", userService.isEnrolled(id, user.getId()));
+            model.addAttribute("isEnrolled", isEnrolled);
 
             if (course.getStartingDate().before(currentDate) && isEnrolled) {
                 model.addAttribute("isStarted", true);
@@ -180,6 +186,9 @@ public class CourseMvcController {
         } catch (EntityNotFoundException e) {
             model.addAttribute("error", e.getMessage());
             return "not-found";
+        } catch (UnauthorizedOperationException e) {
+            model.addAttribute("error", e.getMessage());
+            return "access-denied";
         }
     }
 
@@ -234,8 +243,9 @@ public class CourseMvcController {
         }
     }
 
-    @PostMapping("/{id}/enroll")
-    public String enrollToCourse(@PathVariable int id, @Valid @ModelAttribute("usersCourses") UsersCourses usersCourses,
+    @PostMapping("/{publicId}/enroll")
+    public String enrollToCourse(@PathVariable String publicId,
+                                 @Valid @ModelAttribute("usersCourses") UsersCourses usersCourses,
                                  BindingResult errors,
                                  Model model,
                                  HttpSession session) {
@@ -249,14 +259,23 @@ public class CourseMvcController {
         if (errors.hasErrors()) {
             return "course-single";
         }
-        Course course = courseService.getById(id);
-        usersCourses = usersCoursesMapper.studentEnrollToCourse(course, authUser.getId());
-        userService.enrollToCourse(usersCourses);
-        return "redirect:/courses/{id}";
+        try {
+            Course course = courseService.getByPublicId(publicId);
+            accessControlService.assertCanEnroll(authUser, course);
+            usersCourses = usersCoursesMapper.studentEnrollToCourse(course, authUser.getId());
+            userService.enrollToCourse(usersCourses);
+            return "redirect:/courses/" + publicId;
+        } catch (EntityNotFoundException e) {
+            model.addAttribute("error", e.getMessage());
+            return "not-found";
+        } catch (UnauthorizedOperationException e) {
+            model.addAttribute("error", e.getMessage());
+            return "access-denied";
+        }
     }
 
-    @PostMapping("/{id}/update/status")
-    public String updateCourseStatus(@PathVariable int id,
+    @PostMapping("/{publicId}/update/status")
+    public String updateCourseStatus(@PathVariable String publicId,
                                      Model model,
                                      HttpSession session) {
         User authUser;
@@ -266,7 +285,7 @@ public class CourseMvcController {
             return "redirect:/auth/login";
         }
         try {
-            courseService.toggleDraftStatus(authUser, id);
+            courseService.toggleDraftStatus(authUser, publicId);
             return "redirect:/courses/teacher";
         } catch (EntityNotFoundException e) {
             model.addAttribute("error", e.getMessage());
@@ -277,8 +296,8 @@ public class CourseMvcController {
         }
     }
 
-    @GetMapping("/{id}/update")
-    public String showCourseUpdatePage(@PathVariable int id,
+    @GetMapping("/{publicId}/update")
+    public String showCourseUpdatePage(@PathVariable String publicId,
                                        Model model,
                                        HttpSession session) {
         User authUser;
@@ -289,23 +308,23 @@ public class CourseMvcController {
         }
 
         try {
-            Course course = courseService.getById(id);
-            if (authUser.getId() == course.getTeacher().getId() || authUser.isAdmin()) {
-                UpdateCourseDto updateCourseDto = courseMapper.updateCourseObjToDto(course);
-                model.addAttribute("courseId", id);
-                model.addAttribute("course", updateCourseDto);
-
-                return "course-update";
-            }
-            return "access-denied";
+            Course course = courseService.getByPublicId(publicId);
+            accessControlService.assertCanModifyCourse(authUser, course);
+            UpdateCourseDto updateCourseDto = courseMapper.updateCourseObjToDto(course);
+            model.addAttribute("coursePublicId", course.getPublicId());
+            model.addAttribute("course", updateCourseDto);
+            return "course-update";
         } catch (EntityNotFoundException e) {
             model.addAttribute("error", e.getMessage());
             return "not-found";
+        } catch (UnauthorizedOperationException e) {
+            model.addAttribute("error", e.getMessage());
+            return "access-denied";
         }
     }
 
-    @PostMapping("/{id}/update")
-    public String updateCourse(@PathVariable int id,
+    @PostMapping("/{publicId}/update")
+    public String updateCourse(@PathVariable String publicId,
                                @Valid @ModelAttribute("course") UpdateCourseDto updateCourseDto,
                                BindingResult errors,
                                Model model,
@@ -321,18 +340,22 @@ public class CourseMvcController {
         }
 
         try {
-            Course originalCourse = courseService.getById(id);
+            Course originalCourse = courseService.getByPublicId(publicId);
+            accessControlService.assertCanModifyCourse(authUser, originalCourse);
             Course updatedCourse = courseMapper.updateCourseDtoToObj(originalCourse, updateCourseDto);
             courseService.update(authUser, updatedCourse);
             return "redirect:/courses/teacher";
-        } catch (EntityNotFoundException | UnauthorizedOperationException e) {
+        } catch (EntityNotFoundException e) {
+            model.addAttribute("error", e.getMessage());
+            return "not-found";
+        } catch (UnauthorizedOperationException e) {
             model.addAttribute("error", e.getMessage());
             return "access-denied";
         }
     }
 
-    @GetMapping("/{id}/delete")
-    public String deleteCourse(@PathVariable int id, Model model, HttpSession session) {
+    @GetMapping("/{publicId}/delete")
+    public String deleteCourse(@PathVariable String publicId, Model model, HttpSession session) {
         User authUser;
         try {
             authUser = authenticationHelper.tryGetUser(session);
@@ -341,7 +364,8 @@ public class CourseMvcController {
         }
 
         try {
-            courseService.delete(authUser, id);
+            Course course = courseService.getByPublicId(publicId);
+            courseService.delete(authUser, course.getId());
             return "redirect:/courses/teacher";
         } catch (EntityNotFoundException e) {
             model.addAttribute("error", e.getMessage());
