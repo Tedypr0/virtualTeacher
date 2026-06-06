@@ -31,6 +31,7 @@ create table courses
 (
     course_id     int auto_increment
         primary key,
+    public_id     varchar(36)          not null,
     title         varchar(50)          not null,
     topic_id      int                  not null,
     is_deleted    tinyint(1) default 0 not null,
@@ -42,6 +43,8 @@ create table courses
     avg_rating    double               not null,
     constraint courses_course_id_uindex
         unique (course_id),
+    constraint courses_public_id_uindex
+        unique (public_id),
     constraint courses_title_uindex
         unique (title),
     constraint courses_topics_topic_id_fk
@@ -65,6 +68,7 @@ create table users
 (
     user_id       int auto_increment
         primary key,
+    public_id     varchar(36)  not null,
     first_name    varchar(20)  not null,
     last_name     varchar(20)  not null,
     email         varchar(100) not null,
@@ -78,6 +82,8 @@ create table users
     profile_image_updated_at datetime     null,
     constraint users_email_uindex
         unique (email),
+    constraint users_public_id_uindex
+        unique (public_id),
     constraint users_roles_role_id_fk
         foreign key (role_id) references roles (role_id)
 );
@@ -86,6 +92,7 @@ create table courses_comments
 (
     course_comment_id int auto_increment
         primary key,
+    public_id         varchar(36)          not null,
     user_id           int                  not null,
     course_id         int                  not null,
     content           varchar(1000)        not null,
@@ -93,6 +100,8 @@ create table courses_comments
     is_deleted        tinyint(1) default 0 not null,
     constraint courses_comments_course_comment_id_uindex
         unique (course_comment_id),
+    constraint courses_comments_public_id_uindex
+        unique (public_id),
     constraint courses_comments_courses_course_id_fk
         foreign key (course_id) references courses (course_id),
     constraint courses_comments_users_user_id_fk
@@ -103,6 +112,7 @@ create table ratings
 (
     rating_id     int auto_increment
         primary key,
+    public_id     varchar(36)   not null,
     rating_score  int           null,
     course_id     int           not null,
     user_id       int           not null,
@@ -110,6 +120,8 @@ create table ratings
     creation_date date          not null,
     constraint ratings_rating_id_uindex
         unique (rating_id),
+    constraint ratings_public_id_uindex
+        unique (public_id),
     constraint ratings_courses_course_id_fk
         foreign key (course_id) references courses (course_id),
     constraint ratings_users_user_id_fk
@@ -154,6 +166,7 @@ create table lectures
 (
     lecture_id         int auto_increment
         primary key,
+    public_id          varchar(36)          not null,
     title              varchar(50)          not null,
     video_id           int                  not null,
     is_deleted         tinyint(1)           not null,
@@ -161,6 +174,8 @@ create table lectures
     is_added_to_course tinyint(1) default 0 not null,
     constraint lectures_lecture_id_uindex
         unique (lecture_id),
+    constraint lectures_public_id_uindex
+        unique (public_id),
     constraint lectures_users_user_id_fk
         foreign key (user_id) references users (user_id),
     constraint lectures_videos_video_id_fk
@@ -185,11 +200,14 @@ create table homeworks
 (
     id            int auto_increment
         primary key,
+    public_id     varchar(36) not null,
     homework_name varchar(50) null,
     lecture_id    int         not null,
     user_id       int         not null,
     grade         double      not null,
     is_deleted    tinyint(1)  not null,
+    constraint homeworks_public_id_uindex
+        unique (public_id),
     constraint homeworks_lectures_lecture_id_fk
         foreign key (lecture_id) references lectures (lecture_id),
     constraint homeworks_users_user_id_fk
@@ -200,6 +218,7 @@ create table lectures_comments
 (
     lecture_comment_id int auto_increment
         primary key,
+    public_id          varchar(36)          not null,
     lecture_id         int                  not null,
     user_id            int                  not null,
     content            varchar(1000)        not null,
@@ -207,6 +226,8 @@ create table lectures_comments
     is_deleted         tinyint(1) default 0 not null,
     constraint lectures_comments_lecture_comment_id_uindex
         unique (lecture_comment_id),
+    constraint lectures_comments_public_id_uindex
+        unique (public_id),
     constraint lectures_comments_lectures_lecture_id_fk
         foreign key (lecture_id) references lectures (lecture_id),
     constraint lectures_comments_users_user_id_fk
@@ -230,12 +251,15 @@ create table notes
 (
     note_id    int auto_increment
         primary key,
+    public_id  varchar(36)          not null,
     user_id    int                  not null,
     note       text                 not null,
     lecture_id int                  not null,
     is_deleted tinyint(1) default 0 not null,
     constraint notes_note_id_uindex
         unique (note_id),
+    constraint notes_public_id_uindex
+        unique (public_id),
     constraint notes_lectures_lecture_id_fk
         foreign key (lecture_id) references lectures (lecture_id),
     constraint notes_users_user_id_fk
