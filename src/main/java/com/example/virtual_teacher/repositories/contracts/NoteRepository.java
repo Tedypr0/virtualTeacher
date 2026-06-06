@@ -10,6 +10,8 @@ public interface NoteRepository {
 
     Note getById(int descriptionId);
 
+    Note getByPublicId(String publicId);
+
     Note create(Note note);
 
     Note update(Note note);

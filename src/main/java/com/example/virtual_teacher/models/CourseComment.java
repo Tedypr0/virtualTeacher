@@ -9,13 +9,16 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "courses_comments")
-public class CourseComment {
+public class CourseComment implements PublicIdentifiable {
 
     @JsonIgnore
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "course_comment_id")
     private int id;
+
+    @Column(name = "public_id", nullable = false, unique = true, updatable = false, length = 36)
+    private String publicId;
 
     @NotNull
     @Column(name = "content")
@@ -42,12 +45,27 @@ public class CourseComment {
     public CourseComment() {
     }
 
+    @PrePersist
+    private void ensurePublicId() {
+        PublicIdSupport.ensureAssigned(this);
+    }
+
     public int getId() {
         return id;
     }
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    @Override
+    public String getPublicId() {
+        return publicId;
+    }
+
+    @Override
+    public void setPublicId(String publicId) {
+        this.publicId = publicId;
     }
 
     public String getContent() {

@@ -13,13 +13,16 @@ import java.util.Set;
 
 @Entity
 @Table(name = "lectures")
-public class Lecture {
+public class Lecture implements PublicIdentifiable {
 
     @JsonIgnore
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "lecture_id")
     private int id;
+
+    @Column(name = "public_id", nullable = false, unique = true, updatable = false, length = 36)
+    private String publicId;
 
     @Column(name = "title")
     @NotNull
@@ -56,6 +59,11 @@ public class Lecture {
     private boolean isAddedToCourse;
 
     public Lecture() {}
+
+    @PrePersist
+    private void ensurePublicId() {
+        PublicIdSupport.ensureAssigned(this);
+    }
 
     public boolean isAddedToCourse() {
         return isAddedToCourse;
@@ -102,6 +110,16 @@ public class Lecture {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    @Override
+    public String getPublicId() {
+        return publicId;
+    }
+
+    @Override
+    public void setPublicId(String publicId) {
+        this.publicId = publicId;
     }
 
     public String getTitle() {

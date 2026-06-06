@@ -43,6 +43,14 @@ public class CourseCommentRepositoryImpl implements CourseCommentRepository {
     }
 
     @Override
+    public CourseComment getByPublicId(String publicId) {
+        try (Session session = sessionFactory.openSession()) {
+            return PublicIdQueryHelper.findByPublicId(session, CourseComment.class, publicId, "CourseComment",
+                    comment -> !comment.isDeleted());
+        }
+    }
+
+    @Override
     public CourseComment create(CourseComment courseComment) {
         try (Session session = sessionFactory.openSession()) {
             session.persist(courseComment);

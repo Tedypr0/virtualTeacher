@@ -41,6 +41,14 @@ public class NoteRepositoryImpl implements NoteRepository {
     }
 
     @Override
+    public Note getByPublicId(String publicId) {
+        try (Session session = sessionFactory.openSession()) {
+            return PublicIdQueryHelper.findByPublicId(session, Note.class, publicId, "Note",
+                    note -> !note.isDeleted());
+        }
+    }
+
+    @Override
     public Note create(Note note) {
         try (Session session = sessionFactory.openSession()) {
             session.persist(note);

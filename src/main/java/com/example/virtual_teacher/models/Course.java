@@ -10,13 +10,16 @@ import java.util.Set;
 
 @Entity
 @Table(name = "courses")
-public class Course {
+public class Course implements PublicIdentifiable {
 
     @JsonIgnore
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "course_id")
     private int id;
+
+    @Column(name = "public_id", nullable = false, unique = true, updatable = false, length = 36)
+    private String publicId;
 
     @NotNull
     @Size(min = 5, max = 50, message = "Course title must be between 5 and 50 symbols")
@@ -75,12 +78,27 @@ public class Course {
 
     public Course() {}
 
+    @PrePersist
+    private void ensurePublicId() {
+        PublicIdSupport.ensureAssigned(this);
+    }
+
     public int getId() {
         return id;
     }
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    @Override
+    public String getPublicId() {
+        return publicId;
+    }
+
+    @Override
+    public void setPublicId(String publicId) {
+        this.publicId = publicId;
     }
 
     public String getTitle() {
@@ -189,7 +207,7 @@ public class Course {
 
     public String getStatus(){
         if(isDraft){
-            return "Draft";
+            return "Unpublished";
         }
         return "Published";
     }

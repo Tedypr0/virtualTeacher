@@ -7,13 +7,16 @@ import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "notes")
-public class Note {
+public class Note implements PublicIdentifiable {
 
     @JsonIgnore
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "note_id")
     private int id;
+
+    @Column(name = "public_id", nullable = false, unique = true, updatable = false, length = 36)
+    private String publicId;
 
     @NotNull
     @Column(name = "user_id")
@@ -34,6 +37,11 @@ public class Note {
     public Note() {
     }
 
+    @PrePersist
+    private void ensurePublicId() {
+        PublicIdSupport.ensureAssigned(this);
+    }
+
     public int getId() {
         return id;
     }
@@ -42,7 +50,15 @@ public class Note {
         this.id = id;
     }
 
+    @Override
+    public String getPublicId() {
+        return publicId;
+    }
 
+    @Override
+    public void setPublicId(String publicId) {
+        this.publicId = publicId;
+    }
 
     public int getUserId() {
         return userId;

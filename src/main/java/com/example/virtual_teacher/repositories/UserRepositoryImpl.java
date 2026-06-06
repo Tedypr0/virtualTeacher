@@ -45,6 +45,14 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
+    public User getByPublicId(String publicId) {
+        try (Session session = sessionFactory.openSession()) {
+            return PublicIdQueryHelper.findByPublicId(session, User.class, publicId, "User",
+                    user -> !user.isDeleted());
+        }
+    }
+
+    @Override
     public User getByIdForSession(int id) {
         try (Session session = sessionFactory.openSession()) {
             User user = session.get(User.class, id);

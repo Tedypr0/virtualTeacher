@@ -11,6 +11,8 @@ public interface LectureRepository {
 
     Lecture getById(int id);
 
+    Lecture getByPublicId(String publicId);
+
     List<Lecture> lecturesByCourseId(int id);
 
     Lecture getByTitle(String title);

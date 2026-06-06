@@ -9,13 +9,16 @@ import java.sql.Date;
 
 @Entity
 @Table(name = "ratings")
-public class Rating {
+public class Rating implements PublicIdentifiable {
 
     @JsonIgnore
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "rating_id")
     private int id;
+
+    @Column(name = "public_id", nullable = false, unique = true, updatable = false, length = 36)
+    private String publicId;
 
     @Basic
     @Column(name = "rating_score")
@@ -39,12 +42,27 @@ public class Rating {
         creationDate = new Date(System.currentTimeMillis());
     }
 
+    @PrePersist
+    private void ensurePublicId() {
+        PublicIdSupport.ensureAssigned(this);
+    }
+
     public int getId() {
         return id;
     }
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    @Override
+    public String getPublicId() {
+        return publicId;
+    }
+
+    @Override
+    public void setPublicId(String publicId) {
+        this.publicId = publicId;
     }
 
     public int getRatingScore() {

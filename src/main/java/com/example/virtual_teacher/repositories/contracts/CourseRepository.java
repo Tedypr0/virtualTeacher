@@ -15,6 +15,8 @@ public interface CourseRepository {
 
     Course getById(int id);
 
+    Course getByPublicId(String publicId);
+
     long courseCount();
 
     Course getByTitle(String title);

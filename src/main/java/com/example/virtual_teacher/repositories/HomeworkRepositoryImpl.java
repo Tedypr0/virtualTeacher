@@ -34,6 +34,14 @@ public class HomeworkRepositoryImpl implements HomeworkRepository {
     }
 
     @Override
+    public Homework getByPublicId(String publicId) {
+        try (Session session = sessionFactory.openSession()) {
+            return PublicIdQueryHelper.findByPublicId(session, Homework.class, publicId, "Homework",
+                    homework -> !homework.isDeleted());
+        }
+    }
+
+    @Override
     public List<Homework> getByUserId(int userId) {
         try(Session session = sessionFactory.openSession()){
             Query<Homework> query = session.createQuery("from Homework where user.id = :userId", Homework.class);

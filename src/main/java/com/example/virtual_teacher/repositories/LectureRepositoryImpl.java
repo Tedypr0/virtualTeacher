@@ -41,6 +41,14 @@ public class LectureRepositoryImpl implements LectureRepository {
     }
 
     @Override
+    public Lecture getByPublicId(String publicId) {
+        try (Session session = sessionFactory.openSession()) {
+            return PublicIdQueryHelper.findByPublicId(session, Lecture.class, publicId, "Lecture",
+                    lecture -> !lecture.isDeleted());
+        }
+    }
+
+    @Override
     public List<Lecture> lecturesByCourseId(int id) {
         try (Session session = sessionFactory.openSession()) {
             Query<Lecture> query = session.createQuery("from Lecture l where l.course.id = :id", Lecture.class);

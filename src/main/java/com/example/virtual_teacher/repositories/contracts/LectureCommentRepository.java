@@ -9,6 +9,8 @@ public interface LectureCommentRepository {
 
     LectureComment getById(int commentId);
 
+    LectureComment getByPublicId(String publicId);
+
     LectureComment create(LectureComment lectureComment);
 
     LectureComment update(LectureComment lectureComment);

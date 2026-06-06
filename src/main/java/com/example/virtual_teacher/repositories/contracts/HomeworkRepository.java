@@ -9,6 +9,8 @@ public interface HomeworkRepository {
 
     Homework getHomeworkById(int homeworkId);
 
+    Homework getByPublicId(String publicId);
+
     List<Homework> getByUserId(int userId);
 
     List<Homework> getByTeacherId(int teacherId);

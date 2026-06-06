@@ -14,13 +14,16 @@ import java.util.Set;
 
 @Entity
 @Table(name = "users")
-public class User {
+public class User implements PublicIdentifiable {
 
     @JsonIgnore
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
     private int id;
+
+    @Column(name = "public_id", nullable = false, unique = true, updatable = false, length = 36)
+    private String publicId;
 
     @Column(name = "first_name")
     private String firstName;
@@ -75,6 +78,11 @@ public class User {
 
     public User() {
         date = LocalDateTime.now();
+    }
+
+    @PrePersist
+    private void ensurePublicId() {
+        PublicIdSupport.ensureAssigned(this);
     }
 
     public String getFirstName() {
@@ -141,6 +149,16 @@ public class User {
         this.id = id;
     }
 
+    @Override
+    public String getPublicId() {
+        return publicId;
+    }
+
+    @Override
+    public void setPublicId(String publicId) {
+        this.publicId = publicId;
+    }
+
     public LocalDateTime getDate() {
         return date;
     }
@@ -165,7 +183,7 @@ public class User {
     }
 
     public String getImage() {
-        String url = "/users/" + id + "/profile-image";
+        String url = "/users/" + publicId + "/profile-image";
         if (profileImageUpdatedAt != null) {
             long version = profileImageUpdatedAt.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
             return url + "?v=" + version;

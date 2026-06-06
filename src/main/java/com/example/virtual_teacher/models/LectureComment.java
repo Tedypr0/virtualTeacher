@@ -9,13 +9,16 @@ import java.time.LocalDate;
 
 @Entity
 @Table(name = "lectures_comments")
-public class LectureComment {
+public class LectureComment implements PublicIdentifiable {
 
     @JsonIgnore
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "lecture_comment_id")
     private int id;
+
+    @Column(name = "public_id", nullable = false, unique = true, updatable = false, length = 36)
+    private String publicId;
 
     @NotNull
     @Positive
@@ -43,6 +46,11 @@ public class LectureComment {
         creationDate = LocalDate.now();
     }
 
+    @PrePersist
+    private void ensurePublicId() {
+        PublicIdSupport.ensureAssigned(this);
+    }
+
     public User getUser() {
         return user;
     }
@@ -57,6 +65,16 @@ public class LectureComment {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    @Override
+    public String getPublicId() {
+        return publicId;
+    }
+
+    @Override
+    public void setPublicId(String publicId) {
+        this.publicId = publicId;
     }
 
     public int getLectureId() {

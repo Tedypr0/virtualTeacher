@@ -6,13 +6,16 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "homeworks")
-public class Homework {
+public class Homework implements PublicIdentifiable {
 
     @JsonIgnore
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private int id;
+
+    @Column(name = "public_id", nullable = false, unique = true, updatable = false, length = 36)
+    private String publicId;
 
     @Column(name = "homework_name")
     private String homeworkName;
@@ -33,12 +36,27 @@ public class Homework {
 
     public Homework() {}
 
+    @PrePersist
+    private void ensurePublicId() {
+        PublicIdSupport.ensureAssigned(this);
+    }
+
     public int getId() {
         return id;
     }
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    @Override
+    public String getPublicId() {
+        return publicId;
+    }
+
+    @Override
+    public void setPublicId(String publicId) {
+        this.publicId = publicId;
     }
 
     public String getHomeworkUrl() {

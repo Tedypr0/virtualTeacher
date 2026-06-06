@@ -37,6 +37,13 @@ public class RatingRepositoryImpl implements RatingRepository {
     }
 
     @Override
+    public Rating getByPublicId(String publicId) {
+        try (Session session = sessionFactory.openSession()) {
+            return PublicIdQueryHelper.findByPublicId(session, Rating.class, publicId, "Rating", rating -> true);
+        }
+    }
+
+    @Override
     public Rating getById(int id) {
         try (Session session = sessionFactory.openSession()) {
             Rating rating = session.get(Rating.class, id);

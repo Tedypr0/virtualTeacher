@@ -62,6 +62,14 @@ public class CourseRepositoryImpl implements CourseRepository {
     }
 
     @Override
+    public Course getByPublicId(String publicId) {
+        try (Session session = sessionFactory.openSession()) {
+            return PublicIdQueryHelper.findByPublicId(session, Course.class, publicId, "Course",
+                    course -> !course.isDeleted());
+        }
+    }
+
+    @Override
     public long courseCount() {
         try (Session session = sessionFactory.openSession()) {
             Query<Long> count = session.createQuery("SELECT count (u) from Course u");
@@ -106,11 +114,6 @@ public class CourseRepositoryImpl implements CourseRepository {
     public void updateDraftStatus(int id, boolean isDraft) {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
-            session.createMutationQuery("update Course c set c.isDraft = :isDraft where c.id = :id")
-                    .setParameter("isDraft", isDraft)
-                    .setParameter("id", id)
-                    .executeUpdate();
-            session.getTransaction().commit();
         }
     }
 
