@@ -46,11 +46,11 @@
                 </td>
                 <td style="width: 20%;">
                   <a class="table-link bi" style="font-size: 40px;  display:inline-grid">
-                      <form class="table-link bi" style="font-size: 40px" th:action="@{/users/{id}/application(id=${user.getId()})}" method="post">
+                      <form class="table-link bi" style="font-size: 40px" th:action="@{/users/{publicId}/application(publicId=${user.publicId})}" method="post">
                           <button class="bi bi-check" style="border: none; background-color: white" type="submit" value="accept" name="decision"></button>
                       </form></a>
                   <a class="table-link bi" style="font-size: 40px;  display:inline-grid">
-                     <form class="table-link bi" style="font-size: 40px" th:action="@{/users/{id}/application(id=${user.getId()})}" method="post">
+                     <form class="table-link bi" style="font-size: 40px" th:action="@{/users/{publicId}/application(publicId=${user.publicId})}" method="post">
                        <button class="bi bi-x" style="border: none; background-color: white" type="submit" value="deny" name="decision"></button>
                      </form>
                   </a>

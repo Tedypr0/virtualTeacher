@@ -146,7 +146,7 @@
         </div>
         <div class="row justify-content-center button-margin">
             <li><a class="btn btn-primary btn-sm" href="lecture-single.html"
-                   th:href="@{/courses/{courseId}/lectures/new(courseId=${course.getId()})}">Create</a></li>
+                   th:href="@{/courses/{coursePublicId}/lectures/new(coursePublicId=${course.publicId})}">Create</a></li>
         </div>
         <!-- course list -->
         <div class="row justify-content-center">
@@ -162,16 +162,16 @@
                             </a>
                             <div class="row">
                                 <li><a class="btn btn-primary btn-sm lecture-buttons" href="lecture-single.html"
-                                       th:href="@{/courses/{courseId}/lectures/{id}(id=${lecture.getId()}, courseId=${course.getId()})}">Proceed to lecture</a></li>
+                                       th:href="@{/courses/{coursePublicId}/lectures/{lecturePublicId}(coursePublicId=${course.publicId}, lecturePublicId=${lecture.publicId})}">Proceed to lecture</a></li>
                                 <li><a class="btn btn-primary btn-sm lecture-buttons" href="lecture-single.html"
-                                       th:href="@{/courses/{courseId}/lectures/{id}/update(courseId=${course.getId()}, id=${lecture.getId()})}">Update</a></li>
+                                       th:href="@{/courses/{coursePublicId}/lectures/{lecturePublicId}/update(coursePublicId=${course.publicId}, lecturePublicId=${lecture.publicId})}">Update</a></li>
                                 <li><a class="btn btn-primary btn-sm" href="lecture-single.html"
-                                       th:href="@{/courses/{courseId}/lectures/{id}/delete(id=${lecture.getId()}, courseId=${course.getId()})}">Delete</a></li>
+                                       th:href="@{/courses/{coursePublicId}/lectures/{lecturePublicId}/delete(lecturePublicId=${lecture.publicId}, coursePublicId=${course.publicId})}">Delete</a></li>
                                 <!--                                <li><a class="btn btn-primary btn-sm" href="lecture-single.html"-->
-                                <!--                                       th:href="@{/courses/{courseId}/lectures/{id}/addToCourse(courseId=${course.getId()},-->
+                                <!--                                       th:href="@{/courses/{courseId}/lectures/{id}/addToCourse(coursePublicId=${course.publicId},-->
                                 <!--                                        id=${lecture.getId()})}">Add to course</a></li>-->
                                 <form class="form-inline my-3 my-lg-0" action="#"
-                                      th:action="@{/courses/{courseId}/lectures/{id}/addToCourse(courseId=${course.getId()}, id=${lecture.getId()})}"
+                                      th:action="@{/courses/{coursePublicId}/lectures/{lecturePublicId}/addToCourse(coursePublicId=${course.publicId}, lecturePublicId=${lecture.publicId})}"
                                       method="post">
                                     <button class="btn btn-primary btn-sm lecture-buttons" style="margin-top: 8px; margin-left: 22px" type="submit" th:text="${lecture.isAddedToCourse()} ? 'Remove from course' : 'Add to course'"> Add to course Button</button>
                                 </form>

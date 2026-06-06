@@ -98,7 +98,7 @@
                 </div>
             </form>
 
-            <form method="post" enctype="multipart/form-data" th:action="@{/courses/{courseId}/lectures/{id}/update/uploadFile(courseId=${courseId}, id=${id})}" name="documentFile" id="documentFile">
+            <form method="post" enctype="multipart/form-data" th:action="@{/courses/{coursePublicId}/lectures/{lecturePublicId}/update/uploadFile(coursePublicId=${coursePublicId}, lecturePublicId=${publicId})}" name="documentFile" id="documentFile">
                 <div class="col-12">
                     <br>
                     <input type="file"  onchange="document.getElementById('blah').src = window.URL.createObjectURL(this.files[0])"

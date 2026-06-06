@@ -249,7 +249,7 @@
                                                                             class="fa fa-play"></span>
                                                                         Lecture title</a>
                                                                         <a th:if="${isStarted}"
-                                                                           th:href="@{/courses/{courseId}/lectures/{id}(courseId=${courseId}, id=${lecture.getId()})}">
+                                                                           th:href="@{/courses/{coursePublicId}/lectures/{lecturePublicId}(coursePublicId=${coursePublicId}, lecturePublicId=${lecture.publicId})}">
                                                                             <button class="btn btn-primary">Proceed to
                                                                                 Lecture
                                                                             </button>
@@ -272,7 +272,7 @@
                                             <div id="result" class="mbp_comment_form style2 pb0">
                                                 <h3 style="text-align: center">Comments</h3>
                                                 <form action="#" class="row" th:object="${newComment}"
-                                                      th:action="@{/courses/{id}/comments(id=${course.getId()})}"
+                                                      th:action="@{/courses/{publicId}/comments(publicId=${course.getPublicId()})}"
                                                       name="sub-form" method="post" id="sub-form">
                                                     <div class="col-12"><textarea required="required" maxlength="1000"
                                                                                   name="comment" id="comment"
@@ -318,12 +318,12 @@
                                             <div class="text-right">
                                                 <a th:if="${comment.getUser().getId() == user.getId() || session.isAdmin}">
                                                     <a href="#" class="btn-secondary btn-sm comment-button"
-                                                       th:href="@{{courseId}/comments/{commentId}/update(courseId=${courseId}, commentId=${comment.getId()})}"><i
+                                                       th:href="@{/courses/{coursePublicId}/comments/{commentPublicId}/update(coursePublicId=${coursePublicId}, commentPublicId=${comment.publicId})}"><i
                                                             class="fa fa-edit"></i> Edit</a>
                                                 </a>
                                                 <a th:if="${comment.getUser().getId() == user.getId() || session.isAdmin}">
                                                     <a href="#" class="btn-secondary btn-sm"
-                                                       th:href="@{{courseId}/comments/{commentId}/delete(courseId=${courseId}, commentId=${comment.getId()})}"><i
+                                                       th:href="@{/courses/{coursePublicId}/comments/{commentPublicId}/delete(coursePublicId=${coursePublicId}, commentPublicId=${comment.publicId})}"><i
                                                             class="fa fa-trash"></i> Delete</a>
                                                 </a></div>
                                         </div>
@@ -336,7 +336,7 @@
                                         <div class="sfeedbacks style2">
                                             <h3 style="text-align: center">Reviews</h3>
                                             <form action="#" class="row" th:object="${newReview}"
-                                                  th:action="@{/courses/{id}/ratings(id=${course.getId()})}"
+                                                  th:action="@{/courses/{publicId}/ratings(publicId=${course.getPublicId()})}"
                                                   name="comment" method="post">
                                                 <div class="rate" th:if="${isCompleted && isEnrolled}">
                                                     <input th:field="*{rating}" type="radio" id="star5" name="rate"
@@ -458,7 +458,7 @@
                                                     <div class="text-right">
                                                         <a th:if="${rating.getUser().getId() == user.getId() || session.isAdmin}">
                                                             <a href="#" class="btn-secondary btn-sm"
-                                                               th:href="@{/courses/{courseId}/ratings/{ratingId}/delete(courseId=${courseId}, ratingId=${rating.getId()})}"><i
+                                                               th:href="@{/courses/{coursePublicId}/ratings/{ratingPublicId}/delete(coursePublicId=${coursePublicId}, ratingPublicId=${rating.publicId})}"><i
                                                                     class="fa fa-trash"></i> Delete</a>
                                                         </a></div>
                                                 </div>
@@ -499,7 +499,7 @@
                             </ul>
 
                             <form class="form-inline my-3 my-lg-0" action="#"
-                                  th:action="@{/courses/{id}/enroll(id=${course.getId()})}"
+                                  th:action="@{/courses/{publicId}/enroll(publicId=${course.getPublicId()})}"
                                   method="post" th:object="${usersCourses}">
                                 <input th:unless="${isEnrolled == true}" type="submit" class="btn btn-primary btn-lg"
                                        style="margin-top: 0.5cm;" value="Enroll Now">
@@ -598,7 +598,7 @@
                                 </div>
                             </ul>
                             <a style="margin-top: 1cm;" href="course-single.html" class="btn btn-primary btn-sm"
-                               th:href="@{/courses/{id}(id=${course.getId()})}">Apply now</a>
+                               th:href="@{/courses/{publicId}(publicId=${course.getPublicId()})}">Apply now</a>
                         </div>
                     </div>
                 </div>

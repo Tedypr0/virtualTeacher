@@ -62,7 +62,7 @@
                                 </td>
                                 <td>
                                     <!--    UPDATE GRADE        -->
-                                    <form th:action="@{/users/homeworks/{homeworkId}/grade(homeworkId=${homework.getId()})}" method="post">
+                                    <form th:action="@{/users/homeworks/{publicId}/grade(publicId=${homework.publicId})}" method="post">
                                         <label>
                                             <select name="grade">
                                             <option value="2">2</option>

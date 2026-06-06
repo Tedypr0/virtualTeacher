@@ -208,6 +208,18 @@ body {font-family: Arial, Helvetica, sans-serif;}
     rgba(6, 24, 44, 0.65) 0 4px 6px -1px,
     rgba(255, 255, 255, 0.08) 0 1px 0 inset;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.teacher-course-card .card-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.teacher-course-card .course-card-content {
+  flex: 1;
 }
 
 .teacher-course-card .course-card-thumb {
@@ -253,11 +265,27 @@ body {font-family: Arial, Helvetica, sans-serif;}
 }
 
 .teacher-course-card .course-card-actions {
+  display: flex;
+  flex-direction: column;
   gap: 0.5rem;
 }
 
-.teacher-course-card .course-card-actions form {
+.teacher-course-card .course-card-actions-row {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.teacher-course-card .course-card-actions-row .btn {
+  flex: 1;
+}
+
+.teacher-course-card .course-card-actions-row form {
+  flex: 1;
   margin: 0;
+}
+
+.teacher-course-card .course-card-actions-row form .btn {
+  width: 100%;
 }
 
 .file-upload-input {

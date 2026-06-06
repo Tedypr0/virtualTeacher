@@ -160,7 +160,7 @@
                 </iframe>
             </div>
             <form style="display:inline-block" action="#" th:object="${note}"
-                  th:action="@{/courses/{courseId}/lectures{id}/notes/new(courseId=${courseId}, id=${id})}" method="post">
+                  th:action="@{/courses/{coursePublicId}/lectures/{lecturePublicId}/notes/new(coursePublicId=${coursePublicId}, lecturePublicId=${lecturePublicId})}" method="post">
                 <div class="text-area">
                         <textarea type="text" th:field="*{note}" placeholder="You can take notes here..." cols="60"
                                   rows="12"></textarea>
@@ -180,7 +180,7 @@
     </div>
     </div>
 
-    <form method="post" enctype="multipart/form-data" th:action="@{/courses/{courseId}/lectures/{id}/uploadHomework(courseId=${courseId}, id=${id})}"
+    <form method="post" enctype="multipart/form-data" th:action="@{/courses/{coursePublicId}/lectures/{lecturePublicId}/uploadHomework(coursePublicId=${coursePublicId}, lecturePublicId=${lecturePublicId})}"
           name="documentFile" id="documentFile">
         <div class="col-12">
             <br>
@@ -200,7 +200,7 @@
 
     <h3>Comments</h3>
     <form action="#" class="row" th:object="${newComment}"
-          th:action="@{/courses/{courseId}/lectures/{lectureId}/comments/createComment(lectureId=${lectureId}, courseId=${courseId})}" name="comment" method="post">
+          th:action="@{/courses/{coursePublicId}/lectures/{lecturePublicId}/comments/createComment(coursePublicId=${coursePublicId}, lecturePublicId=${lecturePublicId})}" name="comment" method="post">
         <div class="col-12">
             <textarea name="comment" id="comment" th:field="${newComment.content}" class="form-control mb-4"
                       placeholder="Comment Here..." required></textarea>
@@ -231,13 +231,13 @@
             <div class="text-right">
                 <a th:if="${comment.getUser().getId() == user.getId() || session.isAdmin}">
                     <a href="#" class="btn-secondary btn-sm comment-button"
-                       th:href="@{/courses/{courseId}/lectures/{lectureId}/comments/{commentId}/update(courseId=${courseId}, lectureId=${lectureId}, commentId=${comment.getId()})}">
+                       th:href="@{/courses/{coursePublicId}/lectures/{lecturePublicId}/comments/{commentPublicId}/update(coursePublicId=${coursePublicId}, lecturePublicId=${lecturePublicId}, commentPublicId=${comment.publicId})}">
                         Edit
                     </a>
                 </a>
                 <a th:if="${comment.getUser().getId() == user.getId() || session.isAdmin}">
                     <a href="#" class="btn-secondary btn-sm"
-                       th:href="@{/courses/{courseId}/lectures/{lectureId}/comments/{commentId}/delete(courseId=${courseId}, lectureId=${lectureId}, commentId=${comment.getId()})}"><i
+                       th:href="@{/courses/{coursePublicId}/lectures/{lecturePublicId}/comments/{commentPublicId}/delete(coursePublicId=${coursePublicId}, lecturePublicId=${lecturePublicId}, commentPublicId=${comment.publicId})}"><i
                             class="fa fa-trash"></i> Delete</a>
                 </a></div>
         </div>

@@ -41,11 +41,11 @@
                     View Note
                   </button>
                   <li><a class="btn btn-primary"
-                         th:href="@{/courses/{courseId}/lectures/{id}/notes/{noteId}/delete(id=${note.getLecture().getId()},
-                         courseId=${note.getLecture().getCourse().getId()}, noteId=${note.getId()})}">Delete</a></li>
+                         th:href="@{/courses/{coursePublicId}/lectures/{lecturePublicId}/notes/{notePublicId}/delete(coursePublicId=${note.lecture.course.publicId},
+                         lecturePublicId=${note.lecture.publicId}, notePublicId=${note.publicId})}">Delete</a></li>
                   <li><a class="btn btn-primary"
-                         th:href="@{/courses/{courseId}/lectures/{id}/notes/{noteId}/update(id=${note.getLecture().getId()},
-                         courseId=${note.getLecture().getCourse().getId()}, noteId=${note.getId()})}">Update</a></li>
+                         th:href="@{/courses/{coursePublicId}/lectures/{lecturePublicId}/notes/{notePublicId}/update(lecturePublicId=${note.lecture.publicId},
+                         coursePublicId=${note.lecture.course.publicId}, notePublicId=${note.publicId})}">Update</a></li>
 
                   <!-- Modal -->
                   <div class="modal fade" th:id="'exampleModal'+${note.getId()}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" th:value="${note.getId()}">

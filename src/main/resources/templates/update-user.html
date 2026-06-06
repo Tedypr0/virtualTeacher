@@ -37,7 +37,7 @@
         <p class="profile-crop-hint">Optional: choose a photo and crop it. It will be saved when you click Save.</p>
       </div>
 
-      <form class="row" th:action="@{/users/{id}/update(id=${id})}" th:object="${user}"
+      <form class="row" th:action="@{/users/{publicId}/update(publicId=${publicId})}" th:object="${user}"
             method="post" id="profileForm">
         <div class="col-12 mt-3">
           <input type="text" class="form-control mb-3" id="editFirstname" placeholder="First Name" th:field="*{firstName}">

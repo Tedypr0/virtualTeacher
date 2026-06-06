@@ -104,7 +104,7 @@
                     <!-- course item -->
                     <br>
                     <div th:each="course : ${singleTeacherCourses}" class="col-lg-4 col-sm-6 mb-5">
-                        <div class="card p-0 border-primary rounded-0 hover-shadow teacher-course-card">
+                        <div class="card p-0 border-primary rounded-0 hover-shadow teacher-course-card h-100">
                             <div class="course-card-thumb">
                                 <img class="course-card-img" src="#"
                                      th:src="*{course.getTopic().getImgUrl()}"
@@ -128,23 +128,27 @@
                                     <h5 class="course-card-title" th:text="${course.getTitle()}"></h5>
                                     <h6 class="text-muted mb-0" th:text="${course.getTopic().getTopicName()}"></h6>
                                 </div>
-                                <div class="course-card-actions d-flex flex-wrap mt-3">
-                                    <a class="btn btn-primary btn-sm"
-                                       th:href="@{/courses/{id}/lectures(id=${course.getId()})}">Manage Lectures</a>
-                                    <form th:action="@{/courses/{id}/update/status(id=${course.getId()})}"
-                                          method="post" class="d-inline">
-                                        <button class="btn btn-outline-primary btn-sm" type="submit"
-                                                th:text="${course.getStatus()}">Published</button>
-                                    </form>
-                                    <a class="btn btn-outline-secondary btn-sm"
-                                       th:href="@{/courses/{id}/update(id=${course.getId()})}">
-                                        <i class="fa fa-edit"></i> Edit
-                                    </a>
-                                    <a class="btn btn-outline-danger btn-sm"
-                                       th:href="@{/courses/{id}/delete(id=${course.getId()})}"
-                                       onclick="return confirm('Delete this course?');">
-                                        <i class="fa fa-trash"></i> Delete
-                                    </a>
+                                <div class="course-card-actions mt-3">
+                                    <div class="course-card-actions-row">
+                                        <a class="btn btn-primary btn-sm"
+                                           th:href="@{/courses/{publicId}/lectures(publicId=${course.getPublicId()})}">Manage Lectures</a>
+                                        <form th:action="@{/courses/{publicId}/update/status(publicId=${course.getPublicId()})}"
+                                              method="post">
+                                            <button class="btn btn-outline-primary btn-sm" type="submit"
+                                                    th:text="${course.getStatus()}">Published</button>
+                                        </form>
+                                    </div>
+                                    <div class="course-card-actions-row">
+                                        <a class="btn btn-outline-secondary btn-sm"
+                                           th:href="@{/courses/{publicId}/update(publicId=${course.getPublicId()})}">
+                                            <i class="fa fa-edit"></i> Edit
+                                        </a>
+                                        <a class="btn btn-danger btn-sm"
+                                           th:href="@{/courses/{publicId}/delete(publicId=${course.getPublicId()})}"
+                                           onclick="return confirm('Delete this course?');">
+                                            <i class="fa fa-trash"></i> Delete
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
                         </div>

@@ -105,7 +105,7 @@
         </div>
         <div class="modal-body">
             <p class="login">
-            <form class="row" th:action="@{/courses/{courseId}/lectures/new(courseId=${courseId})}" th:object="${lecture}" method="post">
+            <form class="row" th:action="@{/courses/{coursePublicId}/lectures/new(coursePublicId=${coursePublicId})}" th:object="${lecture}" method="post">
                 <div class="col-12">
                     <input type="text" class="form-control mb-3" id="setTitle" name="setTitle" placeholder="Title"
                            th:field="*{title}">

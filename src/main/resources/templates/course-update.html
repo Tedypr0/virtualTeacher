@@ -92,7 +92,7 @@
         </div>
         <div class="modal-body">
             <p class="login">
-            <form action="#" class="row" th:action="@{__${requestURI}__}" th:object="${course}"
+            <form action="#" class="row" th:action="@{/courses/{coursePublicId}/update(coursePublicId=${coursePublicId})}" th:object="${course}"
                   method="post">
                 <div class="col-12">
                     <input type="text" class="form-control mb-3" id="updateTitle" name="updateTitle" placeholder="Title"
