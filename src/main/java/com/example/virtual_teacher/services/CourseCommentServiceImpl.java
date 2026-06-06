@@ -34,6 +34,11 @@ public class CourseCommentServiceImpl implements CourseCommentService {
     }
 
     @Override
+    public CourseComment getByPublicId(String publicId) {
+        return courseCommentRepository.getByPublicId(publicId);
+    }
+
+    @Override
     public CourseComment create(CourseComment courseComment) {
         courseCommentRepository.create(courseComment);
         return courseComment;

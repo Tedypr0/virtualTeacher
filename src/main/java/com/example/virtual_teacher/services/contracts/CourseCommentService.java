@@ -10,6 +10,8 @@ public interface CourseCommentService {
 
     CourseComment getById(int id);
 
+    CourseComment getByPublicId(String publicId);
+
     CourseComment create(CourseComment courseComment);
 
     CourseComment update(User authUser, CourseComment courseComment);

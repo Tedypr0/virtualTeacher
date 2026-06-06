@@ -3,6 +3,7 @@ package com.example.virtual_teacher.services;
 import com.example.virtual_teacher.exceptions.EntityNotFoundException;
 import com.example.virtual_teacher.exceptions.UnauthorizedOperationException;
 import com.example.virtual_teacher.models.*;
+import com.example.virtual_teacher.repositories.contracts.CourseDescriptionRepository;
 import com.example.virtual_teacher.repositories.contracts.CourseRepository;
 import com.example.virtual_teacher.services.contracts.CourseService;
 import com.example.virtual_teacher.services.contracts.UserService;
@@ -14,12 +15,16 @@ import java.util.List;
 public class CourseServiceImpl implements CourseService {
 
     private final CourseRepository courseRepository;
+    private final CourseDescriptionRepository courseDescriptionRepository;
     private final UserService userService;
     public static final String CREATE_COURSE_ERROR_MESSAGE = "Only owner or admin can create a course!";
     public static final String UPDATE_COURSE_ERROR_MESSAGE = "Only owner or admin can edit or delete a course!";
 
-    public CourseServiceImpl(CourseRepository courseRepository, UserService userService) {
+    public CourseServiceImpl(CourseRepository courseRepository,
+                             CourseDescriptionRepository courseDescriptionRepository,
+                             UserService userService) {
         this.courseRepository = courseRepository;
+        this.courseDescriptionRepository = courseDescriptionRepository;
         this.userService = userService;
     }
 
@@ -42,11 +47,14 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public Course getById(int id) {
         Course course = courseRepository.getById(id);
-        if (course.getDescription() == null) {
-            CourseDescription courseDescription = new CourseDescription();
-            courseDescription.setDescription("No Description");
-            course.setDescription(courseDescription);
-        }
+        attachDescription(course);
+        return course;
+    }
+
+    @Override
+    public Course getByPublicId(String publicId) {
+        Course course = courseRepository.getByPublicId(publicId);
+        attachDescription(course);
         return course;
     }
 
@@ -78,7 +86,37 @@ public class CourseServiceImpl implements CourseService {
         if (!authUser.isAdmin() && authUser.getId() != course.getTeacher().getId()) {
             throw new UnauthorizedOperationException(UPDATE_COURSE_ERROR_MESSAGE);
         }
-        return courseRepository.update(course);
+
+        CourseDescription description = course.getDescription();
+        course.setDescription(null);
+        Course updatedCourse = courseRepository.update(course);
+        persistDescription(updatedCourse.getId(), description);
+        updatedCourse.setDescription(description);
+        return updatedCourse;
+    }
+
+    private void attachDescription(Course course) {
+        CourseDescription description = courseDescriptionRepository.getEntityByCourseId(course.getId());
+        if (description == null) {
+            description = new CourseDescription();
+            description.setDescription("No Description");
+        }
+        course.setDescription(description);
+    }
+
+    private void persistDescription(int courseId, CourseDescription description) {
+        if (description == null || description.getDescription() == null
+                || "No Description".equals(description.getDescription())) {
+            return;
+        }
+
+        description.setCourseId(courseId);
+        description.setDeleted(false);
+        if (description.getId() == 0) {
+            courseDescriptionRepository.create(description);
+        } else {
+            courseDescriptionRepository.update(description);
+        }
     }
 
     @Override
@@ -94,8 +132,9 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public void toggleDraftStatus(User authUser, int courseId) {
-        Course course = courseRepository.getById(courseId);
+    public void toggleDraftStatus(User authUser, String coursePublicId) {
+        Course course = courseRepository.getByPublicId(coursePublicId);
+        int courseId = course.getId();
         if (course.isDeleted()) {
             throw new EntityNotFoundException("id", course.getId());
         }

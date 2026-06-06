@@ -37,6 +37,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User getByPublicId(String publicId) {
+        return userRepository.getByPublicId(publicId);
+    }
+
+    @Override
     public User getByEmail(String email) {
         return userRepository.getByEmail(email);
     }

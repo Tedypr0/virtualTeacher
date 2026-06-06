@@ -14,6 +14,8 @@ public interface LectureService {
 
     Lecture getById(int id);
 
+    Lecture getByPublicId(String publicId);
+
     List<Lecture> getByCourseId(int id);
 
     Lecture create(Lecture lecture, User authUser);

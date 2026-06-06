@@ -34,22 +34,34 @@ public class CourseDescriptionRepositoryImpl implements CourseDescriptionReposit
 
     @Override
     public String getByCourseId(int courseId) {
+        CourseDescription description = getEntityByCourseId(courseId);
+        if (description == null) {
+            return "No description";
+        }
+        return description.toString();
+    }
+
+    @Override
+    public CourseDescription getEntityByCourseId(int courseId) {
         try (Session session = sessionFactory.openSession()) {
             Query<CourseDescription> query = session.createQuery(
-                    "from CourseDescription c where c.courseId = :id and isDeleted = false",
+                    "from CourseDescription c where c.courseId = :id and c.isDeleted = false",
                     CourseDescription.class);
             query.setParameter("id", courseId);
-            if (query.getResultList().size() == 0) {
-                return "No description";
+            List<CourseDescription> results = query.getResultList();
+            if (results.isEmpty()) {
+                return null;
             }
-            return query.getResultList().get(0).toString();
+            return results.get(0);
         }
     }
 
     @Override
     public CourseDescription create(CourseDescription courseDescription) {
-        try (Session session = sessionFactory.openSession()){
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
             session.persist(courseDescription);
+            session.getTransaction().commit();
         }
         return courseDescription;
     }

@@ -11,6 +11,8 @@ public interface RatingService {
 
     Rating getById(int id);
 
+    Rating getByPublicId(String publicId);
+
     List<Rating> getByCourseId(int courseId);
 
     Rating create(User user, Rating rating);

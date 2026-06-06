@@ -33,6 +33,11 @@ public class LectureCommentServiceImpl implements LectureCommentService {
     }
 
     @Override
+    public LectureComment getByPublicId(String publicId) {
+        return lectureCommentRepository.getByPublicId(publicId);
+    }
+
+    @Override
     public LectureComment create(LectureComment lectureComment) {
         lectureCommentRepository.create(lectureComment);
         return lectureComment;

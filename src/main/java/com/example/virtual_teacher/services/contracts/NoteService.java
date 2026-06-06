@@ -14,6 +14,8 @@ public interface NoteService {
 
     Note getById(int id);
 
+    Note getByPublicId(String publicId);
+
     Note create(Note note);
 
     Note update(Note note, User authUser);

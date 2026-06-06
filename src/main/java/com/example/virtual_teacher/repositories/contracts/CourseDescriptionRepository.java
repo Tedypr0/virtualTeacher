@@ -9,6 +9,8 @@ public interface CourseDescriptionRepository {
 
     String getByCourseId(int courseId);
 
+    CourseDescription getEntityByCourseId(int courseId);
+
     CourseDescription create(CourseDescription courseDescription);
 
     CourseDescription update(CourseDescription courseDescription);

@@ -14,6 +14,7 @@ public class Helpers {
     public static Lecture createMockLecture(){
         Lecture mockLecture = new Lecture();
         mockLecture.setId(1);
+        mockLecture.setPublicId("00000000-0000-4000-8000-000000000001");
         mockLecture.setTeacher(createMockTeacher());
         mockLecture.setTitle("mockTitle");
         mockLecture.setVideo(createMockVideo());
@@ -23,6 +24,7 @@ public class Helpers {
     public static User createMockTeacher(){
         User user = new User();
         user.setId(1);
+        user.setPublicId("00000000-0000-4000-8000-000000000010");
         user.setActive(true);
         user.setDate(LocalDateTime.now());
         user.setEmail("user@user.com");
@@ -36,6 +38,7 @@ public class Helpers {
     public static User createMockStudent(){
         User user = new User();
         user.setId(1);
+        user.setPublicId("00000000-0000-4000-8000-000000000020");
         user.setActive(true);
         user.setDate(LocalDateTime.now());
         user.setEmail("user@user.com");
@@ -63,6 +66,7 @@ public class Helpers {
     public static User createMockAdmin(){
         User mockUser = new User();
         mockUser.setId(1);
+        mockUser.setPublicId("00000000-0000-4000-8000-000000000030");
         mockUser.setFirstName("mockFirstName");
         mockUser.setLastName("mockLastName");
         mockUser.setPassword("mockPassword");
@@ -115,6 +119,7 @@ public class Helpers {
     public static Course createMockCourse(){
         Course course = new Course();
         course.setId(1);
+        course.setPublicId("00000000-0000-4000-8000-000000000100");
         course.setTitle("mockTitle");
         course.setTopic(createMockTopic());
         course.setAvgRating(4.0);

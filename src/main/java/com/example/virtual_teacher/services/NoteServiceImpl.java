@@ -30,6 +30,11 @@ public class NoteServiceImpl implements NoteService {
     }
 
     @Override
+    public Note getByPublicId(String publicId) {
+        return noteRepository.getByPublicId(publicId);
+    }
+
+    @Override
     public Note create(Note note) {
         return noteRepository.create(note);
     }

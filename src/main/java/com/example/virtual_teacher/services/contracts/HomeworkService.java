@@ -8,6 +8,8 @@ import java.util.List;
 public interface HomeworkService {
     Homework getHomeworkById(int homeworkId);
 
+    Homework getByPublicId(String publicId);
+
     List<Homework> getByUserId(int userId);
 
     List<Homework> getByTeacherId(User authUser);

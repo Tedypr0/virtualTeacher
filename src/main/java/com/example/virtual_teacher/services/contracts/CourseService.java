@@ -16,6 +16,8 @@ public interface CourseService {
 
     Course getById(int id);
 
+    Course getByPublicId(String publicId);
+
     long courseCount();
 
     Course getByTitle(String title);
@@ -26,7 +28,7 @@ public interface CourseService {
 
     Course delete(User authUser, int id);
 
-    void toggleDraftStatus(User authUser, int courseId);
+    void toggleDraftStatus(User authUser, String coursePublicId);
 
     List<Course> filter(FilterOptionsCourses filterOptionsCourses);
 }

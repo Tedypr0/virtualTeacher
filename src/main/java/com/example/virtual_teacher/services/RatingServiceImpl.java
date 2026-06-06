@@ -42,6 +42,11 @@ public class RatingServiceImpl implements RatingService {
     }
 
     @Override
+    public Rating getByPublicId(String publicId) {
+        return ratingRepository.getByPublicId(publicId);
+    }
+
+    @Override
     public List<Rating> getByCourseId(int courseId) {
         return ratingRepository.getByCourseId(courseId);
     }

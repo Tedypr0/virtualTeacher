@@ -11,6 +11,8 @@ public interface LectureCommentService {
 
     LectureComment getById(int id);
 
+    LectureComment getByPublicId(String publicId);
+
     LectureComment create(LectureComment lectureComment);
 
     LectureComment update(User authUser, LectureComment lectureComment);

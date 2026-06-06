@@ -54,6 +54,17 @@ public class LectureServiceImpl implements LectureService {
     }
 
     @Override
+    public Lecture getByPublicId(String publicId) {
+        Lecture lecture = lectureRepository.getByPublicId(publicId);
+        if (lecture.getDescription() == null) {
+            LectureDescription lectureDescription = new LectureDescription();
+            lectureDescription.setDescription("No Description");
+            lecture.setDescription(lectureDescription);
+        }
+        return lecture;
+    }
+
+    @Override
     public List<Lecture> getByCourseId(int id) {
         try {
             return lectureRepository.lecturesByCourseId(id);
