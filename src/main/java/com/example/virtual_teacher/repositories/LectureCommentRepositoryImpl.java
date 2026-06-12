@@ -23,8 +23,11 @@ public class LectureCommentRepositoryImpl implements LectureCommentRepository {
     @Override
     public List<LectureComment> getAll(int lectureId) {
         try (Session session = sessionFactory.openSession()) {
-            Query<LectureComment> query = session.createQuery("from LectureComment l " +
-                    "where l.isDeleted = false and lectureId=:lectureId", LectureComment.class);
+            Query<LectureComment> query = session.createQuery(
+                    "select c from LectureComment c join fetch c.user " +
+                            "where c.isDeleted = false and c.lectureId = :lectureId " +
+                            "order by c.id desc",
+                    LectureComment.class);
             query.setParameter("lectureId", lectureId);
             return query.getResultList();
         }
@@ -52,7 +55,9 @@ public class LectureCommentRepositoryImpl implements LectureCommentRepository {
     @Override
     public LectureComment create(LectureComment lectureComment) {
         try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
             session.persist(lectureComment);
+            session.getTransaction().commit();
         }
         return lectureComment;
     }

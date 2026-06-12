@@ -21,6 +21,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -56,9 +57,12 @@ public class CourseReviewAndCommentMvcController {
                                    @Valid @ModelAttribute("newComment") CourseCommentDto courseCommentDto,
                                    BindingResult bindingResult,
                                    Model model,
-                                   HttpSession session) {
+                                   HttpSession session,
+                                   RedirectAttributes redirectAttributes) {
+        String courseUrl = "/courses/" + publicId + "#review";
         if (bindingResult.hasErrors()) {
-            return "redirect:/courses/" + publicId;
+            redirectAttributes.addFlashAttribute("commentError", "Comment cannot be empty.");
+            return "redirect:" + courseUrl;
         }
         try {
             User creator = authenticationHelper.tryGetUser(session);
@@ -66,7 +70,7 @@ public class CourseReviewAndCommentMvcController {
             accessControlService.assertCanViewCourse(creator, course);
             CourseComment newComment = courseCommentMapper.fromDto(courseCommentDto, creator, course);
             courseCommentService.create(newComment);
-            return "redirect:/courses/" + publicId;
+            return "redirect:" + courseUrl;
         } catch (AuthenticationFailureException e) {
             return "redirect:/auth/login";
         } catch (EntityNotFoundException e) {
@@ -90,7 +94,7 @@ public class CourseReviewAndCommentMvcController {
             model.addAttribute("comment", courseCommentMapper.objToDto(courseComment));
             model.addAttribute("coursePublicId", coursePublicId);
             model.addAttribute("commentPublicId", commentPublicId);
-            return "comment-update";
+            return "course-comment-update";
         } catch (AuthenticationFailureException e) {
             return "redirect:/auth/login";
         } catch (EntityNotFoundException e) {
@@ -116,7 +120,9 @@ public class CourseReviewAndCommentMvcController {
         }
 
         if (errors.hasErrors()) {
-            return "comment-update";
+            model.addAttribute("coursePublicId", coursePublicId);
+            model.addAttribute("commentPublicId", commentPublicId);
+            return "course-comment-update";
         }
 
         try {
@@ -125,10 +131,12 @@ public class CourseReviewAndCommentMvcController {
             accessControlService.assertCanModifyCourseComment(authUser, originalComment);
             CourseComment courseComment = courseCommentMapper.dtoToObjForUpdate(originalComment, courseCommentDto);
             courseCommentService.update(authUser, courseComment);
-            return "redirect:/courses/" + coursePublicId;
+            return "redirect:/courses/" + coursePublicId + "#review";
         } catch (DuplicateEntityException e) {
             errors.rejectValue("content", "duplicate_comment", e.getMessage());
-            return "comment-update";
+            model.addAttribute("coursePublicId", coursePublicId);
+            model.addAttribute("commentPublicId", commentPublicId);
+            return "course-comment-update";
         } catch (EntityNotFoundException e) {
             model.addAttribute("error", e.getMessage());
             return "not-found";
@@ -149,7 +157,7 @@ public class CourseReviewAndCommentMvcController {
             CourseComment comment = courseCommentService.getByPublicId(commentPublicId);
             accessControlService.assertCanModifyCourseComment(user, comment);
             courseCommentService.delete(user, comment.getId());
-            return "redirect:/courses/" + coursePublicId;
+            return "redirect:/courses/" + coursePublicId + "#review";
         } catch (AuthenticationFailureException e) {
             return "redirect:/auth/login";
         } catch (EntityNotFoundException e) {

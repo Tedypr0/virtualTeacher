@@ -20,6 +20,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -53,12 +54,15 @@ public class LectureCommentMvcController {
     @PostMapping("/courses/{coursePublicId}/lectures/{lecturePublicId}/comments/createComment")
     public String createNewComment(@PathVariable String coursePublicId,
                                    @PathVariable String lecturePublicId,
-                                   @ModelAttribute("comment") LectureCommentDto lectureCommentDto,
+                                   @Valid @ModelAttribute("newComment") LectureCommentDto lectureCommentDto,
                                    BindingResult errors,
                                    Model model,
-                                   HttpSession session) {
+                                   HttpSession session,
+                                   RedirectAttributes redirectAttributes) {
+        String lectureUrl = "/courses/" + coursePublicId + "/lectures/" + lecturePublicId;
         if (errors.hasErrors()) {
-            return "redirect:/courses/" + coursePublicId + "/lectures/" + lecturePublicId;
+            redirectAttributes.addFlashAttribute("commentError", "Comment cannot be empty.");
+            return "redirect:" + lectureUrl;
         }
         try {
             User authUser = authenticationHelper.tryGetUser(session);
@@ -67,7 +71,7 @@ public class LectureCommentMvcController {
             accessControlService.assertCanViewLecture(authUser, course, lecture);
             LectureComment newComment = lectureCommentMapper.dtoToObj(lectureCommentDto, lecture.getId(), authUser);
             lectureCommentService.create(newComment);
-            return "redirect:/courses/" + coursePublicId + "/lectures/" + lecturePublicId;
+            return "redirect:" + lectureUrl;
         } catch (AuthenticationFailureException e) {
             return "redirect:/auth/login";
         } catch (EntityNotFoundException e) {
@@ -121,6 +125,9 @@ public class LectureCommentMvcController {
         }
 
         if (errors.hasErrors()) {
+            model.addAttribute("coursePublicId", coursePublicId);
+            model.addAttribute("lecturePublicId", lecturePublicId);
+            model.addAttribute("commentPublicId", commentPublicId);
             return "comment-update";
         }
 
@@ -132,6 +139,9 @@ public class LectureCommentMvcController {
             return "redirect:/courses/" + coursePublicId + "/lectures/" + lecturePublicId;
         } catch (DuplicateEntityException e) {
             errors.rejectValue("content", "duplicate_comment", e.getMessage());
+            model.addAttribute("coursePublicId", coursePublicId);
+            model.addAttribute("lecturePublicId", lecturePublicId);
+            model.addAttribute("commentPublicId", commentPublicId);
             return "comment-update";
         } catch (EntityNotFoundException e) {
             model.addAttribute("error", e.getMessage());

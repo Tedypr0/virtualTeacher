@@ -267,69 +267,67 @@
                                 <!--/lectures-->
                                 <!--comments-->
                                 <div class="tab-pane fade" id="review" role="tabpanel" aria-labelledby="review-tab">
-                                    <div class="cs_row_seven csv2">
-                                        <div class="sfeedbacks style2">
-                                            <div id="result" class="mbp_comment_form style2 pb0">
-                                                <h3 style="text-align: center">Comments</h3>
-                                                <form action="#" class="row" th:object="${newComment}"
-                                                      th:action="@{/courses/{publicId}/comments(publicId=${course.getPublicId()})}"
-                                                      name="sub-form" method="post" id="sub-form">
-                                                    <div class="col-12"><textarea required="required" maxlength="1000"
-                                                                                  name="comment" id="comment"
-                                                                                  th:field="${newComment.content}"
-                                                                                  class="form-control mb-4"
-                                                                                  placeholder="Comment Here..."></textarea>
-                                                        <label class="error" th:errors="*{content}">Content confirm
-                                                            error
-                                                            placeholder</label>
-                                                    </div>
-                                                    <div class="col-12">
-                                                        <input type="submit" name="submit" id="submit_btn"
-                                                               value="Comment"
-                                                               class="btn btn-primary">
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div th:unless="${commentsByCourseId.size() == 0}"
-                                         th:each="comment : ${commentsByCourseId}">
-                                        <div class="comment-container">
-                                            <header class="text-left">
-                                                <div class="comment-user secondary-text">
-                                                    <img style="width: 77px; margin-top: 0.2cm"
-                                                         th:src="${user.getImage()}"
-                                                         class="mr-3"
-                                                         alt="review1.png"><span
-                                                        th:text="${comment.getUser().getFirstName() +' '+ comment.getUser().getLastName()}">Neda Marinova</span>
-                                                    <time class="comment-date fa fa-clock-o secondary-text"
-                                                          datetime="16-12-2014 01:05"
-                                                          th:text="${comment.getCreationDate()}"><i></i> Dec 16, 2014
-                                                    </time>
+                                    <div class="lecture-notes-section lecture-comments-section">
+                                        <div class="lecture-notes-panel">
+                                            <div class="lecture-notes-header">
+                                                <div>
+                                                    <h3 class="lecture-notes-title">Comments</h3>
+                                                    <p class="lecture-notes-hint">Share thoughts and questions about this course.</p>
                                                 </div>
-                                            </header>
-                                            <div class="comment-post mt-1">
-                                                <p style="overflow-wrap: break-word; margin-left: 2.5cm"
-                                                   class="primary-text"
-                                                   th:text="${comment.getContent()}">
-                                                    Comment Content
-                                                </p>
+                                                <button type="button" class="btn btn-primary btn-sm lecture-notes-add-btn"
+                                                        data-toggle="modal" data-target="#addCourseCommentModal">
+                                                    <i class="ti-plus"></i> Add comment
+                                                </button>
                                             </div>
-                                            <div class="text-right">
-                                                <a th:if="${comment.getUser().getId() == user.getId() || session.isAdmin}">
-                                                    <a href="#" class="btn-secondary btn-sm comment-button"
-                                                       th:href="@{/courses/{coursePublicId}/comments/{commentPublicId}/update(coursePublicId=${coursePublicId}, commentPublicId=${comment.publicId})}"><i
-                                                            class="fa fa-edit"></i> Edit</a>
-                                                </a>
-                                                <a th:if="${comment.getUser().getId() == user.getId() || session.isAdmin}">
-                                                    <a href="#" class="btn-secondary btn-sm"
-                                                       th:href="@{/courses/{coursePublicId}/comments/{commentPublicId}/delete(coursePublicId=${coursePublicId}, commentPublicId=${comment.publicId})}"><i
-                                                            class="fa fa-trash"></i> Delete</a>
-                                                </a></div>
+
+                                            <div th:if="${commentError}" class="alert alert-danger lecture-notes-alert"
+                                                 th:text="${commentError}">Comment cannot be empty.</div>
+
+                                            <div th:if="${#lists.isEmpty(commentsByCourseId)}" class="lecture-notes-empty">
+                                                <i class="ti-comment lecture-notes-empty-icon"></i>
+                                                <p>No comments yet.</p>
+                                                <button type="button" class="btn btn-outline-primary btn-sm"
+                                                        data-toggle="modal" data-target="#addCourseCommentModal">
+                                                    <i class="ti-plus"></i> Be the first to comment
+                                                </button>
+                                            </div>
+
+                                            <div th:unless="${#lists.isEmpty(commentsByCourseId)}" class="lecture-notes-list">
+                                                <article th:each="courseComment : ${commentsByCourseId}"
+                                                         class="lecture-note-item lecture-comment-item">
+                                                    <div class="lecture-comment-body">
+                                                        <p class="lecture-comment-meta">
+                                                            <span class="lecture-comment-author"
+                                                                  th:text="${courseComment.user.firstName + ' ' + courseComment.user.lastName}">Author</span>
+                                                            ·
+                                                            <span th:text="${courseComment.creationDate}">Date</span>
+                                                        </p>
+                                                        <p class="lecture-note-preview"
+                                                           th:text="${#strings.abbreviate(courseComment.content, 140)}">Comment preview…</p>
+                                                    </div>
+                                                    <div class="note-card-actions">
+                                                        <button type="button" class="btn btn-outline-primary btn-sm" data-toggle="modal"
+                                                                th:attr="data-target='#courseCommentViewModal' + ${courseComment.id}">
+                                                            <i class="ti-eye"></i> View
+                                                        </button>
+                                                        <button th:if="${courseComment.user.id == user.id || session.isAdmin}"
+                                                                type="button" class="btn btn-outline-secondary btn-sm" data-toggle="modal"
+                                                                th:attr="data-target='#courseCommentEditModal' + ${courseComment.id}">
+                                                            <i class="ti-pencil"></i> Edit
+                                                        </button>
+                                                        <a th:if="${courseComment.user.id == user.id || session.isAdmin}"
+                                                           class="btn btn-outline-danger btn-sm"
+                                                           th:href="@{/courses/{coursePublicId}/comments/{commentPublicId}/delete(coursePublicId=${coursePublicId}, commentPublicId=${courseComment.publicId})}"
+                                                           onclick="return confirm('Delete this comment?');">
+                                                            <i class="ti-trash"></i> Delete
+                                                        </a>
+                                                    </div>
+                                                </article>
+                                            </div>
                                         </div>
                                     </div>
-                                    <!--/comments-->
                                 </div>
+                                <!--/comments-->
                                 <!--reviews-->
                                 <div class="tab-pane fade" id="review2" role="tabpanel" aria-labelledby="review-tab">
                                     <div class="cs_row_six csv2">
@@ -614,6 +612,95 @@
 <div th:replace="fragments/headerAndFooter :: footer"></div>
 <!-- /footer -->
 
+<div class="modal fade" id="addCourseCommentModal" tabindex="-1" role="dialog" aria-labelledby="addCourseCommentModalLabel">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <form th:object="${newComment}"
+                  th:action="@{/courses/{publicId}/comments(publicId=${course.publicId})}"
+                  method="post">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="addCourseCommentModalLabel">Add comment</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <textarea class="lecture-notes-textarea form-control" th:field="*{content}"
+                              placeholder="Write your comment here…"
+                              rows="6" maxlength="900" required></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary btn-sm" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary btn-sm">
+                        <i class="ti-check"></i> Post comment
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div th:each="courseComment : ${commentsByCourseId}" class="modal fade note-view-modal"
+     th:id="'courseCommentViewModal' + ${courseComment.id}" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <div class="note-modal-heading">
+                    <p class="note-modal-course lecture-comment-meta">
+                        <span class="lecture-comment-author"
+                              th:text="${courseComment.user.firstName + ' ' + courseComment.user.lastName}">Author</span>
+                        ·
+                        <span th:text="${courseComment.creationDate}">Date</span>
+                    </p>
+                    <h4 class="modal-title">Comment</h4>
+                </div>
+            </div>
+            <div class="modal-body note-modal-body" th:text="${courseComment.content}">Comment content</div>
+            <div class="modal-footer">
+                <button th:if="${courseComment.user.id == user.id || session.isAdmin}"
+                        type="button" class="btn btn-outline-secondary btn-sm" data-toggle="modal"
+                        data-dismiss="modal"
+                        th:attr="data-target='#courseCommentEditModal' + ${courseComment.id}">
+                    <i class="ti-pencil"></i> Edit
+                </button>
+                <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:each="courseComment : ${commentsByCourseId}" class="modal fade"
+     th:id="'courseCommentEditModal' + ${courseComment.id}" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <form th:action="@{/courses/{coursePublicId}/comments/{commentPublicId}/update(coursePublicId=${coursePublicId}, commentPublicId=${courseComment.publicId})}"
+                  method="post">
+                <div class="modal-header">
+                    <h4 class="modal-title">Edit comment</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <textarea class="lecture-notes-textarea form-control" name="content"
+                              th:text="${courseComment.content}"
+                              placeholder="Write your comment here…"
+                              rows="6" maxlength="900" required></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary btn-sm" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary btn-sm">
+                        <i class="ti-save"></i> Save changes
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 <!-- jQuery -->
 <script src="/plugins/jQuery/jquery.min.js" th:href="@{/plugins/jQuery/jquery.min.js}"></script>
 <!-- Bootstrap JS -->
@@ -638,6 +725,19 @@
 
 <!-- Main Script -->
 <script src="/js/script.js" th:href="@{/js/script.js}"></script>
+<script>
+    $(function () {
+        if (window.location.hash === '#review') {
+            $('#review-tab').tab('show');
+        }
+    });
+</script>
+<script th:if="${commentError}">
+    $(function () {
+        $('#review-tab').tab('show');
+        $('#addCourseCommentModal').modal('show');
+    });
+</script>
 
 </body>
 </html>

@@ -53,7 +53,9 @@ public class CourseCommentRepositoryImpl implements CourseCommentRepository {
     @Override
     public CourseComment create(CourseComment courseComment) {
         try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
             session.persist(courseComment);
+            session.getTransaction().commit();
         }
         return courseComment;
     }
@@ -86,8 +88,11 @@ public class CourseCommentRepositoryImpl implements CourseCommentRepository {
     @Override
     public List<CourseComment> getByCourseId(int courseId) {
         try (Session session = sessionFactory.openSession()) {
-            Query<CourseComment> query = session.createQuery("from CourseComment c " +
-                    "where c.isDeleted = false and courseId=:courseId", CourseComment.class);
+            Query<CourseComment> query = session.createQuery(
+                    "select c from CourseComment c join fetch c.user " +
+                            "where c.isDeleted = false and c.courseId = :courseId " +
+                            "order by c.id desc",
+                    CourseComment.class);
             query.setParameter("courseId", courseId);
             return query.getResultList();
         }
