@@ -34,6 +34,11 @@ public class HomeworkServiceImpl implements HomeworkService {
     }
 
     @Override
+    public Homework getByUserIdAndLectureId(int userId, int lectureId) {
+        return homeworkRepository.getByUserIdAndLectureId(userId, lectureId);
+    }
+
+    @Override
     public List<Homework> getByTeacherId(User authUser) {
         if(!authUser.isTeacher() && !authUser.isAdmin()){
             throw new UnauthorizedOperationException("User is not authorized");

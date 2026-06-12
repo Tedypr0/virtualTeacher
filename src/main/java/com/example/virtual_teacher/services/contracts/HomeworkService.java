@@ -12,6 +12,8 @@ public interface HomeworkService {
 
     List<Homework> getByUserId(int userId);
 
+    Homework getByUserIdAndLectureId(int userId, int lectureId);
+
     List<Homework> getByTeacherId(User authUser);
 
     void create(Homework homework);

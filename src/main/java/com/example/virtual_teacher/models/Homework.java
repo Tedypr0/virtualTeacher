@@ -59,8 +59,16 @@ public class Homework implements PublicIdentifiable {
         this.publicId = publicId;
     }
 
+    public String getHomeworkName() {
+        return homeworkName;
+    }
+
+    public String getDisplayFileName() {
+        return homeworkName + ".docx";
+    }
+
     public String getHomeworkUrl() {
-        return String.format("\\homeworks\\%s.docx",homeworkName);
+        return "/homeworks/" + homeworkName + ".docx";
     }
 
     public void setHomeworkName(String homeworkName) {

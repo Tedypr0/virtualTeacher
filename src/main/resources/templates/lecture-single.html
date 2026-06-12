@@ -91,35 +91,37 @@
                         <h2 th:text="${lecture.getTitle()}">Lecture Title</h2>
                     </div>
                 </div>
-                    <div class=" order-sm-3 order-6 order-2">
-                        <ul class="list-inline">
-                            <li class="list-inline-item mb-3 mb-sm-0">
-                                <div class="row">
-                                    <div class=" d-flex align-items-center">
-                                        <i class="ti-book text-primary icon-md mr-2"></i>
-                                        <div class="text-left">
-                                            <h6 class="mb-0">LECTURE MATERIALS</h6>
-                                            <p class="mb-0">1 video/1 assignment</p>
-                                        </div>
-                                    </div>
-                            </li>
-                            <li class="list-inline-item mr-4 mb-3 mb-sm-0">
-                                <div class="col-6 d-flex align-items-center">
-                                    <i class="ti-alarm-clock text-primary icon-md mr-2"></i>
+                <div class=" order-sm-3 order-6 order-2">
+                    <ul class="list-inline">
+                        <li class="list-inline-item mb-3 mb-sm-0">
+                            <div class="row">
+                                <div class=" d-flex align-items-center">
+                                    <i class="ti-book text-primary icon-md mr-2"></i>
                                     <div class="text-left">
-                                        <h6 class="mb-0">DURATION</h6>
-                                        <p class="mb-0">1 Hour</p>
+                                        <h6 class="mb-0">LECTURE MATERIALS</h6>
+                                        <p class="mb-0">1 video/1 assignment</p>
                                     </div>
                                 </div>
-                            </li>
+                            </div>
+                        </li>
+                        <li class="list-inline-item mr-4 mb-3 mb-sm-0">
+                            <div class="col-6 d-flex align-items-center">
+                                <i class="ti-alarm-clock text-primary icon-md mr-2"></i>
+                                <div class="text-left">
+                                    <h6 class="mb-0">DURATION</h6>
+                                    <p class="mb-0">1 Hour</p>
+                                </div>
+                            </div>
+                        </li>
                     </ul>
                 </div>
             </div>
-            <!-- border -->
-            <div class="col-12 mt-4 order-4">
-                <div class="border-bottom border-primary"></div>
-            </div>
         </div>
+        <!-- border -->
+        <div class="col-12 mt-4 order-4">
+            <div class="border-bottom border-primary"></div>
+        </div>
+    </div>
     </div>
     <!-- course details -->
     <div class="row">
@@ -160,7 +162,8 @@
                 </iframe>
             </div>
             <form style="display:inline-block" action="#" th:object="${note}"
-                  th:action="@{/courses/{coursePublicId}/lectures/{lecturePublicId}/notes/new(coursePublicId=${coursePublicId}, lecturePublicId=${lecturePublicId})}" method="post">
+                  th:action="@{/courses/{coursePublicId}/lectures/{lecturePublicId}/notes/new(coursePublicId=${coursePublicId}, lecturePublicId=${lecturePublicId})}"
+                  method="post">
                 <div class="text-area">
                         <textarea type="text" th:field="*{note}" placeholder="You can take notes here..." cols="60"
                                   rows="12"></textarea>
@@ -180,27 +183,54 @@
     </div>
     </div>
 
-    <form method="post" enctype="multipart/form-data" th:action="@{/courses/{coursePublicId}/lectures/{lecturePublicId}/uploadHomework(coursePublicId=${coursePublicId}, lecturePublicId=${lecturePublicId})}"
-          name="documentFile" id="documentFile">
-        <div class="col-12">
-            <br>
-            <pre class="tab"><h3>Lecture Homework</h3> </pre>
-            <input type="file"
-                   onchange="document.getElementById('blah').src = window.URL.createObjectURL(this.files[0])"
-                   accept=".doc, .docx" value="CLICK ME" id="selectedDocument" name="documentFile" style="width: 10%">
-            <label for="selectedDocument">Click me to select a document</label>
-            <br>
-            <img id="blah" src="#" alt=""/>
-            <button type="submit" class="btn btn-primary">Upload</button>
+    <div th:if="${!session.isTeacher && !session.isAdmin}" class="homework-upload-form">
+        <div class="homework-upload-panel">
+            <h3 class="homework-upload-title">Homework</h3>
+
+            <div th:if="${submittedHomework != null}" class="homework-submitted">
+                <p class="homework-submitted-label">Your submission</p>
+                <div class="homework-submitted-file">
+                    <i class="ti-file homework-file-icon"></i>
+                    <span class="homework-file-name" th:text="${submittedHomework.displayFileName}">homework.docx</span>
+                    <a th:href="@{${submittedHomework.homeworkUrl}}" download class="btn btn-outline-primary btn-sm">
+                        <i class="ti-download"></i> Download
+                    </a>
+                </div>
+                <p class="homework-grade">
+                    <span class="homework-grade-label">Grade:</span>
+                    <span th:text="${submittedHomework.grade == 0 ? 'Not graded yet' : submittedHomework.grade}">Not graded yet</span>
+                </p>
+            </div>
+
+            <p class="homework-upload-hint"
+               th:text="${submittedHomework != null ? 'Upload a new file to replace your submission (.doc or .docx).' : 'Upload your completed assignment (.doc or .docx).'}">
+                Upload your completed assignment (.doc or .docx).
+            </p>
+            <form method="post" enctype="multipart/form-data"
+                  th:action="@{/courses/{coursePublicId}/lectures/{lecturePublicId}/uploadHomework(coursePublicId=${coursePublicId}, lecturePublicId=${lecturePublicId})}"
+                  name="documentFile" id="documentFile">
+                <div class="file-upload-control homework-upload-control">
+                    <input type="file" class="file-upload-input" id="homeworkFileInput" name="documentFile"
+                           accept=".doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document">
+                    <button type="button" class="btn btn-outline-primary btn-sm" id="homeworkChooseBtn">
+                        <i class="ti-upload"></i> Choose document
+                    </button>
+                    <span id="homeworkFileName" class="file-upload-name">No file selected</span>
+                </div>
+                <button type="submit" class="btn btn-primary homework-upload-submit"
+                        th:text="${submittedHomework != null ? 'Replace homework' : 'Submit homework'}">Submit homework
+                </button>
+            </form>
         </div>
-    </form>
+    </div>
     <br>
     <br>
     <br>
 
     <h3>Comments</h3>
     <form action="#" class="row" th:object="${newComment}"
-          th:action="@{/courses/{coursePublicId}/lectures/{lecturePublicId}/comments/createComment(coursePublicId=${coursePublicId}, lecturePublicId=${lecturePublicId})}" name="comment" method="post">
+          th:action="@{/courses/{coursePublicId}/lectures/{lecturePublicId}/comments/createComment(coursePublicId=${coursePublicId}, lecturePublicId=${lecturePublicId})}"
+          name="comment" method="post">
         <div class="col-12">
             <textarea name="comment" id="comment" th:field="${newComment.content}" class="form-control mb-4"
                       placeholder="Comment Here..." required></textarea>
@@ -268,6 +298,10 @@
 
 <!-- Main Script -->
 <script src="/js/script.js" th:href="@{/js/script.js}"></script>
+<script src="/js/file-upload.js" th:src="@{/js/file-upload.js}"></script>
+<script>
+    initFileUpload('homeworkFileInput', 'homeworkFileName', 'homeworkChooseBtn', 20 * 1024 * 1024);
+</script>
 
 </body>
 </html>

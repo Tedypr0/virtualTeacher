@@ -128,6 +128,10 @@ public class LectureMvcController {
             model.addAttribute("comments", lectureComments);
             model.addAttribute("user", user);
             model.addAttribute("note", new NoteDto());
+            if (!user.isTeacher() && !user.isAdmin()) {
+                model.addAttribute("submittedHomework",
+                        homeworkService.getByUserIdAndLectureId(user.getId(), lecture.getId()));
+            }
             return "lecture-single";
         } catch (AuthenticationFailureException e) {
             return "redirect:/auth/login";
@@ -327,9 +331,21 @@ public class LectureMvcController {
             Course course = courseService.getByPublicId(coursePublicId);
             Lecture lecture = lectureService.getByPublicId(lecturePublicId);
             accessControlService.assertCanViewLecture(authUser, course, lecture);
+            if (authUser.isTeacher() || authUser.isAdmin()) {
+                return "access-denied";
+            }
+            if (multipartFile.isEmpty()) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+            }
             String fileName = lectureService.saveHomework(multipartFile, lecture, authUser);
-            Homework homework = homeworkMapper.createObjFromParams(authUser, lecture, fileName);
-            homeworkService.create(homework);
+            Homework existingHomework = homeworkService.getByUserIdAndLectureId(authUser.getId(), lecture.getId());
+            if (existingHomework != null) {
+                existingHomework.setHomeworkName(fileName);
+                homeworkService.update(existingHomework);
+            } else {
+                Homework homework = homeworkMapper.createObjFromParams(authUser, lecture, fileName);
+                homeworkService.create(homework);
+            }
             return "redirect:/courses/" + coursePublicId + "/lectures/" + lecturePublicId;
         } catch (AuthenticationFailureException e) {
             return "redirect:/auth/login";

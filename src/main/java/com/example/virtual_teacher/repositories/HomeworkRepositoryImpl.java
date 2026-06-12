@@ -51,6 +51,22 @@ public class HomeworkRepositoryImpl implements HomeworkRepository {
     }
 
     @Override
+    public Homework getByUserIdAndLectureId(int userId, int lectureId) {
+        try (Session session = sessionFactory.openSession()) {
+            Query<Homework> query = session.createQuery(
+                    "from Homework where user.id = :userId and lecture.id = :lectureId and isDeleted = false",
+                    Homework.class);
+            query.setParameter("userId", userId);
+            query.setParameter("lectureId", lectureId);
+            List<Homework> results = query.getResultList();
+            if (results.isEmpty()) {
+                return null;
+            }
+            return results.get(0);
+        }
+    }
+
+    @Override
     public List<Homework> getByTeacherId(int teacherId) {
         try(Session session = sessionFactory.openSession()){
             Query<Homework> query = session.createQuery("from Homework where lecture.teacher.id = :teacherId and grade=0", Homework.class);
@@ -61,8 +77,10 @@ public class HomeworkRepositoryImpl implements HomeworkRepository {
 
     @Override
     public void create(Homework homework) {
-        try(Session session = sessionFactory.openSession()){
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
             session.persist(homework);
+            session.getTransaction().commit();
         }
     }
 

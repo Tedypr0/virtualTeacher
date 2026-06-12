@@ -13,6 +13,8 @@ public interface HomeworkRepository {
 
     List<Homework> getByUserId(int userId);
 
+    Homework getByUserIdAndLectureId(int userId, int lectureId);
+
     List<Homework> getByTeacherId(int teacherId);
 
     void create(Homework homework);

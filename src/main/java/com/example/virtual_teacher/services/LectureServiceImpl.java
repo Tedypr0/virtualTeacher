@@ -147,14 +147,13 @@ public class LectureServiceImpl implements LectureService {
 
     @Override
     public String saveHomework(MultipartFile multipartFile, Lecture lecture, User authUser) throws IOException {
-        StringBuilder sb = new StringBuilder();
-        sb.append(Paths.get("").toAbsolutePath()).append("\\src\\main\\resources\\static\\homeworks\\");
-        byte[] bytes = multipartFile.getBytes();
+        Path homeworkDir = Paths.get("").toAbsolutePath()
+                .resolve("src/main/resources/static/homeworks");
+        Files.createDirectories(homeworkDir);
         String fileName = String.format("%s_%s_%d", authUser.getFirstName(),
                 authUser.getLastName(), lecture.getId());
-        sb.append(fileName);
-        Path path = Paths.get(sb + ".docx");
-        Files.write(path, bytes);
+        Path path = homeworkDir.resolve(fileName + ".docx");
+        Files.write(path, multipartFile.getBytes());
         return fileName;
     }
 
