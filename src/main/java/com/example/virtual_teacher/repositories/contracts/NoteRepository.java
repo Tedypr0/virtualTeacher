@@ -21,4 +21,6 @@ public interface NoteRepository {
     List<Note> getByLectureId(int lectureId);
 
     List<Note> getByUserId(int userId);
+
+    Note getByUserIdAndLectureId(int userId, int lectureId);
 }

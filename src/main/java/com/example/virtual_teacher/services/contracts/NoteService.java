@@ -23,4 +23,6 @@ public interface NoteService {
     Note delete(User authUser, int id);
 
     List<Note> getByUserId(int userId);
+
+    Note getByUserIdAndLectureId(int userId, int lectureId);
 }

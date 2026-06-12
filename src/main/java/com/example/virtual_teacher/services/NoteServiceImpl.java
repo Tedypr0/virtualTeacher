@@ -50,5 +50,12 @@ public class NoteServiceImpl implements NoteService {
     }
 
     @Override
-    public List<Note> getByUserId(int userId) {return noteRepository.getByUserId(userId);}
+    public List<Note> getByUserId(int userId) {
+        return noteRepository.getByUserId(userId);
+    }
+
+    @Override
+    public Note getByUserIdAndLectureId(int userId, int lectureId) {
+        return noteRepository.getByUserIdAndLectureId(userId, lectureId);
+    }
 }

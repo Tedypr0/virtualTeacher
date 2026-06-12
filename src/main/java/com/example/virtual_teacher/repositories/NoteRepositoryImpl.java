@@ -51,7 +51,9 @@ public class NoteRepositoryImpl implements NoteRepository {
     @Override
     public Note create(Note note) {
         try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
             session.persist(note);
+            session.getTransaction().commit();
         }
         return note;
     }
@@ -93,11 +95,29 @@ public class NoteRepositoryImpl implements NoteRepository {
 
     @Override
     public List<Note> getByUserId(int userId) {
-        try(Session session = sessionFactory.openSession()){
-            Query<Note> query = session.createQuery("from Note where " +
-                    "userId = :userId and isDeleted = false",Note.class);
-            query.setParameter("userId",userId);
+        try (Session session = sessionFactory.openSession()) {
+            Query<Note> query = session.createQuery(
+                    "select n from Note n join fetch n.lecture l left join fetch l.course " +
+                            "where n.userId = :userId and n.isDeleted = false",
+                    Note.class);
+            query.setParameter("userId", userId);
             return query.getResultList();
+        }
+    }
+
+    @Override
+    public Note getByUserIdAndLectureId(int userId, int lectureId) {
+        try (Session session = sessionFactory.openSession()) {
+            Query<Note> query = session.createQuery(
+                    "from Note n where n.userId = :userId and n.lecture.id = :lectureId and n.isDeleted = false",
+                    Note.class);
+            query.setParameter("userId", userId);
+            query.setParameter("lectureId", lectureId);
+            List<Note> results = query.getResultList();
+            if (results.isEmpty()) {
+                return null;
+            }
+            return results.get(0);
         }
     }
 }

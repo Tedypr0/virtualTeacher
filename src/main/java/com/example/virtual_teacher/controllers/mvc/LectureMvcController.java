@@ -45,6 +45,7 @@ public class LectureMvcController {
     private final HomeworkService homeworkService;
     private final CourseLectureService courseLectureService;
     private final CourseService courseService;
+    private final NoteService noteService;
 
     @Autowired
     public LectureMvcController(AuthenticationHelper authenticationHelper,
@@ -58,7 +59,8 @@ public class LectureMvcController {
                                 HomeworkMapper homeworkMapper,
                                 HomeworkService homeworkService,
                                 CourseLectureService courseLectureService,
-                                CourseService courseService) {
+                                CourseService courseService,
+                                NoteService noteService) {
         this.authenticationHelper = authenticationHelper;
         this.accessControlService = accessControlService;
         this.lectureService = lectureService;
@@ -71,6 +73,7 @@ public class LectureMvcController {
         this.homeworkService = homeworkService;
         this.courseLectureService = courseLectureService;
         this.courseService = courseService;
+        this.noteService = noteService;
     }
 
     @ModelAttribute("isAuthenticated")
@@ -127,7 +130,12 @@ public class LectureMvcController {
             model.addAttribute("newComment", new LectureCommentDto());
             model.addAttribute("comments", lectureComments);
             model.addAttribute("user", user);
-            model.addAttribute("note", new NoteDto());
+            NoteDto noteDto = new NoteDto();
+            Note existingNote = noteService.getByUserIdAndLectureId(user.getId(), lecture.getId());
+            if (existingNote != null) {
+                noteDto.setNote(existingNote.getNote());
+            }
+            model.addAttribute("note", noteDto);
             if (!user.isTeacher() && !user.isAdmin()) {
                 model.addAttribute("submittedHomework",
                         homeworkService.getByUserIdAndLectureId(user.getId(), lecture.getId()));

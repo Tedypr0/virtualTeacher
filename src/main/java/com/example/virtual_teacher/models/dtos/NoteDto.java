@@ -1,12 +1,11 @@
 package com.example.virtual_teacher.models.dtos;
 
-import jakarta.persistence.Column;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 public class NoteDto {
 
-    @Column(name = "note")
-    @NotNull
+    @NotBlank(message = "Note cannot be empty")
     private String note;
 
     public NoteDto() {

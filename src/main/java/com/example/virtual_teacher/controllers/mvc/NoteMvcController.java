@@ -65,8 +65,14 @@ public class NoteMvcController {
             Course course = courseService.getByPublicId(coursePublicId);
             Lecture lecture = lectureService.getByPublicId(lecturePublicId);
             accessControlService.assertCanViewLecture(authUser, course, lecture);
-            Note newNote = noteMapper.dtoToObj(noteDto, lecture, authUser);
-            noteService.create(newNote);
+            Note existingNote = noteService.getByUserIdAndLectureId(authUser.getId(), lecture.getId());
+            if (existingNote != null) {
+                existingNote.setNote(noteDto.getNote());
+                noteService.update(existingNote, authUser);
+            } else {
+                Note newNote = noteMapper.dtoToObj(noteDto, lecture, authUser);
+                noteService.create(newNote);
+            }
             return "redirect:/courses/" + coursePublicId + "/lectures/" + lecturePublicId;
         } catch (AuthenticationFailureException e) {
             return "redirect:/auth/login";
