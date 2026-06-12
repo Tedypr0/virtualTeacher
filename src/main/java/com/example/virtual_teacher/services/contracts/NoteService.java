@@ -24,5 +24,5 @@ public interface NoteService {
 
     List<Note> getByUserId(int userId);
 
-    Note getByUserIdAndLectureId(int userId, int lectureId);
+    List<Note> getAllByUserIdAndLectureId(int userId, int lectureId);
 }

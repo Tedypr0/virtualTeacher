@@ -106,18 +106,15 @@ public class NoteRepositoryImpl implements NoteRepository {
     }
 
     @Override
-    public Note getByUserIdAndLectureId(int userId, int lectureId) {
+    public List<Note> getAllByUserIdAndLectureId(int userId, int lectureId) {
         try (Session session = sessionFactory.openSession()) {
             Query<Note> query = session.createQuery(
-                    "from Note n where n.userId = :userId and n.lecture.id = :lectureId and n.isDeleted = false",
+                    "from Note n where n.userId = :userId and n.lecture.id = :lectureId and n.isDeleted = false " +
+                            "order by n.id desc",
                     Note.class);
             query.setParameter("userId", userId);
             query.setParameter("lectureId", lectureId);
-            List<Note> results = query.getResultList();
-            if (results.isEmpty()) {
-                return null;
-            }
-            return results.get(0);
+            return query.getResultList();
         }
     }
 }

@@ -2,90 +2,95 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="utf-8">
-  <title>User Notes</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
-  <link href="https://netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
-  <link href="/css/style.css" rel="stylesheet" th:href="@{/css/styleUsers.css}">
-  <link href="/js/script.js" rel="script" th:href="@{/js/script.js}">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
-  <script src="https://netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+  <title>My Notes</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <link rel="stylesheet" href="/plugins/bootstrap/bootstrap.min.css" th:href="@{/plugins/bootstrap/bootstrap.min.css}">
+  <link rel="stylesheet" href="/plugins/themify-icons/themify-icons.css" th:href="@{/plugins/themify-icons/themify-icons.css}">
+  <link href="/css/style.css" rel="stylesheet" th:href="@{/css/style.css}">
+  <link href="/css/styleUsers.css" rel="stylesheet" th:href="@{/css/styleUsers.css}">
 </head>
 <body>
-<link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css">
-<hr>
-<div class="container bootstrap snippets bootdey">
-  <div class="row">
-    <div class="col-lg-12">
-      <div class="main-box no-header clearfix">
-        <div class="main-box-body clearfix">
-          <div class="table-responsive">
-            <table class="table user-list">
-              <thead>
-              <tr>
-                <th><span>Course</span></th>
-                <th><span>Lecture</span></th>
-                <th><span>Note</span></th>
-                <th>&nbsp;</th>
-              </tr>
-              </thead>
 
-              <tbody th:each="note : ${notes}">
-              <tr>
-                <td>
-                  <a href="#" class="user-link" th:text="${note.getLecture().getCourse().getTitle()}">Course Title</a>
-                </td>
-                <td th:text="${note.getLecture().getTitle()}">Lecture Title</td>
-                <td>
-                  <button type="button" class="btn btn-primary" data-toggle="modal" th:data-target="'#exampleModal'+${note.getId()}">
-                    View Note
-                  </button>
-                  <li><a class="btn btn-primary"
-                         th:href="@{/courses/{coursePublicId}/lectures/{lecturePublicId}/notes/{notePublicId}/delete(coursePublicId=${note.lecture.course.publicId},
-                         lecturePublicId=${note.lecture.publicId}, notePublicId=${note.publicId})}">Delete</a></li>
-                  <li><a class="btn btn-primary"
-                         th:href="@{/courses/{coursePublicId}/lectures/{lecturePublicId}/notes/{notePublicId}/update(lecturePublicId=${note.lecture.publicId},
-                         coursePublicId=${note.lecture.course.publicId}, notePublicId=${note.publicId})}">Update</a></li>
+<div class="preloader">
+  <img src="/images/preloader.gif" alt="preloader" th:src="@{/images/preloader.gif}">
+</div>
 
-                  <!-- Modal -->
-                  <div class="modal fade" th:id="'exampleModal'+${note.getId()}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" th:value="${note.getId()}">
-                    <div class="modal-dialog" role="document">
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <h5 class="modal-title" id="exampleModalLabel" style="text-align: center" th:text="'You are viewing lecture with name '+ ${note.getLecture().getTitle()} +  '\'s ' + 'note'">Modal title</h5>
-                          <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="margin-top: -25px">
-                            <span aria-hidden="true">&times;</span>
-                          </button>
-                        </div>
-                        <div class="modal-body" th:text="${note.getNote()}">
+<div th:replace="fragments/headerAndFooter :: header"></div>
 
-                        </div>
-                        <div class="modal-footer">
-                          <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+<section class="section-sm">
+  <div class="container notes-page">
+    <div class="notes-page-header">
+      <h2 class="notes-page-title">My Notes</h2>
+      <p class="notes-page-subtitle">All notes you saved across lectures.</p>
+    </div>
 
-                </td>
-              </tr>
+    <div th:if="${#lists.isEmpty(notes)}" class="notes-empty-state">
+      <i class="ti-notepad notes-empty-icon"></i>
+      <p>You don't have any notes yet.</p>
+      <p class="text-muted">Open a lecture and click <strong>Add new note</strong> to get started.</p>
+    </div>
 
-              </tbody>
-            </table>
-              <!--   check note size         -->
-            <h3 th:if="${notes.size()==0}" style="text-align: center">You do not have any notes!</h3>
-          </div>
+    <div th:unless="${#lists.isEmpty(notes)}" class="notes-list">
+      <article th:each="note : ${notes}" class="note-card">
+        <div class="note-card-body">
+          <p class="note-card-course" th:text="${note.lecture.course.title}">Course Title</p>
+          <h4 class="note-card-lecture" th:text="${note.lecture.title}">Lecture Title</h4>
+          <p class="note-card-preview" th:text="${#strings.abbreviate(note.note, 160)}">Note preview…</p>
         </div>
+        <div class="note-card-actions">
+          <button type="button" class="btn btn-outline-primary btn-sm" data-toggle="modal"
+                  th:attr="data-target='#noteModal' + ${note.id}">
+            <i class="ti-eye"></i> View
+          </button>
+          <a class="btn btn-outline-secondary btn-sm"
+             th:href="@{/courses/{coursePublicId}/lectures/{lecturePublicId}/notes/{notePublicId}/update(coursePublicId=${note.lecture.course.publicId}, lecturePublicId=${note.lecture.publicId}, notePublicId=${note.publicId})}">
+            <i class="ti-pencil"></i> Edit
+          </a>
+          <a class="btn btn-outline-danger btn-sm"
+             th:href="@{/courses/{coursePublicId}/lectures/{lecturePublicId}/notes/{notePublicId}/delete(coursePublicId=${note.lecture.course.publicId}, lecturePublicId=${note.lecture.publicId}, notePublicId=${note.publicId})}"
+             onclick="return confirm('Delete this note?');">
+            <i class="ti-trash"></i> Delete
+          </a>
+          <a class="btn btn-link btn-sm note-card-lecture-link"
+             th:href="@{/courses/{coursePublicId}/lectures/{lecturePublicId}(coursePublicId=${note.lecture.course.publicId}, lecturePublicId=${note.lecture.publicId})}">
+            Go to lecture
+          </a>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<div th:each="note : ${notes}" class="modal fade note-view-modal" th:id="'noteModal' + ${note.id}" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <div class="note-modal-heading">
+          <p class="note-modal-course" th:text="${note.lecture.course.title}">Course</p>
+          <h4 class="modal-title" th:text="${note.lecture.title}">Lecture title</h4>
+        </div>
+      </div>
+      <div class="modal-body note-modal-body" th:text="${note.note}">Note content</div>
+      <div class="modal-footer">
+        <a class="btn btn-outline-secondary btn-sm"
+           th:href="@{/courses/{coursePublicId}/lectures/{lecturePublicId}/notes/{notePublicId}/update(coursePublicId=${note.lecture.course.publicId}, lecturePublicId=${note.lecture.publicId}, notePublicId=${note.publicId})}">
+          <i class="ti-pencil"></i> Edit
+        </a>
+        <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal">Close</button>
       </div>
     </div>
   </div>
 </div>
 
+<div th:replace="fragments/headerAndFooter :: footer"></div>
 
-<script type="text/javascript">
-  $('#myModal').on('shown.bs.modal', function () {
-    $('#myInput').trigger('focus')
-  })
-</script>
+<script src="/plugins/jQuery/jquery.min.js" th:src="@{/plugins/jQuery/jquery.min.js}"></script>
+<script src="/plugins/bootstrap/bootstrap.min.js" th:src="@{/plugins/bootstrap/bootstrap.min.js}"></script>
+<script src="/js/script.js" th:src="@{/js/script.js}"></script>
+
 </body>
 </html>

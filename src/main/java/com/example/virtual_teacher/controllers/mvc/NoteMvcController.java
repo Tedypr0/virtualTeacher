@@ -20,6 +20,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -53,27 +54,24 @@ public class NoteMvcController {
     @PostMapping("courses/{coursePublicId}/lectures/{lecturePublicId}/notes/new")
     public String createNewNote(@PathVariable String coursePublicId,
                                 @PathVariable String lecturePublicId,
-                                @Valid @ModelAttribute("note") NoteDto noteDto,
+                                @Valid @ModelAttribute("newNote") NoteDto noteDto,
                                 BindingResult errors,
                                 Model model,
-                                HttpSession session) {
+                                HttpSession session,
+                                RedirectAttributes redirectAttributes) {
+        String lectureUrl = "/courses/" + coursePublicId + "/lectures/" + lecturePublicId;
         if (errors.hasErrors()) {
-            return "redirect:/courses/" + coursePublicId + "/lectures/" + lecturePublicId;
+            redirectAttributes.addFlashAttribute("noteError", "Note cannot be empty.");
+            return "redirect:" + lectureUrl;
         }
         try {
             User authUser = authenticationHelper.tryGetUser(session);
             Course course = courseService.getByPublicId(coursePublicId);
             Lecture lecture = lectureService.getByPublicId(lecturePublicId);
             accessControlService.assertCanViewLecture(authUser, course, lecture);
-            Note existingNote = noteService.getByUserIdAndLectureId(authUser.getId(), lecture.getId());
-            if (existingNote != null) {
-                existingNote.setNote(noteDto.getNote());
-                noteService.update(existingNote, authUser);
-            } else {
-                Note newNote = noteMapper.dtoToObj(noteDto, lecture, authUser);
-                noteService.create(newNote);
-            }
-            return "redirect:/courses/" + coursePublicId + "/lectures/" + lecturePublicId;
+            Note newNote = noteMapper.dtoToObj(noteDto, lecture, authUser);
+            noteService.create(newNote);
+            return "redirect:" + lectureUrl;
         } catch (AuthenticationFailureException e) {
             return "redirect:/auth/login";
         } catch (EntityNotFoundException e) {
@@ -126,6 +124,9 @@ public class NoteMvcController {
         }
 
         if (errors.hasErrors()) {
+            model.addAttribute("coursePublicId", coursePublicId);
+            model.addAttribute("lecturePublicId", lecturePublicId);
+            model.addAttribute("notePublicId", notePublicId);
             return "note-update";
         }
 
@@ -134,9 +135,12 @@ public class NoteMvcController {
             accessControlService.assertCanModifyNote(authUser, originalNote);
             Note note = noteMapper.dtoToObjForUpdate(originalNote, noteDto);
             noteService.update(note, authUser);
-            return "redirect:/users/myNotes";
+            return "redirect:/courses/" + coursePublicId + "/lectures/" + lecturePublicId;
         } catch (DuplicateEntityException e) {
             errors.rejectValue("note", "duplicate_note", e.getMessage());
+            model.addAttribute("coursePublicId", coursePublicId);
+            model.addAttribute("lecturePublicId", lecturePublicId);
+            model.addAttribute("notePublicId", notePublicId);
             return "note-update";
         } catch (EntityNotFoundException e) {
             model.addAttribute("error", e.getMessage());
@@ -159,7 +163,7 @@ public class NoteMvcController {
             Note note = noteService.getByPublicId(notePublicId);
             accessControlService.assertCanModifyNote(authUser, note);
             noteService.delete(authUser, note.getId());
-            return "redirect:/users/myNotes";
+            return "redirect:/courses/" + coursePublicId + "/lectures/" + lecturePublicId;
         } catch (AuthenticationFailureException e) {
             return "redirect:/auth/login";
         } catch (EntityNotFoundException e) {

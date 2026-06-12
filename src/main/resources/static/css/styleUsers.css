@@ -395,6 +395,237 @@ body {font-family: Arial, Helvetica, sans-serif;}
   color: #343a40;
 }
 
+.lecture-notes-section {
+  margin-top: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.lecture-notes-panel {
+  border: 1px solid #dee2e6;
+  border-radius: 6px;
+  padding: 1.25rem 1.5rem;
+  background: #f8f9fa;
+  max-width: 720px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+.lecture-notes-header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.lecture-notes-add-btn {
+  flex-shrink: 0;
+}
+
+.lecture-notes-alert {
+  margin-bottom: 1rem;
+}
+
+.lecture-notes-empty {
+  text-align: center;
+  padding: 2rem 1rem;
+  border: 1px dashed #ced4da;
+  border-radius: 4px;
+  background: #fff;
+  color: #495057;
+}
+
+.lecture-notes-empty-icon {
+  font-size: 2rem;
+  color: #adb5bd;
+  display: block;
+  margin-bottom: 0.75rem;
+}
+
+.lecture-notes-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.lecture-note-item {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 1rem 1.15rem;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  background: #fff;
+}
+
+.lecture-note-preview {
+  flex: 1 1 220px;
+  margin-bottom: 0;
+  color: #495057;
+  line-height: 1.5;
+}
+
+.lecture-notes-title {
+  margin-bottom: 0.35rem;
+  font-size: 1.25rem;
+}
+
+.lecture-notes-hint {
+  color: #6c757d;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+}
+
+.lecture-notes-textarea {
+  min-height: 180px;
+  resize: vertical;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  padding: 0.75rem 1rem;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  background: #fff;
+}
+
+.lecture-notes-textarea:focus {
+  border-color: #80bdff;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.15);
+}
+
+.lecture-notes-error {
+  margin-top: 0.5rem;
+  margin-bottom: 0;
+}
+
+.lecture-notes-save {
+  margin-top: 1rem;
+}
+
+.notes-page {
+  max-width: 900px;
+  padding-top: 2rem;
+  padding-bottom: 3rem;
+}
+
+.notes-page-header {
+  margin-bottom: 1.75rem;
+}
+
+.notes-page-title {
+  margin-bottom: 0.35rem;
+}
+
+.notes-page-subtitle {
+  color: #6c757d;
+  margin-bottom: 0;
+}
+
+.notes-empty-state {
+  text-align: center;
+  padding: 3rem 1.5rem;
+  border: 1px dashed #ced4da;
+  border-radius: 6px;
+  background: #f8f9fa;
+  color: #495057;
+}
+
+.notes-empty-icon {
+  font-size: 2.5rem;
+  color: #adb5bd;
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.notes-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.note-card {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1.25rem 1.5rem;
+  border: 1px solid #dee2e6;
+  border-radius: 6px;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+.note-card-course {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: #6c757d;
+  margin-bottom: 0.25rem;
+}
+
+.note-card-lecture {
+  margin-top: 0;
+  margin-bottom: 0.75rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.note-card-preview {
+  color: #495057;
+  margin-bottom: 0;
+  line-height: 1.5;
+}
+
+.note-card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.note-card-lecture-link {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.note-view-modal .modal-header {
+  border-bottom: 1px solid #eee;
+  padding-bottom: 1rem;
+}
+
+.note-modal-heading {
+  padding-right: 1.5rem;
+}
+
+.note-modal-course {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: #6c757d;
+  margin-bottom: 0.25rem;
+}
+
+.note-modal-heading .modal-title {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.note-modal-body {
+  white-space: pre-wrap;
+  word-break: break-word;
+  line-height: 1.6;
+  color: #343a40;
+  max-height: 60vh;
+  overflow-y: auto;
+  padding: 1.25rem 1.5rem;
+  background: #f8f9fa;
+  border-radius: 4px;
+  margin: 0 1rem 1rem;
+}
+
 .profile-image-preview {
   width: 120px;
   height: 120px;

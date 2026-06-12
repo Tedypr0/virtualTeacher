@@ -130,12 +130,9 @@ public class LectureMvcController {
             model.addAttribute("newComment", new LectureCommentDto());
             model.addAttribute("comments", lectureComments);
             model.addAttribute("user", user);
-            NoteDto noteDto = new NoteDto();
-            Note existingNote = noteService.getByUserIdAndLectureId(user.getId(), lecture.getId());
-            if (existingNote != null) {
-                noteDto.setNote(existingNote.getNote());
-            }
-            model.addAttribute("note", noteDto);
+            model.addAttribute("lectureNotes",
+                    noteService.getAllByUserIdAndLectureId(user.getId(), lecture.getId()));
+            model.addAttribute("newNote", new NoteDto());
             if (!user.isTeacher() && !user.isAdmin()) {
                 model.addAttribute("submittedHomework",
                         homeworkService.getByUserIdAndLectureId(user.getId(), lecture.getId()));

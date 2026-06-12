@@ -161,15 +161,130 @@
                         th:src="${video}" allowfullscreen>
                 </iframe>
             </div>
-            <form style="display:inline-block" action="#" th:object="${note}"
-                  th:action="@{/courses/{coursePublicId}/lectures/{lecturePublicId}/notes/new(coursePublicId=${coursePublicId}, lecturePublicId=${lecturePublicId})}"
-                  method="post">
-                <div class="text-area">
-                        <textarea type="text" th:field="*{note}" placeholder="You can take notes here..." cols="60"
-                                  rows="12"></textarea>
+            <div class="lecture-notes-section">
+                <div class="lecture-notes-panel">
+                    <div class="lecture-notes-header">
+                        <div>
+                            <h3 class="lecture-notes-title">My Notes</h3>
+                            <p class="lecture-notes-hint">Notes for this lecture. Add as many as you need while you watch.</p>
+                        </div>
+                        <button type="button" class="btn btn-primary btn-sm lecture-notes-add-btn" data-toggle="modal" data-target="#addNoteModal">
+                            <i class="ti-plus"></i> Add new note
+                        </button>
+                    </div>
+
+                    <div th:if="${noteError}" class="alert alert-danger lecture-notes-alert" th:text="${noteError}">Note cannot be empty.</div>
+
+                    <div th:if="${#lists.isEmpty(lectureNotes)}" class="lecture-notes-empty">
+                        <i class="ti-notepad lecture-notes-empty-icon"></i>
+                        <p>No notes for this lecture yet.</p>
+                        <button type="button" class="btn btn-outline-primary btn-sm" data-toggle="modal" data-target="#addNoteModal">
+                            <i class="ti-plus"></i> Add your first note
+                        </button>
+                    </div>
+
+                    <div th:unless="${#lists.isEmpty(lectureNotes)}" class="lecture-notes-list">
+                        <article th:each="lectureNote : ${lectureNotes}" class="lecture-note-item">
+                            <p class="lecture-note-preview" th:text="${#strings.abbreviate(lectureNote.note, 140)}">Note preview…</p>
+                            <div class="note-card-actions">
+                                <button type="button" class="btn btn-outline-primary btn-sm" data-toggle="modal"
+                                        th:attr="data-target='#lectureNoteViewModal' + ${lectureNote.id}">
+                                    <i class="ti-eye"></i> View
+                                </button>
+                                <button type="button" class="btn btn-outline-secondary btn-sm" data-toggle="modal"
+                                        th:attr="data-target='#lectureNoteEditModal' + ${lectureNote.id}">
+                                    <i class="ti-pencil"></i> Edit
+                                </button>
+                                <a class="btn btn-outline-danger btn-sm"
+                                   th:href="@{/courses/{coursePublicId}/lectures/{lecturePublicId}/notes/{notePublicId}/delete(coursePublicId=${coursePublicId}, lecturePublicId=${lecturePublicId}, notePublicId=${lectureNote.publicId})}"
+                                   onclick="return confirm('Delete this note?');">
+                                    <i class="ti-trash"></i> Delete
+                                </a>
+                            </div>
+                        </article>
+                    </div>
                 </div>
-                <button type="submit" class="btn btn-primary" style="margin-bottom: 50px">Save</button>
-            </form>
+            </div>
+
+            <div class="modal fade" id="addNoteModal" tabindex="-1" role="dialog" aria-labelledby="addNoteModalLabel">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                        <form th:object="${newNote}"
+                              th:action="@{/courses/{coursePublicId}/lectures/{lecturePublicId}/notes/new(coursePublicId=${coursePublicId}, lecturePublicId=${lecturePublicId})}"
+                              method="post">
+                            <div class="modal-header">
+                                <h4 class="modal-title" id="addNoteModalLabel">Add new note</h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <textarea class="lecture-notes-textarea form-control" th:field="*{note}"
+                                          placeholder="Start typing your notes here…"
+                                          rows="10" maxlength="2000" required></textarea>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-outline-secondary btn-sm" data-dismiss="modal">Cancel</button>
+                                <button type="submit" class="btn btn-primary btn-sm">
+                                    <i class="ti-save"></i> Save note
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div th:each="lectureNote : ${lectureNotes}" class="modal fade note-view-modal"
+                 th:id="'lectureNoteViewModal' + ${lectureNote.id}" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            <h4 class="modal-title" th:text="${lecture.title}">Lecture title</h4>
+                        </div>
+                        <div class="modal-body note-modal-body" th:text="${lectureNote.note}">Note content</div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-outline-secondary btn-sm" data-toggle="modal"
+                                    data-dismiss="modal"
+                                    th:attr="data-target='#lectureNoteEditModal' + ${lectureNote.id}">
+                                <i class="ti-pencil"></i> Edit
+                            </button>
+                            <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div th:each="lectureNote : ${lectureNotes}" class="modal fade"
+                 th:id="'lectureNoteEditModal' + ${lectureNote.id}" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                        <form th:action="@{/courses/{coursePublicId}/lectures/{lecturePublicId}/notes/{notePublicId}/update(coursePublicId=${coursePublicId}, lecturePublicId=${lecturePublicId}, notePublicId=${lectureNote.publicId})}"
+                              method="post">
+                            <div class="modal-header">
+                                <h4 class="modal-title">Edit note</h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <textarea class="lecture-notes-textarea form-control" name="note"
+                                          th:text="${lectureNote.note}"
+                                          placeholder="Start typing your notes here…"
+                                          rows="10" maxlength="2000" required></textarea>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-outline-secondary btn-sm" data-dismiss="modal">Cancel</button>
+                                <button type="submit" class="btn btn-primary btn-sm">
+                                    <i class="ti-save"></i> Save changes
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
             <div>
                 <br>
                 <br>
@@ -301,6 +416,9 @@
 <script src="/js/file-upload.js" th:src="@{/js/file-upload.js}"></script>
 <script>
     initFileUpload('homeworkFileInput', 'homeworkFileName', 'homeworkChooseBtn', 20 * 1024 * 1024);
+</script>
+<script th:if="${noteError}">
+    $(function () { $('#addNoteModal').modal('show'); });
 </script>
 
 </body>
