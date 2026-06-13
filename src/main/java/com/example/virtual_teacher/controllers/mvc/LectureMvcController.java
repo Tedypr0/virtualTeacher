@@ -181,6 +181,7 @@ public class LectureMvcController {
             Course course = courseService.getByPublicId(coursePublicId);
             accessControlService.assertCanModifyCourse(authUser, course);
             model.addAttribute("lecture", new NewLectureDto());
+            model.addAttribute("course", course);
             model.addAttribute("coursePublicId", course.getPublicId());
             return "lecture-new";
         } catch (AuthenticationFailureException e) {
@@ -214,6 +215,7 @@ public class LectureMvcController {
         }
 
         if (errors.hasErrors()) {
+            model.addAttribute("course", courseService.getByPublicId(coursePublicId));
             model.addAttribute("coursePublicId", coursePublicId);
             return "lecture-new";
         }
@@ -227,6 +229,7 @@ public class LectureMvcController {
             return "redirect:/courses/" + coursePublicId + "/lectures";
         } catch (DuplicateEntityException e) {
             errors.rejectValue("title", "duplicate_lecture_title", e.getMessage());
+            model.addAttribute("course", courseService.getByPublicId(coursePublicId));
             model.addAttribute("coursePublicId", coursePublicId);
             return "lecture-new";
         } catch (EntityNotFoundException e) {

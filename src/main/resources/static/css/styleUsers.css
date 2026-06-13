@@ -486,6 +486,269 @@ body {font-family: Arial, Helvetica, sans-serif;}
   color: #495057;
 }
 
+.lecture-form-page {
+  max-width: 680px;
+  padding-top: 1.5rem;
+  padding-bottom: 3rem;
+}
+
+.lecture-form-header {
+  margin-bottom: 1.5rem;
+}
+
+.lecture-form-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.9rem;
+  color: #6c757d;
+  margin-bottom: 0.75rem;
+  text-decoration: none;
+}
+
+.lecture-form-back:hover {
+  color: #343a40;
+  text-decoration: none;
+}
+
+.lecture-form-title {
+  margin-bottom: 0.35rem;
+  font-size: 1.75rem;
+  font-weight: 600;
+}
+
+.lecture-form-subtitle {
+  color: #6c757d;
+  margin-bottom: 0;
+  line-height: 1.5;
+}
+
+.lecture-form-panel {
+  border: 1px solid #dee2e6;
+  border-radius: 6px;
+  padding: 1.5rem 1.75rem;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+.lecture-form-group {
+  margin-bottom: 1.35rem;
+}
+
+.lecture-form-group:last-of-type {
+  margin-bottom: 0;
+}
+
+.lecture-form-label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.4rem;
+  color: #343a40;
+}
+
+.lecture-form-input {
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  padding: 0.65rem 0.85rem;
+  font-size: 0.95rem;
+}
+
+.lecture-form-input:focus {
+  border-color: #80bdff;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.15);
+}
+
+.lecture-form-hint {
+  font-size: 0.85rem;
+  color: #6c757d;
+  margin-top: 0.35rem;
+  margin-bottom: 0;
+}
+
+.lecture-form-error {
+  color: #dc3545;
+  font-size: 0.875rem;
+  margin-top: 0.35rem;
+  margin-bottom: 0;
+}
+
+.lecture-form-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 1.75rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid #eee;
+}
+
+.lecture-form-actions .btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.5rem 1.15rem;
+  font-weight: 500;
+}
+
+.lecture-form-actions .btn-outline-secondary {
+  background: #fff;
+}
+
+.lectures-page-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.lectures-page-title {
+  margin-bottom: 0.25rem;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.lectures-page-subtitle {
+  color: #6c757d;
+  margin-bottom: 0;
+}
+
+.lectures-create-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-weight: 500;
+  flex-shrink: 0;
+}
+
+.lectures-page {
+  padding-bottom: 3rem;
+}
+
+.lectures-empty-state {
+  text-align: center;
+  padding: 3rem 1.5rem;
+  border: 1px dashed #ced4da;
+  border-radius: 6px;
+  background: #f8f9fa;
+  color: #495057;
+}
+
+.lectures-empty-icon {
+  font-size: 2.5rem;
+  color: #adb5bd;
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.lectures-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.lecture-card {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1.25rem;
+  padding: 1.25rem 1.5rem;
+  border: 1px solid #dee2e6;
+  border-radius: 6px;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+.lecture-card-main {
+  flex: 1 1 240px;
+  min-width: 0;
+}
+
+.lecture-card-heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.65rem;
+  margin-bottom: 0.35rem;
+}
+
+.lecture-card-title {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: #343a40;
+}
+
+.lecture-card-status {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+}
+
+.lecture-card-status--published {
+  background: #d4edda;
+  color: #155724;
+}
+
+.lecture-card-status--draft {
+  background: #e9ecef;
+  color: #6c757d;
+}
+
+.lecture-card-meta {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #6c757d;
+  line-height: 1.5;
+}
+
+.lecture-card-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex: 0 0 auto;
+  min-width: 220px;
+}
+
+.lecture-card-actions-row {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.lecture-card-actions-row .btn {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.lecture-card-actions-row form {
+  flex: 1;
+  margin: 0;
+}
+
+.lecture-card-actions-row form .btn {
+  width: 100%;
+}
+
+@media (max-width: 767px) {
+  .lecture-card-actions {
+    width: 100%;
+    min-width: 0;
+  }
+}
+
 .lecture-notes-title {
   margin-bottom: 0.35rem;
   font-size: 1.25rem;

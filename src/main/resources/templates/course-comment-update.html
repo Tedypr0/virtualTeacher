@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <title>Edit Comment</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/plugins/bootstrap/bootstrap.min.css" th:href="@{/plugins/bootstrap/bootstrap.min.css}">
+  <link rel="stylesheet" href="/plugins/themify-icons/themify-icons.css" th:href="@{/plugins/themify-icons/themify-icons.css}">
+  <link href="/css/styleUsers.css" rel="stylesheet" th:href="@{/css/styleUsers.css}">
+</head>
+<body>
+
+<div class="container notes-page">
+  <div class="lecture-notes-panel" style="max-width: 640px; margin-top: 2rem;">
+    <h3 class="lecture-notes-title">Edit Comment</h3>
+    <p class="lecture-notes-hint">Update your comment for this course.</p>
+    <form th:action="@{/courses/{coursePublicId}/comments/{commentPublicId}/update(coursePublicId=${coursePublicId}, commentPublicId=${commentPublicId})}"
+          th:object="${comment}" method="post">
+      <textarea class="lecture-notes-textarea form-control" th:field="*{content}"
+                placeholder="Write your comment here…"
+                rows="8" maxlength="900" required></textarea>
+      <p class="lecture-notes-error error" th:if="${#fields.hasErrors('content')}" th:errors="*{content}"></p>
+      <div class="note-card-actions" style="margin-top: 1rem;">
+        <button type="submit" class="btn btn-primary">
+          <i class="ti-save"></i> Save changes
+        </button>
+        <a class="btn btn-outline-secondary"
+           th:href="|/courses/${coursePublicId}#review|">Cancel</a>
+      </div>
+    </form>
+  </div>
+</div>
+
+</body>
+</html>

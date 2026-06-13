@@ -1,172 +1,91 @@
 <!DOCTYPE html>
-
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-
-    <!-- Basic Page Needs
-      ================================================== -->
     <meta charset="utf-8">
-    <title>Educenter - Education HTML Template</title>
-
-    <!-- Mobile Specific Metas
-      ================================================== -->
+    <title>Create Lecture</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="description" content="Construction Html5 Template">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-    <meta name="author" content="Themefisher">
-    <meta name="generator" content="Themefisher Educenter HTML Template v1.0">
-
-    <!-- ** ../../../plugins Needed for the Project ** -->
-    <!-- Bootstrap -->
-    <link rel="stylesheet" href="../../../plugins/bootstrap/bootstrap.min.css">
-    <!-- slick slider -->
-    <link rel="stylesheet" href="../../../plugins/slick/slick.css">
-    <!-- themefy-icon -->
-    <link rel="stylesheet" href="../../../plugins/themify-icons/themify-icons.css">
-    <!-- animation css -->
-    <link rel="stylesheet" href="../../../plugins/animate/animate.css">
-    <!-- aos -->
-    <link rel="stylesheet" href="../../../plugins/aos/aos.css">
-    <!-- venobox popup -->
-    <link rel="stylesheet" href="../../../plugins/venobox/venobox.css">
-
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css"/>
-
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-    <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
-
-    <!-- Main Stylesheet -->
-    <link href="../../../css/style.css" rel="stylesheet">
-
-
-    <!--Favicon-->
-    <link rel="shortcut icon" href="../../../static/images/favicon.png" type="image/x-icon">
-    <link rel="icon" href="../../../images/favicon.png" type="image/x-icon">
-
+    <link rel="stylesheet" href="/plugins/bootstrap/bootstrap.min.css" th:href="@{/plugins/bootstrap/bootstrap.min.css}">
+    <link rel="stylesheet" href="/plugins/themify-icons/themify-icons.css" th:href="@{/plugins/themify-icons/themify-icons.css}">
+    <link rel="stylesheet" href="/plugins/slick/slick.css" th:href="@{/plugins/slick/slick.css}">
+    <link rel="stylesheet" href="/plugins/animate/animate.css" th:href="@{/plugins/animate/animate.css}">
+    <link rel="stylesheet" href="/plugins/aos/aos.css" th:href="@{/plugins/aos/aos.css}">
+    <link rel="stylesheet" href="/plugins/venobox/venobox.css" th:href="@{/plugins/venobox/venobox.css}">
+    <link href="/css/style.css" rel="stylesheet" th:href="@{/css/style.css}">
+    <link href="/css/styleUsers.css" rel="stylesheet" th:href="@{/css/styleUsers.css}">
+    <link rel="shortcut icon" href="/images/favicon.png" type="image/x-icon" th:href="@{/images/favicon.png}">
 </head>
-
 <body>
-<!-- preloader start -->
+
 <div class="preloader">
     <img src="/images/preloader.gif" alt="preloader" th:src="@{/images/preloader.gif}">
 </div>
-<!-- preloader end -->
 
-<!-- header -->
-<header class="fixed-top header">
-    <!-- top header -->
-    <div class="top-header py-2 bg-white">
-        <div class="container">
-            <div class="row no-gutters">
-                <div class="col-lg-4 text-center text-lg-left">
-                    <a class="text-color mr-3" href="tel:+443003030266"><strong>CALL</strong> +44 300 303 0266</a>
-                    <ul class="list-inline d-inline">
-                        <li class="list-inline-item mx-0"><a class="d-inline-block p-2 text-color"
-                                                             href="https://facebook.com/themefisher/"><i
-                                class="ti-facebook"></i></a></li>
-                        <li class="list-inline-item mx-0"><a class="d-inline-block p-2 text-color"
-                                                             href="https://twitter.com/themefisher"><i
-                                class="ti-twitter-alt"></i></a></li>
-                        <li class="list-inline-item mx-0"><a class="d-inline-block p-2 text-color"
-                                                             href="https://github.com/themefisher"><i
-                                class="ti-github"></i></a></li>
-                        <li class="list-inline-item mx-0"><a class="d-inline-block p-2 text-color"
-                                                             href="https://instagram.com/themefisher/"><i
-                                class="ti-instagram"></i></a></li>
-                    </ul>
-                </div>
-                <div class="col-lg-8 text-center text-lg-right">
-                    <ul class="list-inline">
-                        <li class="list-inline-item"><a
-                                class="text-uppercase text-color p-sm-2 py-2 px-0 d-inline-block" href="notice.html">notice</a>
-                        </li>
-                        <li class="list-inline-item"><a
-                                class="text-uppercase text-color p-sm-2 py-2 px-0 d-inline-block" href="research.html">research</a>
-                        </li>
-                        <li class="list-inline-item"><a
-                                class="text-uppercase text-color p-sm-2 py-2 px-0 d-inline-block"
-                                href="scholarship.html">SCHOLARSHIP</a></li>
+<div th:replace="fragments/headerAndFooter :: header"></div>
 
-                    </ul>
-                </div>
-            </div>
+<section class="section-sm">
+    <div class="container lecture-form-page">
+        <div class="lecture-form-header">
+            <a class="lecture-form-back"
+               th:href="@{/courses/{coursePublicId}/lectures(coursePublicId=${coursePublicId})}">
+                <i class="ti-arrow-left"></i> Back to lectures
+            </a>
+            <h2 class="lecture-form-title">Create a new lecture</h2>
+            <p class="lecture-form-subtitle"
+               th:if="${course != null}"
+               th:text="|Add a lecture to ${course.title}. You can upload an assignment after creating it.|">
+                Add a lecture to this course.
+            </p>
+            <p class="lecture-form-subtitle" th:unless="${course != null}">
+                Add a title and video link for your new lecture.
+            </p>
         </div>
-    </div>
-    <!-- navbar -->
 
-</header>
+        <div class="lecture-form-panel">
+            <form th:action="@{/courses/{coursePublicId}/lectures/new(coursePublicId=${coursePublicId})}"
+                  th:object="${lecture}" method="post" novalidate>
 
-<div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content rounded-0 border-0 p-4" id="edit">
-        <div class="modal-header border-0">
-            <h3 style="text-align: center">Create New Lecture</h3>
-
-        </div>
-        <div class="modal-body">
-            <p class="login">
-            <form class="row" th:action="@{/courses/{coursePublicId}/lectures/new(coursePublicId=${coursePublicId})}" th:object="${lecture}" method="post">
-                <div class="col-12">
-                    <input type="text" class="form-control mb-3" id="setTitle" name="setTitle" placeholder="Title"
-                           th:field="*{title}">
-                    <label class="error" th:errors="*{title}">Title error
-                        placeholder</label>
+                <div class="lecture-form-group">
+                    <label for="lectureTitle" class="lecture-form-label">Lecture title</label>
+                    <input type="text" class="form-control lecture-form-input" id="lectureTitle"
+                           th:field="*{title}" placeholder="e.g. Introduction to Java"
+                           maxlength="50" required>
+                    <p class="lecture-form-hint">Between 5 and 50 characters.</p>
+                    <p class="lecture-form-error" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></p>
                 </div>
-                <div class="col-12">
-                    <input type="text" class="form-control mb-3" id="setVideo" name="setVideo" placeholder="Video URL"
-                           th:field="*{videoUrl}"/>
-                    <label class="error" th:errors="*{videoUrl}">Video error
-                        placeholder</label>
+
+                <div class="lecture-form-group">
+                    <label for="lectureVideoUrl" class="lecture-form-label">Video URL</label>
+                    <input type="url" class="form-control lecture-form-input" id="lectureVideoUrl"
+                           th:field="*{videoUrl}" placeholder="https://www.youtube.com/embed/..."
+                           maxlength="500" required>
+                    <p class="lecture-form-hint">Paste a YouTube embed link or other video URL for this lecture.</p>
+                    <p class="lecture-form-error" th:if="${#fields.hasErrors('videoUrl')}" th:errors="*{videoUrl}"></p>
                 </div>
-                <div class="col-12">
-                    <button type="submit" class="btn btn-primary">Save</button>
-                    <a class="btn btn-primary" th:href="@{/}">Close</a>
+
+                <div class="lecture-form-actions">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="ti-check"></i> Create lecture
+                    </button>
+                    <a class="btn btn-outline-secondary"
+                       th:href="@{/courses/{coursePublicId}/lectures(coursePublicId=${coursePublicId})}">
+                        Cancel
+                    </a>
                 </div>
             </form>
-
-
         </div>
     </div>
-</div>
+</section>
 
-<script>
+<div th:replace="fragments/headerAndFooter :: footer"></div>
 
+<script src="/plugins/jQuery/jquery.min.js" th:src="@{/plugins/jQuery/jquery.min.js}"></script>
+<script src="/plugins/bootstrap/bootstrap.min.js" th:src="@{/plugins/bootstrap/bootstrap.min.js}"></script>
+<script src="/plugins/slick/slick.min.js" th:src="@{/plugins/slick/slick.min.js}"></script>
+<script src="/plugins/aos/aos.js" th:src="@{/plugins/aos/aos.js}"></script>
+<script src="/plugins/venobox/venobox.min.js" th:src="@{/plugins/venobox/venobox.min.js}"></script>
+<script src="/plugins/filterizr/jquery.filterizr.min.js" th:src="@{/plugins/filterizr/jquery.filterizr.min.js}"></script>
+<script src="/js/script.js" th:src="@{/js/script.js}"></script>
 
-    const togglePassword = document.querySelector("#togglePassword");
-    const password = document.querySelector("#editPassword");
-
-    togglePassword.addEventListener("click", function () {
-        // toggle the type attribute
-        const type = password.getAttribute("type") === "password" ? "text" : "password";
-        password.setAttribute("type", type);
-
-        // toggle the icon
-        this.classList.toggle("bi-eye");
-    });
-
-    // prevent form submit
-    const form = document.querySelector("form");
-    form.addEventListener('submit', function (e) {
-        e.preventDefault();
-    });
-</script>
-<!-- jQuery -->
-<script src="../../../plugins/jQuery/jquery.min.js"></script>
-<!-- Bootstrap JS -->
-<script src="../../../plugins/bootstrap/bootstrap.min.js"></script>
-<!-- slick slider -->
-<script src="../../../plugins/slick/slick.min.js"></script>
-<!-- aos -->
-<script src="../../../plugins/aos/aos.js"></script>
-<!-- venobox popup -->
-<script src="../../../plugins/venobox/venobox.min.js"></script>
-<!-- filter -->
-<script src="../../../plugins/filterizr/jquery.filterizr.min.js"></script>
-<!-- google map -->
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCcABaamniA6OL5YvYSpB3pFMNrXwXnLwU"></script>
-<script src="../../../plugins/google-map/gmap.js"></script>
-
-<!-- Main Script -->
-<script src="../../../js/script.js"></script>
 </body>
 </html>

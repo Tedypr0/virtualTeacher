@@ -33,7 +33,7 @@
 
     <!-- Main Stylesheet -->
     <link href="/css/style.css" rel="stylesheet" th:href="@{/css/style.css}">
-    <link href="/css/style.css" rel="stylesheet" th:href="@{/css/styleUsers.css}">
+    <link href="/css/styleUsers.css" rel="stylesheet" th:href="@{/css/styleUsers.css}">
     <!--Favicon-->
     <link rel="shortcut icon" href="/images/favicon.png" type="image/x-icon" th:href="@{/images/favicon.png}">
     <link rel="icon" href="/images/favicon.png" type="image/x-icon" th:href="@{/images/favicon.png}">
@@ -121,74 +121,88 @@
 </div>
 
 <!-- page title -->
-<section class="page-title-section overlay" data-background="images/backgrounds/page-title.jpg">
+<section class="page-title-section overlay" data-background="images/backgrounds/page-title.jpg"
+         th:attr="data-background=@{/images/backgrounds/page-title.jpg}">
     <div class="container">
         <div class="row">
             <div class="col-md-8">
                 <ul class="list-inline custom-breadcrumb mb-2">
-                    <li class="list-inline-item"><a class="h2 text-primary font-secondary" href="index.html">Home</a>
-                    </li>
-                    <li class="list-inline-item text-white h3 font-secondary nasted">Our Courses</li>
+                    <li class="list-inline-item"><a class="h2 text-primary font-secondary" th:href="@{/}">Home</a></li>
+                    <li class="list-inline-item"><a class="h2 text-primary font-secondary" th:href="@{/courses/teacher}">My courses</a></li>
+                    <li class="list-inline-item text-white h3 font-secondary nasted"
+                        th:text="${course != null ? course.title : 'Lectures'}">Lectures</li>
                 </ul>
-                <p class="text-lighten mb-0">Our courses offer a good compromise between the continuous assessment
-                    favoured by some universities and the emphasis placed on final exams by others.</p>
+                <p class="text-lighten mb-0">Manage lectures for this course — open, edit, publish, or remove them.</p>
             </div>
         </div>
     </div>
 </section>
 <!-- /page title -->
 
-<!-- courses -->
-<section class="section">
-    <div class="container">
-        <div class="row justify-content-center">
-            <h3>Create a new lecture</h3>
+<!-- lectures -->
+<section class="section-sm">
+    <div class="container lectures-page">
+        <div class="lectures-page-toolbar">
+            <div>
+                <h3 class="lectures-page-title">Course lectures</h3>
+                <p class="lectures-page-subtitle" th:if="${course != null}" th:text="${course.title}">Course title</p>
+            </div>
+            <a class="btn btn-primary lectures-create-btn"
+               th:href="@{/courses/{coursePublicId}/lectures/new(coursePublicId=${course.publicId})}">
+                <i class="ti-plus"></i> Create lecture
+            </a>
         </div>
-        <div class="row justify-content-center button-margin">
-            <li><a class="btn btn-primary btn-sm" href="lecture-single.html"
-                   th:href="@{/courses/{coursePublicId}/lectures/new(coursePublicId=${course.publicId})}">Create</a></li>
+
+        <div th:if="${#lists.isEmpty(lectures)}" class="lectures-empty-state">
+            <i class="ti-book lectures-empty-icon"></i>
+            <p>No lectures yet for this course.</p>
+            <a class="btn btn-outline-primary btn-sm"
+               th:href="@{/courses/{coursePublicId}/lectures/new(coursePublicId=${course.publicId})}">
+                <i class="ti-plus"></i> Create your first lecture
+            </a>
         </div>
-        <!-- course list -->
-        <div class="row justify-content-center">
-            <!-- course item -->
-            <div class="col-6 mb-5">
-                <div th:each="lecture : ${lectures}">
-                    <div class="card p-0 border-primary rounded-0 hover-shadow">
-                        <div class="card-body">
-                            <ul class="list-inline mb-2">
-                            </ul>
-                            <a href="lecture-single.html">
-                                <h3 class="card-title" th:text="${lecture.title}">Lecture 1</h3>
-                            </a>
-                            <div class="row">
-                                <li><a class="btn btn-primary btn-sm lecture-buttons" href="lecture-single.html"
-                                       th:href="@{/courses/{coursePublicId}/lectures/{lecturePublicId}(coursePublicId=${course.publicId}, lecturePublicId=${lecture.publicId})}">Proceed to lecture</a></li>
-                                <li><a class="btn btn-primary btn-sm lecture-buttons" href="lecture-single.html"
-                                       th:href="@{/courses/{coursePublicId}/lectures/{lecturePublicId}/update(coursePublicId=${course.publicId}, lecturePublicId=${lecture.publicId})}">Update</a></li>
-                                <li><a class="btn btn-primary btn-sm" href="lecture-single.html"
-                                       th:href="@{/courses/{coursePublicId}/lectures/{lecturePublicId}/delete(lecturePublicId=${lecture.publicId}, coursePublicId=${course.publicId})}">Delete</a></li>
-                                <!--                                <li><a class="btn btn-primary btn-sm" href="lecture-single.html"-->
-                                <!--                                       th:href="@{/courses/{courseId}/lectures/{id}/addToCourse(coursePublicId=${course.publicId},-->
-                                <!--                                        id=${lecture.getId()})}">Add to course</a></li>-->
-                                <form class="form-inline my-3 my-lg-0" action="#"
-                                      th:action="@{/courses/{coursePublicId}/lectures/{lecturePublicId}/addToCourse(coursePublicId=${course.publicId}, lecturePublicId=${lecture.publicId})}"
-                                      method="post">
-                                    <button class="btn btn-primary btn-sm lecture-buttons" style="margin-top: 8px; margin-left: 22px" type="submit" th:text="${lecture.isAddedToCourse()} ? 'Remove from course' : 'Add to course'"> Add to course Button</button>
-                                </form>
-                            </div>
-                        </div>
+
+        <div th:unless="${#lists.isEmpty(lectures)}" class="lectures-list">
+            <article th:each="lecture : ${lectures}" class="lecture-card">
+                <div class="lecture-card-main">
+                    <div class="lecture-card-heading">
+                        <h4 class="lecture-card-title" th:text="${lecture.title}">Lecture title</h4>
+                        <span class="lecture-card-status"
+                              th:classappend="${lecture.addedToCourse} ? ' lecture-card-status--published' : ' lecture-card-status--draft'"
+                              th:text="${lecture.addedToCourse} ? 'Published' : 'Unpublished'">Unpublished</span>
+                    </div>
+                    <p class="lecture-card-meta" th:if="${lecture.description != null}"
+                       th:text="${#strings.abbreviate(lecture.description.description, 120)}">Description preview</p>
+                </div>
+                <div class="lecture-card-actions">
+                    <div class="lecture-card-actions-row">
+                        <a class="btn btn-primary btn-sm"
+                           th:href="@{/courses/{coursePublicId}/lectures/{lecturePublicId}(coursePublicId=${course.publicId}, lecturePublicId=${lecture.publicId})}">
+                            <i class="ti-eye"></i> Open lecture
+                        </a>
+                        <form th:action="@{/courses/{coursePublicId}/lectures/{lecturePublicId}/addToCourse(coursePublicId=${course.publicId}, lecturePublicId=${lecture.publicId})}"
+                              method="post">
+                            <button class="btn btn-outline-primary btn-sm" type="submit"
+                                    th:text="${lecture.addedToCourse} ? 'Unpublish' : 'Publish'">Publish</button>
+                        </form>
+                    </div>
+                    <div class="lecture-card-actions-row">
+                        <a class="btn btn-outline-secondary btn-sm"
+                           th:href="@{/courses/{coursePublicId}/lectures/{lecturePublicId}/update(coursePublicId=${course.publicId}, lecturePublicId=${lecture.publicId})}">
+                            <i class="ti-pencil"></i> Edit
+                        </a>
+                        <a class="btn btn-danger btn-sm"
+                           th:href="@{/courses/{coursePublicId}/lectures/{lecturePublicId}/delete(lecturePublicId=${lecture.publicId}, coursePublicId=${course.publicId})}"
+                           onclick="return confirm('Delete this lecture?');">
+                            <i class="ti-trash"></i> Delete
+                        </a>
                     </div>
                 </div>
-            </div>
-            <!-- /course list -->
-            <!-- course list -->
-            <div class="row justify-content-center">
-                <!-- /course list -->
-            </div>
+            </article>
         </div>
     </div>
 </section>
-<!-- /courses -->
+<!-- /lectures -->
 
 <!-- footer -->
 <div th:replace="fragments/headerAndFooter :: footer"></div>
