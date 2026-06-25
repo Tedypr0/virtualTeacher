@@ -16,8 +16,6 @@
           <li class="list-inline-item"><a class="text-uppercase text-color portal-nav-link" th:href="@{/users}">Users</a></li>
           <li class="list-inline-item"><a class="text-uppercase text-color portal-nav-link" th:href="@{/users/applications}">Teacher Applications</a></li>
           <li class="list-inline-item"><a class="badge-notification-number badge-danger"><p class="p-application-numbers" th:text="${teacherApplicationsNumber}">0</p></a></li>
-          <li class="list-inline-item"><a class="text-uppercase text-color portal-nav-link" th:href="@{/about/contacts/messages}">Contact Messages</a></li>
-          <li th:if="${unreadContactCount > 0}" class="list-inline-item"><a class="badge-notification-number badge-danger"><p class="p-application-numbers" th:text="${unreadContactCount}">0</p></a></li>
         </ul>
       </div>
     </div>

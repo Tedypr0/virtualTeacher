@@ -71,7 +71,7 @@
                             <span aria-hidden="true">&times;</span>
                           </button>
                         </div>
-                        <div class="modal-body" th:text="${user.getMotivationalLetter().getMotivationalLetter()}">
+                        <div class="modal-body" th:text="${user.getMotivationalLetter() != null ? user.getMotivationalLetter().getMotivationalLetter() : 'No message provided'}">
 
                         </div>
                         <div class="modal-footer">
