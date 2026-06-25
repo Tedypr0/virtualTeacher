@@ -1,40 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:border-radius="http://www.w3.org/1999/xhtml">
-<head>
-  <meta charset="UTF-8">
-  <title>Title</title>
-  <!-- Mobile Specific Metas
-================================================== -->
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="description" content="Construction Html5 Template">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-  <meta name="author" content="Themefisher">
-  <meta name="generator" content="Themefisher Educenter HTML Template v1.0">
-
-  <!-- ** ../plugins Needed for the Project ** -->
-  <!-- Bootstrap -->
-  <link rel="stylesheet" href="/plugins/bootstrap/bootstrap.min.css"
-        th:href="@{/plugins/bootstrap/bootstrap.min.css}">
-  <!-- slick slider -->
-  <link rel="stylesheet" href="/plugins/slick/slick.css" th:href="@{/plugins/slick/slick.css}">
-  <!-- themefy-icon -->
-  <link rel="stylesheet" href="/plugins/themify-icons/themify-icons.css"
-        th:href="@{/plugins/themify-icons/themify-icons.css}">
-  <!-- animation css -->
-  <link rel="stylesheet" href="/plugins/animate/animate.css" th:href="@{/plugins/animate/animate.css}">
-  <!-- aos -->
-  <link rel="stylesheet" href="/plugins/aos/aos.css" th:href="@{/plugins/aos/aos.css}">
-  <!-- venobox popup -->
-  <link rel="stylesheet" href="/plugins/venobox/venobox.css" th:href="@{/plugins/venobox/venobox.css}">
-
-  <!-- Main Stylesheet -->
-  <link href="/css/style.css" rel="stylesheet" th:href="@{/css/style.css}">
-  <link href="/css/style.css" rel="stylesheet" th:href="@{/css/styleUsers.css}">
-
-  <!--Favicon-->
-  <link rel="shortcut icon" href="/images/favicon.png" type="image/x-icon" th:href="@{/images/favicon.png}">
-  <link rel="icon" href="/images/favicon.png" type="image/x-icon" th:href="@{/images/favicon.png}">
-</head>
+<head th:replace="~{fragments/head :: head('Contact')}"></head>
 
 <body>
 <!-- preloader start -->
@@ -135,21 +101,40 @@
         <h2 class="section-title">Contact Us</h2>
       </div>
     </div>
+
+    <div th:if="${successMessage}" class="row mb-3">
+      <div class="col-12">
+        <div class="alert alert-success" th:text="${successMessage}">Message sent.</div>
+      </div>
+    </div>
+
     <div class="row">
       <div class="col-lg-7 mb-4 mb-lg-0">
-        <form action="/contact.html" method="POST">
-          <input type="text" class="form-control mb-3" id="name" name="name" placeholder="Your Name" required>
-          <input type="email" class="form-control mb-3" id="mail" name="mail" placeholder="Your Email" required>
-          <input type="text" class="form-control mb-3" id="subject" name="subject" placeholder="Subject" required>
-          <textarea name="message" id="message" class="form-control mb-3" placeholder="Your Message" required></textarea>
-          <button type="submit" value="send" class="btn btn-primary">SEND MESSAGE</button>
+        <form th:action="@{/about/contacts}" th:object="${contactMessageDto}" method="POST" novalidate>
+          <div class="mb-3">
+            <input type="text" class="form-control" th:field="*{senderName}" placeholder="Your Name">
+            <small class="text-danger" th:if="${#fields.hasErrors('senderName')}" th:errors="*{senderName}"></small>
+          </div>
+          <div class="mb-3">
+            <input type="email" class="form-control" th:field="*{senderEmail}" placeholder="Your Email">
+            <small class="text-danger" th:if="${#fields.hasErrors('senderEmail')}" th:errors="*{senderEmail}"></small>
+          </div>
+          <div class="mb-3">
+            <input type="text" class="form-control" th:field="*{subject}" placeholder="Subject">
+            <small class="text-danger" th:if="${#fields.hasErrors('subject')}" th:errors="*{subject}"></small>
+          </div>
+          <div class="mb-3">
+            <textarea class="form-control" th:field="*{message}" placeholder="Your Message" rows="5"></textarea>
+            <small class="text-danger" th:if="${#fields.hasErrors('message')}" th:errors="*{message}"></small>
+          </div>
+          <button type="submit" class="btn btn-primary">SEND MESSAGE</button>
         </form>
       </div>
       <div class="col-lg-5">
-        <p class="mb-5">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Velit recusandae voluptates doloremque veniam temporibus porro culpa ipsa, nisi soluta minima saepe laboriosam debitis nesciunt. Dolore, labore. Accusamus nulla sed cum aliquid exercitationem debitis error harum porro maxime quo iusto aliquam dicta modi earum fugiat, vel possimus commodi, deleniti et veniam, fuga ipsum praesentium. Odit unde optio nulla ipsum quae obcaecati! Quod esse natus quibusdam asperiores quam vel, tempore itaque architecto ducimus expedita</p>
-        <a href="tel:+8802057843248" class="text-color h5 d-block">+880 20 5784 3248</a>
-        <a href="mailto:yourmail@email.com" class="mb-5 text-color h5 d-block">yourmail@email.com</a>
-        <p>71 Shelton Street<br>London WC2H 9JQ England</p>
+        <p class="mb-4">Have a question, feedback, or need to report something? Fill in the form and our team will get back to you as soon as possible.</p>
+        <a href="tel:+35987123768" class="text-color h5 d-block mb-2"><i class="ti-mobile mr-2"></i>+359 878 123 768</a>
+        <a href="mailto:contact@felerik.academy" class="mb-4 text-color h5 d-block"><i class="ti-email mr-2"></i>contact@felerik.academy</a>
+        <p class="text-muted"><i class="ti-location-pin mr-2"></i>Sofia, Bulgaria</p>
       </div>
     </div>
   </div>

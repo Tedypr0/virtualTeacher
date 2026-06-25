@@ -1,29 +1,32 @@
 package com.example.virtual_teacher.controllers.mvc;
 
+import com.example.virtual_teacher.exceptions.UnauthorizedOperationException;
+import com.example.virtual_teacher.models.dtos.ContactMessageDto;
+import com.example.virtual_teacher.services.contracts.ContactService;
 import com.example.virtual_teacher.services.contracts.CourseService;
 import com.example.virtual_teacher.services.contracts.UserService;
+import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import jakarta.servlet.http.HttpSession;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/about")
 public class AboutMvcController {
 
     private final UserService userService;
-
     private final CourseService courseService;
+    private final ContactService contactService;
 
     @Autowired
-    public AboutMvcController(UserService userService, CourseService courseService) {
+    public AboutMvcController(UserService userService, CourseService courseService, ContactService contactService) {
         this.userService = userService;
         this.courseService = courseService;
+        this.contactService = contactService;
     }
 
     @ModelAttribute("isAuthenticated")
@@ -32,7 +35,7 @@ public class AboutMvcController {
     }
 
     @ModelAttribute("currentUser")
-    public Object populateUser(HttpSession session){
+    public Object populateUser(HttpSession session) {
         return session.getAttribute("currentUser");
     }
 
@@ -48,7 +51,7 @@ public class AboutMvcController {
 
     @GetMapping("/teachers")
     public String showTeachersPage(Model model) {
-        model.addAttribute("userList", userService.getAll());
+        model.addAttribute("teachers", userService.getTeachers());
         model.addAttribute("teacherApplicationsNumber", userService.getAllTeacherApplications().size());
         return "teacher";
     }
@@ -62,9 +65,44 @@ public class AboutMvcController {
 
     @GetMapping("/contacts")
     public String showContactPage(Model model) {
-        model.addAttribute("userList", userService.getAll());
         model.addAttribute("teacherApplicationsNumber", userService.getAllTeacherApplications().size());
+        if (!model.containsAttribute("contactMessageDto")) {
+            model.addAttribute("contactMessageDto", new ContactMessageDto());
+        }
         return "contact";
     }
 
+    @PostMapping("/contacts")
+    public String submitContactMessage(@Valid @ModelAttribute("contactMessageDto") ContactMessageDto dto,
+                                       BindingResult errors,
+                                       RedirectAttributes redirectAttributes) {
+        if (errors.hasErrors()) {
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.contactMessageDto", errors);
+            redirectAttributes.addFlashAttribute("contactMessageDto", dto);
+            return "redirect:/about/contacts";
+        }
+        contactService.submit(dto);
+        redirectAttributes.addFlashAttribute("successMessage", "Your message has been sent. We'll get back to you shortly.");
+        return "redirect:/about/contacts";
+    }
+
+    @GetMapping("/contacts/messages")
+    public String showContactMessages(HttpSession session, Model model) {
+        if (session.getAttribute("isAdmin") == null && session.getAttribute("isTeacher") == null) {
+            throw new UnauthorizedOperationException("Only admins and teachers can view contact messages.");
+        }
+        model.addAttribute("messages", contactService.getAll());
+        model.addAttribute("unreadCount", contactService.countUnread());
+        model.addAttribute("teacherApplicationsNumber", userService.getAllTeacherApplications().size());
+        return "contact-messages";
+    }
+
+    @PostMapping("/contacts/messages/{publicId}/read")
+    public String markAsRead(@PathVariable String publicId, HttpSession session) {
+        if (session.getAttribute("isAdmin") == null && session.getAttribute("isTeacher") == null) {
+            throw new UnauthorizedOperationException("Only admins and teachers can perform this action.");
+        }
+        contactService.markAsRead(publicId);
+        return "redirect:/about/contacts/messages";
+    }
 }
