@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Contact Messages')}"></head>
+
+<body>
+<!-- preloader -->
+<div class="preloader">
+    <img src="/images/preloader.gif" alt="preloader" th:src="@{/images/preloader.gif}">
+</div>
+
+<!-- header -->
+<div th:replace="fragments/headerAndFooter :: header"></div>
+
+<!-- page title -->
+<section class="page-title-section overlay" th:attr="data-background=@{/images/backgrounds/page-title.jpg}">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8">
+                <ul class="list-inline custom-breadcrumb mb-2">
+                    <li class="list-inline-item"><a class="h2 text-primary font-secondary" th:href="@{/}">Home</a></li>
+                    <li class="list-inline-item text-white h3 font-secondary nasted">Contact Messages</li>
+                </ul>
+                <p class="text-lighten mb-0">Messages submitted through the contact form.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- messages -->
+<section class="section-sm">
+    <div class="container">
+
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h3 class="mb-1">Contact Messages</h3>
+                <p class="text-muted mb-0">
+                    <span th:text="${unreadCount}">0</span> unread
+                    · <span th:text="${#lists.size(messages)}">0</span> total
+                </p>
+            </div>
+        </div>
+
+        <div th:if="${#lists.isEmpty(messages)}" class="lecture-notes-panel text-center py-5">
+            <i class="ti-email" style="font-size: 2.5rem; color: #ccc;"></i>
+            <p class="mt-3 text-muted">No messages yet.</p>
+        </div>
+
+        <div th:unless="${#lists.isEmpty(messages)}" class="contact-messages-list">
+            <div th:each="msg : ${messages}"
+                 th:classappend="${!msg.read} ? 'contact-message-item--unread' : ''"
+                 class="contact-message-item lecture-notes-panel mb-3">
+                <div class="d-flex justify-content-between align-items-start flex-wrap">
+                    <div class="contact-message-meta mb-2">
+                        <span class="contact-message-badge" th:unless="${msg.read}">NEW</span>
+                        <strong th:text="${msg.senderName}">Name</strong>
+                        <span class="text-muted mx-1">·</span>
+                        <a th:href="'mailto:' + ${msg.senderEmail}" class="text-color" th:text="${msg.senderEmail}">email</a>
+                        <span class="text-muted mx-1">·</span>
+                        <span class="text-muted" th:text="${#temporals.format(msg.createdAt, 'dd MMM yyyy, HH:mm')}">date</span>
+                    </div>
+                    <form th:unless="${msg.read}"
+                          th:action="@{/about/contacts/messages/{id}/read(id=${msg.publicId})}"
+                          method="POST">
+                        <button type="submit" class="btn btn-outline-primary btn-sm">
+                            <i class="ti-check mr-1"></i> Mark as read
+                        </button>
+                    </form>
+                </div>
+                <h5 class="contact-message-subject mt-1" th:text="${msg.subject}">Subject</h5>
+                <p class="contact-message-body mb-0" th:text="${msg.message}">Message</p>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<!-- footer -->
+<div th:replace="fragments/headerAndFooter :: footer"></div>
+</body>
+</html>
