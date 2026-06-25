@@ -1,46 +1,7 @@
 <!DOCTYPE html>
 
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-
-    <!-- Basic Page Needs
-      ================================================== -->
-    <meta charset="utf-8">
-    <title>Educenter - Education HTML Template</title>
-
-    <!-- Mobile Specific Metas
-      ================================================== -->
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="description" content="Construction Html5 Template">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-    <meta name="author" content="Themefisher">
-    <meta name="generator" content="Themefisher Educenter HTML Template v1.0">
-
-    <!-- ** ../plugins Needed for the Project ** -->
-    <!-- Bootstrap -->
-    <link rel="stylesheet" href="/plugins/bootstrap/bootstrap.min.css"
-          th:href="@{/plugins/bootstrap/bootstrap.min.css}">
-    <!-- slick slider -->
-    <link rel="stylesheet" href="/plugins/slick/slick.css" th:href="@{/plugins/slick/slick.css}">
-    <!-- themefy-icon -->
-    <link rel="stylesheet" href="/plugins/themify-icons/themify-icons.css"
-          th:href="@{/plugins/themify-icons/themify-icons.css}">
-    <!-- animation css -->
-    <link rel="stylesheet" href="/plugins/animate/animate.css" th:href="@{/plugins/animate/animate.css}">
-    <!-- aos -->
-    <link rel="stylesheet" href="/plugins/aos/aos.css" th:href="@{/plugins/aos/aos.css}">
-    <!-- venobox popup -->
-    <link rel="stylesheet" href="/plugins/venobox/venobox.css" th:href="@{/plugins/venobox/venobox.css}">
-
-    <!-- Main Stylesheet -->
-    <link href="/css/style.css" rel="stylesheet" th:href="@{/css/style.css}">
-    <link href="/css/style.css" rel="stylesheet" th:href="@{/css/styleUsers.css}">
-
-    <!--Favicon-->
-    <link rel="shortcut icon" href="/images/favicon.png" type="image/x-icon" th:href="@{/images/favicon.png}">
-    <link rel="icon" href="/images/favicon.png" type="image/x-icon" th:href="@{/images/favicon.png}">
-
-</head>
+<head th:replace="~{fragments/head :: head('Lecture')}"></head>
 
 <body>
 <!-- preloader start -->
@@ -78,111 +39,108 @@
 <!-- section -->
 <section class="section-sm">
     <div class="container">
-        <div class="row">
-            <div class="col-4">
-                <!-- course thumb -->
-                <img src="images/courses/course-5.jpg" class="lecture-main-picture"
-                     th:src="@{/images/courses/course-5.jpg}">
+        <!-- Hero row -->
+        <div class="row align-items-center mb-4">
+            <div class="col-lg-3 text-center mb-4 mb-lg-0">
+                <img src="images/courses/course-5.jpg" class="lecture-hero-img img-fluid"
+                     th:src="@{/images/courses/course-5.jpg}" alt="Lecture">
             </div>
-            <!-- course info -->
-            <div class="col-8">
-                <div class="row align-items-center">
-                    <div class=" order-1 mb-4 mb-xl-0">
-                        <h2 th:text="${lecture.getTitle()}">Lecture Title</h2>
-                    </div>
-                </div>
-                <div class=" order-sm-3 order-6 order-2">
-                    <ul class="list-inline">
-                        <li class="list-inline-item mb-3 mb-sm-0">
-                            <div class="row">
-                                <div class=" d-flex align-items-center">
-                                    <i class="ti-book text-primary icon-md mr-2"></i>
-                                    <div class="text-left">
-                                        <h6 class="mb-0">LECTURE MATERIALS</h6>
-                                        <p class="mb-0">1 video/1 assignment</p>
-                                    </div>
-                                </div>
+            <div class="col-lg-9">
+                <h2 class="mb-3" th:text="${lecture.getTitle()}">Lecture Title</h2>
+                <ul class="list-inline mb-0">
+                    <li class="list-inline-item mr-4 mb-2">
+                        <div class="d-flex align-items-center">
+                            <i class="ti-book text-primary icon-md mr-2"></i>
+                            <div>
+                                <h6 class="mb-0">LECTURE MATERIALS</h6>
+                                <p class="mb-0">1 video/1 assignment</p>
                             </div>
-                        </li>
-                        <li class="list-inline-item mr-4 mb-3 mb-sm-0">
-                            <div class="col-6 d-flex align-items-center">
-                                <i class="ti-alarm-clock text-primary icon-md mr-2"></i>
-                                <div class="text-left">
-                                    <h6 class="mb-0">DURATION</h6>
-                                    <p class="mb-0">1 Hour</p>
-                                </div>
+                        </div>
+                    </li>
+                    <li class="list-inline-item mb-2">
+                        <div class="d-flex align-items-center">
+                            <i class="ti-alarm-clock text-primary icon-md mr-2"></i>
+                            <div>
+                                <h6 class="mb-0">DURATION</h6>
+                                <p class="mb-0">1 Hour</p>
                             </div>
-                        </li>
-                    </ul>
-                </div>
+                        </div>
+                    </li>
+                </ul>
             </div>
-        </div>
-        <!-- border -->
-        <div class="col-12 mt-4 order-4">
-            <div class="border-bottom border-primary"></div>
-        </div>
-    </div>
-    </div>
-    <!-- course details -->
-    <div class="row">
-        <div class="col-12 mb-4">
-            <h3 th:unless="${lecture.getDescription().getDescription() == null}">About Lecture</h3>
-            <p th:unless="${lecture.getDescription().getDescription() == null}" th:text="${lecture.getDescription()
-                .getDescription()}">Lecture Description </p>
-            <br>
-            <br>
-            <br>
         </div>
 
-        <!-- teacher -->
-        <div class="col-12">
-            <div class="d-flex justify-content-between align-items-center flex-wrap">
-                <div class="media mb-2 mb-sm-0">
-                    <img class="mr-4 img-fluid user-image" src="images/teacher.jpg" alt="Teacher"
-                         th:src="${currentUser.getImage()}" style="width:90px; height:90px;">
-                    <style>
-                        img {
-                            border-radius: 50%;
-                        }
-                    </style>
-                    <div class="media-body">
-                        <h4 class="mt-0" th:text="${lecture.getTeacher().getFirstName()
-                             + ' '+ lecture.getTeacher().getLastName()}">Neda Marinova</h4>
-                        Teacher
+        <div class="border-bottom border-primary mb-5"></div>
+
+        <!-- Main content + sidebar -->
+        <div class="row">
+            <div class="col-lg-8">
+                <!-- About Lecture -->
+                <div th:unless="${lecture.getDescription().getDescription() == null}" class="mb-5">
+                    <h3 class="mb-3">About Lecture</h3>
+                    <p th:text="${lecture.getDescription().getDescription()}">Lecture Description</p>
+                </div>
+
+                <!-- Lecture Video -->
+                <div class="mb-5">
+                    <h4 class="mb-3">Lecture Video</h4>
+                    <div class="embed-responsive embed-responsive-16by9">
+                        <iframe class="embed-responsive-item" th:src="${video}" allowfullscreen></iframe>
+                    </div>
+                </div>
+
+                <!-- Assignment -->
+                <div class="mb-5">
+                    <h4 class="mb-3">Lecture Assignment</h4>
+                    <a th:href="@{${lecture.getAssignment()}}" download class="btn btn-outline-primary btn-sm">
+                        <i class="ti-download mr-1"></i> Download Assignment
+                    </a>
+                </div>
+
+                <div class="border-bottom border-primary mb-5"></div>
+            </div>
+
+            <!-- Teacher sidebar -->
+            <div class="col-lg-4">
+                <div class="card border-primary rounded-0 p-4 mb-4">
+                    <h5 class="mb-3">Instructor</h5>
+                    <div class="d-flex align-items-center">
+                        <img class="img-fluid rounded-circle mr-3"
+                             src="images/teacher.jpg" alt="Teacher"
+                             th:src="${lecture.teacher.image}"
+                             th:attr="onerror=|this.onerror=null;this.src='@{${defaultAvatarImage}}';|"
+                             style="width:70px;height:70px;object-fit:cover;">
+                        <div>
+                            <h6 class="mb-0" th:text="${lecture.getTeacher().getFirstName() + ' ' + lecture.getTeacher().getLastName()}">Teacher Name</h6>
+                            <small class="text-muted">Teacher</small>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="video-space">
-                <br>
-                <br>
-                <br>
-                <h3>Lecture Video</h3>
-                <iframe width="420" height="315"
-                        th:src="${video}" allowfullscreen>
-                </iframe>
-            </div>
-            <div class="lecture-notes-section">
-                <div class="lecture-notes-panel">
+        </div>
+
+        <!-- Grid row: Notes + Homework -->
+        <div class="row mb-4">
+            <!-- Notes -->
+            <div class="col-lg-7 mb-4 mb-lg-0">
+                <div class="lecture-notes-panel h-100">
                     <div class="lecture-notes-header">
                         <div>
-                            <h3 class="lecture-notes-title">My Notes</h3>
-                            <p class="lecture-notes-hint">Notes for this lecture. Add as many as you need while you watch.</p>
+                            <h4 class="lecture-notes-title">My Notes</h4>
+                            <p class="lecture-notes-hint">Add as many as you need while you watch.</p>
                         </div>
                         <button type="button" class="btn btn-primary btn-sm lecture-notes-add-btn" data-toggle="modal" data-target="#addNoteModal">
-                            <i class="ti-plus"></i> Add new note
+                            <i class="ti-plus"></i> Add note
                         </button>
                     </div>
-
                     <div th:if="${noteError}" class="alert alert-danger lecture-notes-alert" th:text="${noteError}">Note cannot be empty.</div>
-
                     <div th:if="${#lists.isEmpty(lectureNotes)}" class="lecture-notes-empty">
                         <i class="ti-notepad lecture-notes-empty-icon"></i>
-                        <p>No notes for this lecture yet.</p>
+                        <p>No notes yet.</p>
                         <button type="button" class="btn btn-outline-primary btn-sm" data-toggle="modal" data-target="#addNoteModal">
                             <i class="ti-plus"></i> Add your first note
                         </button>
                     </div>
-
                     <div th:unless="${#lists.isEmpty(lectureNotes)}" class="lecture-notes-list">
                         <article th:each="lectureNote : ${lectureNotes}" class="lecture-note-item">
                             <p class="lecture-note-preview" th:text="${#strings.abbreviate(lectureNote.note, 140)}">Note preview…</p>
@@ -206,282 +164,239 @@
                 </div>
             </div>
 
-            <div class="modal fade" id="addNoteModal" tabindex="-1" role="dialog" aria-labelledby="addNoteModalLabel">
-                <div class="modal-dialog modal-lg" role="document">
-                    <div class="modal-content">
-                        <form th:object="${newNote}"
-                              th:action="@{/courses/{coursePublicId}/lectures/{lecturePublicId}/notes/new(coursePublicId=${coursePublicId}, lecturePublicId=${lecturePublicId})}"
-                              method="post">
-                            <div class="modal-header">
-                                <h4 class="modal-title" id="addNoteModalLabel">Add new note</h4>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                <textarea class="lecture-notes-textarea form-control" th:field="*{note}"
-                                          placeholder="Start typing your notes here…"
-                                          rows="10" maxlength="2000" required></textarea>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-outline-secondary btn-sm" data-dismiss="modal">Cancel</button>
-                                <button type="submit" class="btn btn-primary btn-sm">
-                                    <i class="ti-save"></i> Save note
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-
-            <div th:each="lectureNote : ${lectureNotes}" class="modal fade note-view-modal"
-                 th:id="'lectureNoteViewModal' + ${lectureNote.id}" tabindex="-1" role="dialog">
-                <div class="modal-dialog modal-lg" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                            <h4 class="modal-title" th:text="${lecture.title}">Lecture title</h4>
+            <!-- Homework (students only) -->
+            <div class="col-lg-5" th:if="${!session.isTeacher && !session.isAdmin}">
+                <div class="lecture-notes-panel h-100">
+                    <h4 class="lecture-notes-title mb-1">Homework</h4>
+                    <div th:if="${submittedHomework != null}" class="homework-submitted mt-3">
+                        <p class="homework-submitted-label">Your submission</p>
+                        <div class="homework-submitted-file">
+                            <i class="ti-file homework-file-icon"></i>
+                            <span class="homework-file-name" th:text="${submittedHomework.displayFileName}">homework.docx</span>
+                            <a th:href="@{${submittedHomework.homeworkUrl}}" download class="btn btn-outline-primary btn-sm">
+                                <i class="ti-download"></i> Download
+                            </a>
                         </div>
-                        <div class="modal-body note-modal-body" th:text="${lectureNote.note}">Note content</div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-outline-secondary btn-sm" data-toggle="modal"
-                                    data-dismiss="modal"
-                                    th:attr="data-target='#lectureNoteEditModal' + ${lectureNote.id}">
-                                <i class="ti-pencil"></i> Edit
-                            </button>
-                            <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal">Close</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div th:each="lectureNote : ${lectureNotes}" class="modal fade"
-                 th:id="'lectureNoteEditModal' + ${lectureNote.id}" tabindex="-1" role="dialog">
-                <div class="modal-dialog modal-lg" role="document">
-                    <div class="modal-content">
-                        <form th:action="@{/courses/{coursePublicId}/lectures/{lecturePublicId}/notes/{notePublicId}/update(coursePublicId=${coursePublicId}, lecturePublicId=${lecturePublicId}, notePublicId=${lectureNote.publicId})}"
-                              method="post">
-                            <div class="modal-header">
-                                <h4 class="modal-title">Edit note</h4>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                <textarea class="lecture-notes-textarea form-control" name="note"
-                                          th:text="${lectureNote.note}"
-                                          placeholder="Start typing your notes here…"
-                                          rows="10" maxlength="2000" required></textarea>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-outline-secondary btn-sm" data-dismiss="modal">Cancel</button>
-                                <button type="submit" class="btn btn-primary btn-sm">
-                                    <i class="ti-save"></i> Save changes
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-            <div>
-                <br>
-                <br>
-                <br>
-                <h3>Lecture Assignment</h3>
-                <a th:href="@{${lecture.getAssignment()}}" download>Download</a>
-
-            </div>
-            <div class="border-bottom border-primary mt-4"></div>
-        </div>
-    </div>
-    </div>
-
-    <div th:if="${!session.isTeacher && !session.isAdmin}" class="homework-upload-form">
-        <div class="homework-upload-panel">
-            <h3 class="homework-upload-title">Homework</h3>
-
-            <div th:if="${submittedHomework != null}" class="homework-submitted">
-                <p class="homework-submitted-label">Your submission</p>
-                <div class="homework-submitted-file">
-                    <i class="ti-file homework-file-icon"></i>
-                    <span class="homework-file-name" th:text="${submittedHomework.displayFileName}">homework.docx</span>
-                    <a th:href="@{${submittedHomework.homeworkUrl}}" download class="btn btn-outline-primary btn-sm">
-                        <i class="ti-download"></i> Download
-                    </a>
-                </div>
-                <p class="homework-grade">
-                    <span class="homework-grade-label">Grade:</span>
-                    <span th:text="${submittedHomework.grade == 0 ? 'Not graded yet' : submittedHomework.grade}">Not graded yet</span>
-                </p>
-            </div>
-
-            <p class="homework-upload-hint"
-               th:text="${submittedHomework != null ? 'Upload a new file to replace your submission (.doc or .docx).' : 'Upload your completed assignment (.doc or .docx).'}">
-                Upload your completed assignment (.doc or .docx).
-            </p>
-            <form method="post" enctype="multipart/form-data"
-                  th:action="@{/courses/{coursePublicId}/lectures/{lecturePublicId}/uploadHomework(coursePublicId=${coursePublicId}, lecturePublicId=${lecturePublicId})}"
-                  name="documentFile" id="documentFile">
-                <div class="file-upload-control homework-upload-control">
-                    <input type="file" class="file-upload-input" id="homeworkFileInput" name="documentFile"
-                           accept=".doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document">
-                    <button type="button" class="btn btn-outline-primary btn-sm" id="homeworkChooseBtn">
-                        <i class="ti-upload"></i> Choose document
-                    </button>
-                    <span id="homeworkFileName" class="file-upload-name">No file selected</span>
-                </div>
-                <button type="submit" class="btn btn-primary homework-upload-submit"
-                        th:text="${submittedHomework != null ? 'Replace homework' : 'Submit homework'}">Submit homework
-                </button>
-            </form>
-        </div>
-    </div>
-    <br>
-    <br>
-    <br>
-
-    <div class="lecture-notes-section lecture-comments-section">
-        <div class="lecture-notes-panel">
-            <div class="lecture-notes-header">
-                <div>
-                    <h3 class="lecture-notes-title">Comments</h3>
-                    <p class="lecture-notes-hint">Share thoughts and questions about this lecture with others.</p>
-                </div>
-                <button type="button" class="btn btn-primary btn-sm lecture-notes-add-btn" data-toggle="modal" data-target="#addCommentModal">
-                    <i class="ti-plus"></i> Add comment
-                </button>
-            </div>
-
-            <div th:if="${commentError}" class="alert alert-danger lecture-notes-alert" th:text="${commentError}">Comment cannot be empty.</div>
-
-            <div th:if="${#lists.isEmpty(comments)}" class="lecture-notes-empty">
-                <i class="ti-comment lecture-notes-empty-icon"></i>
-                <p>No comments yet.</p>
-                <button type="button" class="btn btn-outline-primary btn-sm" data-toggle="modal" data-target="#addCommentModal">
-                    <i class="ti-plus"></i> Be the first to comment
-                </button>
-            </div>
-
-            <div th:unless="${#lists.isEmpty(comments)}" class="lecture-notes-list">
-                <article th:each="lectureComment : ${comments}" class="lecture-note-item lecture-comment-item">
-                    <div class="lecture-comment-body">
-                        <p class="lecture-comment-meta">
-                            <span class="lecture-comment-author"
-                                  th:text="${lectureComment.user.firstName + ' ' + lectureComment.user.lastName}">Author</span>
-                            ·
-                            <span th:text="${lectureComment.creationDate}">Date</span>
+                        <p class="homework-grade">
+                            <span class="homework-grade-label">Grade:</span>
+                            <span th:text="${submittedHomework.grade == 0 ? 'Not graded yet' : submittedHomework.grade}">Not graded yet</span>
                         </p>
-                        <p class="lecture-note-preview" th:text="${#strings.abbreviate(lectureComment.content, 140)}">Comment preview…</p>
                     </div>
-                    <div class="note-card-actions">
-                        <button type="button" class="btn btn-outline-primary btn-sm" data-toggle="modal"
-                                th:attr="data-target='#lectureCommentViewModal' + ${lectureComment.id}">
-                            <i class="ti-eye"></i> View
+                    <p class="homework-upload-hint mt-3"
+                       th:text="${submittedHomework != null ? 'Upload a new file to replace your submission (.doc or .docx).' : 'Upload your completed assignment (.doc or .docx).'}">
+                        Upload your completed assignment (.doc or .docx).
+                    </p>
+                    <form method="post" enctype="multipart/form-data"
+                          th:action="@{/courses/{coursePublicId}/lectures/{lecturePublicId}/uploadHomework(coursePublicId=${coursePublicId}, lecturePublicId=${lecturePublicId})}"
+                          name="documentFile" id="documentFile">
+                        <div class="file-upload-control homework-upload-control">
+                            <input type="file" class="file-upload-input" id="homeworkFileInput" name="documentFile"
+                                   accept=".doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document">
+                            <button type="button" class="btn btn-outline-primary btn-sm" id="homeworkChooseBtn">
+                                <i class="ti-upload"></i> Choose document
+                            </button>
+                            <span id="homeworkFileName" class="file-upload-name">No file selected</span>
+                        </div>
+                        <button type="submit" class="btn btn-primary homework-upload-submit"
+                                th:text="${submittedHomework != null ? 'Replace homework' : 'Submit homework'}">Submit homework
                         </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Comments (full width) -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="lecture-notes-panel">
+                    <div class="lecture-notes-header">
+                        <div>
+                            <h4 class="lecture-notes-title">Comments</h4>
+                            <p class="lecture-notes-hint">Share thoughts and questions about this lecture with others.</p>
+                        </div>
+                        <button type="button" class="btn btn-primary btn-sm lecture-notes-add-btn" data-toggle="modal" data-target="#addCommentModal">
+                            <i class="ti-plus"></i> Add comment
+                        </button>
+                    </div>
+                    <div th:if="${commentError}" class="alert alert-danger lecture-notes-alert" th:text="${commentError}">Comment cannot be empty.</div>
+                    <div th:if="${#lists.isEmpty(comments)}" class="lecture-notes-empty">
+                        <i class="ti-comment lecture-notes-empty-icon"></i>
+                        <p>No comments yet.</p>
+                        <button type="button" class="btn btn-outline-primary btn-sm" data-toggle="modal" data-target="#addCommentModal">
+                            <i class="ti-plus"></i> Be the first to comment
+                        </button>
+                    </div>
+                    <div th:unless="${#lists.isEmpty(comments)}" class="lecture-notes-list">
+                        <article th:each="lectureComment : ${comments}" class="lecture-note-item lecture-comment-item">
+                            <div class="lecture-comment-body">
+                                <p class="lecture-comment-meta">
+                                    <span class="lecture-comment-author"
+                                          th:text="${lectureComment.user.firstName + ' ' + lectureComment.user.lastName}">Author</span>
+                                    ·
+                                    <span th:text="${lectureComment.creationDate}">Date</span>
+                                </p>
+                                <p class="lecture-note-preview" th:text="${#strings.abbreviate(lectureComment.content, 140)}">Comment preview…</p>
+                            </div>
+                            <div class="note-card-actions">
+                                <button type="button" class="btn btn-outline-primary btn-sm" data-toggle="modal"
+                                        th:attr="data-target='#lectureCommentViewModal' + ${lectureComment.id}">
+                                    <i class="ti-eye"></i> View
+                                </button>
+                                <button th:if="${lectureComment.user.id == user.id || session.isAdmin}"
+                                        type="button" class="btn btn-outline-secondary btn-sm" data-toggle="modal"
+                                        th:attr="data-target='#lectureCommentEditModal' + ${lectureComment.id}">
+                                    <i class="ti-pencil"></i> Edit
+                                </button>
+                                <a th:if="${lectureComment.user.id == user.id || session.isAdmin}"
+                                   class="btn btn-outline-danger btn-sm"
+                                   th:href="@{/courses/{coursePublicId}/lectures/{lecturePublicId}/comments/{commentPublicId}/delete(coursePublicId=${coursePublicId}, lecturePublicId=${lecturePublicId}, commentPublicId=${lectureComment.publicId})}"
+                                   onclick="return confirm('Delete this comment?');">
+                                    <i class="ti-trash"></i> Delete
+                                </a>
+                            </div>
+                        </article>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modals: Notes -->
+        <div class="modal fade" id="addNoteModal" tabindex="-1" role="dialog" aria-labelledby="addNoteModalLabel">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <form th:object="${newNote}"
+                          th:action="@{/courses/{coursePublicId}/lectures/{lecturePublicId}/notes/new(coursePublicId=${coursePublicId}, lecturePublicId=${lecturePublicId})}"
+                          method="post">
+                        <div class="modal-header">
+                            <h4 class="modal-title" id="addNoteModalLabel">Add new note</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        </div>
+                        <div class="modal-body">
+                            <textarea class="lecture-notes-textarea form-control" th:field="*{note}"
+                                      placeholder="Start typing your notes here…" rows="10" maxlength="2000" required></textarea>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-outline-secondary btn-sm" data-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-primary btn-sm"><i class="ti-save"></i> Save note</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div th:each="lectureNote : ${lectureNotes}" class="modal fade note-view-modal"
+             th:id="'lectureNoteViewModal' + ${lectureNote.id}" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" th:text="${lecture.title}">Lecture title</h4>
+                    </div>
+                    <div class="modal-body note-modal-body" th:text="${lectureNote.note}">Note content</div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary btn-sm" data-toggle="modal" data-dismiss="modal"
+                                th:attr="data-target='#lectureNoteEditModal' + ${lectureNote.id}">
+                            <i class="ti-pencil"></i> Edit
+                        </button>
+                        <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div th:each="lectureNote : ${lectureNotes}" class="modal fade"
+             th:id="'lectureNoteEditModal' + ${lectureNote.id}" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <form th:action="@{/courses/{coursePublicId}/lectures/{lecturePublicId}/notes/{notePublicId}/update(coursePublicId=${coursePublicId}, lecturePublicId=${lecturePublicId}, notePublicId=${lectureNote.publicId})}"
+                          method="post">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Edit note</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        </div>
+                        <div class="modal-body">
+                            <textarea class="lecture-notes-textarea form-control" name="note"
+                                      th:text="${lectureNote.note}" placeholder="Start typing your notes here…"
+                                      rows="10" maxlength="2000" required></textarea>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-outline-secondary btn-sm" data-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-primary btn-sm"><i class="ti-save"></i> Save changes</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modals: Comments -->
+        <div class="modal fade" id="addCommentModal" tabindex="-1" role="dialog" aria-labelledby="addCommentModalLabel">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <form th:object="${newComment}"
+                          th:action="@{/courses/{coursePublicId}/lectures/{lecturePublicId}/comments/createComment(coursePublicId=${coursePublicId}, lecturePublicId=${lecturePublicId})}"
+                          method="post">
+                        <div class="modal-header">
+                            <h4 class="modal-title" id="addCommentModalLabel">Add comment</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        </div>
+                        <div class="modal-body">
+                            <textarea class="lecture-notes-textarea form-control" th:field="*{content}"
+                                      placeholder="Write your comment here…" rows="6" maxlength="900" required></textarea>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-outline-secondary btn-sm" data-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-primary btn-sm"><i class="ti-check"></i> Post comment</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div th:each="lectureComment : ${comments}" class="modal fade note-view-modal"
+             th:id="'lectureCommentViewModal' + ${lectureComment.id}" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <div class="note-modal-heading">
+                            <p class="note-modal-course lecture-comment-meta">
+                                <span class="lecture-comment-author"
+                                      th:text="${lectureComment.user.firstName + ' ' + lectureComment.user.lastName}">Author</span>
+                                · <span th:text="${lectureComment.creationDate}">Date</span>
+                            </p>
+                            <h4 class="modal-title">Comment</h4>
+                        </div>
+                    </div>
+                    <div class="modal-body note-modal-body" th:text="${lectureComment.content}">Comment content</div>
+                    <div class="modal-footer">
                         <button th:if="${lectureComment.user.id == user.id || session.isAdmin}"
-                                type="button" class="btn btn-outline-secondary btn-sm" data-toggle="modal"
+                                type="button" class="btn btn-outline-secondary btn-sm" data-toggle="modal" data-dismiss="modal"
                                 th:attr="data-target='#lectureCommentEditModal' + ${lectureComment.id}">
                             <i class="ti-pencil"></i> Edit
                         </button>
-                        <a th:if="${lectureComment.user.id == user.id || session.isAdmin}"
-                           class="btn btn-outline-danger btn-sm"
-                           th:href="@{/courses/{coursePublicId}/lectures/{lecturePublicId}/comments/{commentPublicId}/delete(coursePublicId=${coursePublicId}, lecturePublicId=${lecturePublicId}, commentPublicId=${lectureComment.publicId})}"
-                           onclick="return confirm('Delete this comment?');">
-                            <i class="ti-trash"></i> Delete
-                        </a>
-                    </div>
-                </article>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal fade" id="addCommentModal" tabindex="-1" role="dialog" aria-labelledby="addCommentModalLabel">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <form th:object="${newComment}"
-                      th:action="@{/courses/{coursePublicId}/lectures/{lecturePublicId}/comments/createComment(coursePublicId=${coursePublicId}, lecturePublicId=${lecturePublicId})}"
-                      method="post">
-                    <div class="modal-header">
-                        <h4 class="modal-title" id="addCommentModalLabel">Add comment</h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <textarea class="lecture-notes-textarea form-control" th:field="*{content}"
-                                  placeholder="Write your comment here…"
-                                  rows="6" maxlength="900" required></textarea>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-outline-secondary btn-sm" data-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-primary btn-sm">
-                            <i class="ti-check"></i> Post comment
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <div th:each="lectureComment : ${comments}" class="modal fade note-view-modal"
-         th:id="'lectureCommentViewModal' + ${lectureComment.id}" tabindex="-1" role="dialog">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                    <div class="note-modal-heading">
-                        <p class="note-modal-course lecture-comment-meta">
-                            <span class="lecture-comment-author"
-                                  th:text="${lectureComment.user.firstName + ' ' + lectureComment.user.lastName}">Author</span>
-                            ·
-                            <span th:text="${lectureComment.creationDate}">Date</span>
-                        </p>
-                        <h4 class="modal-title">Comment</h4>
+                        <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal">Close</button>
                     </div>
                 </div>
-                <div class="modal-body note-modal-body" th:text="${lectureComment.content}">Comment content</div>
-                <div class="modal-footer">
-                    <button th:if="${lectureComment.user.id == user.id || session.isAdmin}"
-                            type="button" class="btn btn-outline-secondary btn-sm" data-toggle="modal"
-                            data-dismiss="modal"
-                            th:attr="data-target='#lectureCommentEditModal' + ${lectureComment.id}">
-                        <i class="ti-pencil"></i> Edit
-                    </button>
-                    <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal">Close</button>
-                </div>
             </div>
         </div>
-    </div>
-
-    <div th:each="lectureComment : ${comments}" class="modal fade"
-         th:id="'lectureCommentEditModal' + ${lectureComment.id}" tabindex="-1" role="dialog">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <form th:action="@{/courses/{coursePublicId}/lectures/{lecturePublicId}/comments/{commentPublicId}/update(coursePublicId=${coursePublicId}, lecturePublicId=${lecturePublicId}, commentPublicId=${lectureComment.publicId})}"
-                      method="post">
-                    <div class="modal-header">
-                        <h4 class="modal-title">Edit comment</h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <textarea class="lecture-notes-textarea form-control" name="content"
-                                  th:text="${lectureComment.content}"
-                                  placeholder="Write your comment here…"
-                                  rows="6" maxlength="900" required></textarea>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-outline-secondary btn-sm" data-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-primary btn-sm">
-                            <i class="ti-save"></i> Save changes
-                        </button>
-                    </div>
-                </form>
+        <div th:each="lectureComment : ${comments}" class="modal fade"
+             th:id="'lectureCommentEditModal' + ${lectureComment.id}" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <form th:action="@{/courses/{coursePublicId}/lectures/{lecturePublicId}/comments/{commentPublicId}/update(coursePublicId=${coursePublicId}, lecturePublicId=${lecturePublicId}, commentPublicId=${lectureComment.publicId})}"
+                          method="post">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Edit comment</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        </div>
+                        <div class="modal-body">
+                            <textarea class="lecture-notes-textarea form-control" name="content"
+                                      th:text="${lectureComment.content}" placeholder="Write your comment here…"
+                                      rows="6" maxlength="900" required></textarea>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-outline-secondary btn-sm" data-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-primary btn-sm"><i class="ti-save"></i> Save changes</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
@@ -492,25 +407,6 @@
 <div th:replace="fragments/headerAndFooter :: footer"></div>
 <!-- /footer -->
 
-<!-- jQuery -->
-<script src="/plugins/jQuery/jquery.min.js" th:href="@{/plugins/jQuery/jquery.min.js}"></script>
-<!-- Bootstrap JS -->
-<script src="/plugins/bootstrap/bootstrap.min.js" th:href="@{/plugins/bootstrap/bootstrap.min.js}"></script>
-<!-- slick slider -->
-<script src="/plugins/slick/slick.min.js" th:href="@{/plugins/slick/slick.min.js}"></script>
-<!-- aos -->
-<script src="/plugins/aos/aos.js" th:href="@{/plugins/aos/aos.js}"></script>
-<!-- venobox popup -->
-<script src="/plugins/venobox/venobox.min.js" th:href="@{/plugins/venobox/venobox.min.js}"></script>
-<!-- filter -->
-<script src="/plugins/filterizr/jquery.filterizr.min.js"
-        th:href="@{/plugins/filterizr/jquery.filterizr.min.js}"></script>
-<!-- google map -->
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCcABaamniA6OL5YvYSpB3pFMNrXwXnLwU"></script>
-<script src="/plugins/google-map/gmap.js" th:href="@{/plugins/google-map/gmap.js}"></script>
-
-<!-- Main Script -->
-<script src="/js/script.js" th:href="@{/js/script.js}"></script>
 <script src="/js/file-upload.js" th:src="@{/js/file-upload.js}"></script>
 <script>
     initFileUpload('homeworkFileInput', 'homeworkFileName', 'homeworkChooseBtn', 20 * 1024 * 1024);

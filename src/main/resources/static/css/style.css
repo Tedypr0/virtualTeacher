@@ -1382,22 +1382,22 @@ input[type="file"] {
 
 }
 
-img {
+#preview img {
     max-width: 60%;
     border-radius: 50%;
     width: 60%;
     margin-top: 10%;
 }
 
-body {
+.upload-demo-page {
     margin: 20px 50px;
 }
 
-h1 {
+.upload-demo-page h1 {
     font-size: 1.5em;
 }
 
-p {
+.upload-demo-page p {
     margin: 0;
 }
 

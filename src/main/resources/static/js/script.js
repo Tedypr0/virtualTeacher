@@ -49,19 +49,41 @@ $(document).ready(function() {
 		setTimeout(hidePreloader, 2000);
 	});
 
-	// Sticky Menu
-	$(window).scroll(function () {
-		var height = $('.top-header').innerHeight();
-		if ($('header').offset().top > 10) {
-			$('.top-header').addClass('hide');
-			$('.navigation').addClass('nav-bg');
-			$('.navigation').css('margin-top', '-' + height + 'px');
-		} else {
-			$('.top-header').removeClass('hide');
-			$('.navigation').removeClass('nav-bg');
-			$('.navigation').css('margin-top', '-' + 0 + 'px');
+	// Sticky header: collapse utility + portal bars when scrolling down, hide on scroll down / show on scroll up
+	$(document).ready(function () {
+		var lastScrollTop = 0;
+		var $header = $('header.header');
+
+		function updateCompactHeader() {
+			var scrollTop = $(window).scrollTop();
+
+			// Compact mode (collapse top bar) once past 32px
+			if (scrollTop > 32) {
+				$header.addClass('header-compact');
+				$('.navigation').addClass('nav-bg');
+			} else {
+				$header.removeClass('header-compact');
+				$('.navigation').removeClass('nav-bg');
+			}
+
+			// Hide on scroll down, reveal on scroll up (only after 80px from top)
+			if (scrollTop > 80) {
+				if (scrollTop > lastScrollTop + 5) {
+					$header.css('top', -$header.outerHeight() + 'px');
+				} else if (scrollTop < lastScrollTop - 5) {
+					$header.css('top', '0');
+				}
+			} else {
+				$header.css('top', '0');
+			}
+
+			lastScrollTop = scrollTop;
 		}
+
+		$(window).on('scroll', updateCompactHeader);
+		updateCompactHeader();
 	});
+
 	// navbarDropdown
 	if ($(window).width() < 992) {
 		$('.navigation .dropdown-toggle').on('click', function () {
