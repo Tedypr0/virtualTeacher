@@ -3,6 +3,7 @@ package com.example.virtual_teacher.config;
 import com.example.virtual_teacher.helpers.ImageUrlHelper;
 import com.example.virtual_teacher.services.contracts.ContactService;
 import com.example.virtual_teacher.services.contracts.UserService;
+import com.example.virtual_teacher.models.User;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,7 +58,14 @@ public class ThymeleafModelAdvice {
     }
 
     @ModelAttribute("unreadContactCount")
-    public long unreadContactCount() {
-        return contactService.countUnread();
+    public long unreadContactCount(HttpSession session) {
+        User currentUser = (User) session.getAttribute("currentUser");
+        if (currentUser == null) return 0L;
+        Boolean isAdmin = (Boolean) session.getAttribute("isAdmin");
+        Boolean isTeacher = (Boolean) session.getAttribute("isTeacher");
+        if (Boolean.TRUE.equals(isAdmin) || Boolean.TRUE.equals(isTeacher)) {
+            return contactService.countUnread(currentUser.getId());
+        }
+        return 0L;
     }
 }

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class ContactServiceImpl implements ContactService {
@@ -40,12 +41,17 @@ public class ContactServiceImpl implements ContactService {
     }
 
     @Override
-    public void markAsRead(String publicId) {
-        contactRepository.markAsRead(publicId);
+    public void markAsRead(String publicId, int userId) {
+        contactRepository.markAsRead(publicId, userId);
     }
 
     @Override
-    public long countUnread() {
-        return contactRepository.countUnread();
+    public long countUnread(int userId) {
+        return contactRepository.countUnread(userId);
+    }
+
+    @Override
+    public Set<String> getReadPublicIds(int userId) {
+        return contactRepository.getReadPublicIds(userId);
     }
 }

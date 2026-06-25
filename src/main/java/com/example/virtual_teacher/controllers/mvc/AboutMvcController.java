@@ -1,6 +1,7 @@
 package com.example.virtual_teacher.controllers.mvc;
 
 import com.example.virtual_teacher.exceptions.UnauthorizedOperationException;
+import com.example.virtual_teacher.models.User;
 import com.example.virtual_teacher.models.dtos.ContactMessageDto;
 import com.example.virtual_teacher.services.contracts.ContactService;
 import com.example.virtual_teacher.services.contracts.CourseService;
@@ -89,10 +90,13 @@ public class AboutMvcController {
     @GetMapping("/contacts/messages")
     public String showContactMessages(HttpSession session, Model model) {
         if (session.getAttribute("isAdmin") == null && session.getAttribute("isTeacher") == null) {
-            throw new UnauthorizedOperationException("Only admins and teachers can view contact messages.");
+            return "access-denied";
         }
+        User currentUser = (User) session.getAttribute("currentUser");
+        int userId = currentUser.getId();
         model.addAttribute("messages", contactService.getAll());
-        model.addAttribute("unreadCount", contactService.countUnread());
+        model.addAttribute("readPublicIds", contactService.getReadPublicIds(userId));
+        model.addAttribute("unreadCount", contactService.countUnread(userId));
         model.addAttribute("teacherApplicationsNumber", userService.getAllTeacherApplications().size());
         return "contact-messages";
     }
@@ -102,7 +106,8 @@ public class AboutMvcController {
         if (session.getAttribute("isAdmin") == null && session.getAttribute("isTeacher") == null) {
             throw new UnauthorizedOperationException("Only admins and teachers can perform this action.");
         }
-        contactService.markAsRead(publicId);
+        User currentUser = (User) session.getAttribute("currentUser");
+        contactService.markAsRead(publicId, currentUser.getId());
         return "redirect:/about/contacts/messages";
     }
 }

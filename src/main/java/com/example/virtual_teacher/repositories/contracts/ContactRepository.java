@@ -3,6 +3,7 @@ package com.example.virtual_teacher.repositories.contracts;
 import com.example.virtual_teacher.models.ContactMessage;
 
 import java.util.List;
+import java.util.Set;
 
 public interface ContactRepository {
 
@@ -12,7 +13,9 @@ public interface ContactRepository {
 
     ContactMessage getByPublicId(String publicId);
 
-    void markAsRead(String publicId);
+    void markAsRead(String publicId, int userId);
 
-    long countUnread();
+    long countUnread(int userId);
+
+    Set<String> getReadPublicIds(int userId);
 }

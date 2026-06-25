@@ -4,6 +4,7 @@ import com.example.virtual_teacher.models.ContactMessage;
 import com.example.virtual_teacher.models.dtos.ContactMessageDto;
 
 import java.util.List;
+import java.util.Set;
 
 public interface ContactService {
 
@@ -13,7 +14,9 @@ public interface ContactService {
 
     ContactMessage getByPublicId(String publicId);
 
-    void markAsRead(String publicId);
+    void markAsRead(String publicId, int userId);
 
-    long countUnread();
+    long countUnread(int userId);
+
+    Set<String> getReadPublicIds(int userId);
 }

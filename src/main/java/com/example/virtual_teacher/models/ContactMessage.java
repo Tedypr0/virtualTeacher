@@ -35,12 +35,8 @@ public class ContactMessage implements PublicIdentifiable {
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
-    @Column(name = "is_read", nullable = false)
-    private boolean isRead;
-
     public ContactMessage() {
         this.createdAt = LocalDateTime.now();
-        this.isRead = false;
     }
 
     @PrePersist
@@ -71,7 +67,4 @@ public class ContactMessage implements PublicIdentifiable {
 
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
-
-    public boolean isRead() { return isRead; }
-    public void setRead(boolean read) { isRead = read; }
 }

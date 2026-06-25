@@ -47,18 +47,18 @@
 
         <div th:unless="${#lists.isEmpty(messages)}" class="contact-messages-list">
             <div th:each="msg : ${messages}"
-                 th:classappend="${!msg.read} ? 'contact-message-item--unread' : ''"
+                 th:classappend="${!readPublicIds.contains(msg.publicId)} ? 'contact-message-item--unread' : ''"
                  class="contact-message-item lecture-notes-panel mb-3">
                 <div class="d-flex justify-content-between align-items-start flex-wrap">
                     <div class="contact-message-meta mb-2">
-                        <span class="contact-message-badge" th:unless="${msg.read}">NEW</span>
+                        <span class="contact-message-badge" th:unless="${readPublicIds.contains(msg.publicId)}">NEW</span>
                         <strong th:text="${msg.senderName}">Name</strong>
                         <span class="text-muted mx-1">·</span>
                         <a th:href="'mailto:' + ${msg.senderEmail}" class="text-color" th:text="${msg.senderEmail}">email</a>
                         <span class="text-muted mx-1">·</span>
                         <span class="text-muted" th:text="${#temporals.format(msg.createdAt, 'dd MMM yyyy, HH:mm')}">date</span>
                     </div>
-                    <form th:unless="${msg.read}"
+                    <form th:unless="${readPublicIds.contains(msg.publicId)}"
                           th:action="@{/about/contacts/messages/{id}/read(id=${msg.publicId})}"
                           method="POST">
                         <button type="submit" class="btn btn-outline-primary btn-sm">

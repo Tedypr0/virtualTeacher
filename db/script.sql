@@ -282,3 +282,30 @@ create table users_grades
         foreign key (user_id) references users (user_id)
 );
 
+
+create table contact_messages
+(
+    contact_message_id int auto_increment
+        primary key,
+    public_id          varchar(36)  not null,
+    sender_name        varchar(255) not null,
+    sender_email       varchar(255) not null,
+    subject            varchar(255) not null,
+    message            text         not null,
+    created_at         datetime     not null,
+    constraint contact_messages_public_id_uindex
+        unique (public_id)
+);
+
+create table contact_message_reads
+(
+    contact_message_id int not null,
+    user_id            int not null,
+    primary key (contact_message_id, user_id),
+    constraint contact_message_reads_contact_messages_fk
+        foreign key (contact_message_id) references contact_messages (contact_message_id)
+            on delete cascade,
+    constraint contact_message_reads_users_fk
+        foreign key (user_id) references users (user_id)
+            on delete cascade
+);
