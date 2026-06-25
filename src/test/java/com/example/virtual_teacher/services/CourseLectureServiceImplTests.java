@@ -5,6 +5,7 @@ import com.example.virtual_teacher.models.Course;
 import com.example.virtual_teacher.models.CourseLecture;
 import com.example.virtual_teacher.models.Lecture;
 import com.example.virtual_teacher.repositories.contracts.CourseLectureRepository;
+import com.example.virtual_teacher.repositories.contracts.CourseRepository;
 import com.example.virtual_teacher.repositories.contracts.LectureRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,6 +23,8 @@ public class CourseLectureServiceImplTests {
     CourseLectureRepository mockRepository;
     @Mock
     LectureRepository lectureRepository;
+    @Mock
+    CourseRepository courseRepository;
 
     @InjectMocks
     CourseLectureServiceImpl service;
@@ -31,9 +34,13 @@ public class CourseLectureServiceImplTests {
         //Arrange
         CourseLecture mockCourseLecture = Helpers.createMockCourseLecture();
         Lecture mockLecture = Helpers.createMockLecture();
+        Course mockCourse = Helpers.createMockCourse();
+        mockLecture.setAddedToCourse(true);
 
         Mockito.when(lectureRepository.getById(mockCourseLecture.getLectureId()))
                 .thenReturn(mockLecture);
+        Mockito.when(courseRepository.getById(mockCourseLecture.getCourseId()))
+                .thenReturn(mockCourse);
 
         Mockito.when(mockRepository.isAddedToCourse(mockCourseLecture.getCourseId(),mockCourseLecture.getLectureId()))
                 .thenReturn(true);
@@ -44,6 +51,7 @@ public class CourseLectureServiceImplTests {
         service.createOrDeleteCourseLecture(mockCourseLecture);
 
         Mockito.verify(mockRepository, Mockito.times(1)).delete(mockCourseLecture.getId());
+        Mockito.verify(lectureRepository, Mockito.times(1)).update(mockLecture);
     }
 
     @Test
@@ -51,16 +59,21 @@ public class CourseLectureServiceImplTests {
         //Arrange
         CourseLecture mockCourseLecture = Helpers.createMockCourseLecture();
         Lecture mockLecture = Helpers.createMockLecture();
+        Course mockCourse = Helpers.createMockCourse();
+        mockLecture.setAddedToCourse(false);
 
         Mockito.when(lectureRepository.getById(mockCourseLecture.getLectureId()))
                 .thenReturn(mockLecture);
+        Mockito.when(courseRepository.getById(mockCourseLecture.getCourseId()))
+                .thenReturn(mockCourse);
 
         Mockito.when(mockRepository.isAddedToCourse(mockCourseLecture.getCourseId(),mockCourseLecture.getLectureId()))
                 .thenReturn(false);
 
         service.createOrDeleteCourseLecture(mockCourseLecture);
 
-        Mockito.verify(mockRepository, Mockito.times(1)).create(mockCourseLecture);
+        Mockito.verify(mockRepository, Mockito.times(1)).create(Mockito.any(CourseLecture.class));
+        Mockito.verify(lectureRepository, Mockito.times(1)).update(mockLecture);
     }
 
     @Test

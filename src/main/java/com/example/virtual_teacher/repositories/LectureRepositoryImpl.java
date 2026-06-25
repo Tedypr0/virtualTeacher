@@ -51,8 +51,21 @@ public class LectureRepositoryImpl implements LectureRepository {
     @Override
     public List<Lecture> lecturesByCourseId(int id) {
         try (Session session = sessionFactory.openSession()) {
-            Query<Lecture> query = session.createQuery("from Lecture l where l.course.id = :id", Lecture.class);
-                    query.setParameter("id", id);
+            Query<Lecture> query = session.createQuery(
+                    "from Lecture l where l.isDeleted = false and l.course.id = :id",
+                    Lecture.class);
+            query.setParameter("id", id);
+            return query.getResultList();
+        }
+    }
+
+    @Override
+    public List<Lecture> getPublishedByCourseId(int courseId) {
+        try (Session session = sessionFactory.openSession()) {
+            Query<Lecture> query = session.createQuery(
+                    "from Lecture l where l.isDeleted = false and l.isAddedToCourse = true and l.course.id = :courseId",
+                    Lecture.class);
+            query.setParameter("courseId", courseId);
             return query.getResultList();
         }
     }
@@ -117,6 +130,21 @@ public class LectureRepositoryImpl implements LectureRepository {
         try (Session session = sessionFactory.openSession()) {
             Query<Lecture> query = session.createQuery("select l from Lecture l where isDeleted = false and l.teacher.id = :id")
                     .setParameter("id", id);
+            return query.getResultList();
+        }
+    }
+
+    @Override
+    public List<Lecture> getByCourseAndTeacher(int courseId, int teacherId) {
+        try (Session session = sessionFactory.openSession()) {
+            Query<Lecture> query = session.createQuery(
+                    "select distinct l from Lecture l " +
+                            "where l.isDeleted = false and l.teacher.id = :teacherId " +
+                            "and (l.course.id = :courseId or l.id in (" +
+                            "select cl.lectureId from CourseLecture cl where cl.courseId = :courseId))",
+                    Lecture.class);
+            query.setParameter("courseId", courseId);
+            query.setParameter("teacherId", teacherId);
             return query.getResultList();
         }
     }

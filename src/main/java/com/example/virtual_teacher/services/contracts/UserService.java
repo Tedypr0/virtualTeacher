@@ -46,4 +46,6 @@ public interface UserService {
 
     long getAllTeachers();
     long getAllStudents();
+
+    List<User> getTeachers();
 }

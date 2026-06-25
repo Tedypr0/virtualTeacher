@@ -166,6 +166,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public List<User> getTeachers() {
+        return userRepository.getTeachers();
+    }
+
+    @Override
     public long getAllStudents() {
         return userRepository.getAllStudents();
     }

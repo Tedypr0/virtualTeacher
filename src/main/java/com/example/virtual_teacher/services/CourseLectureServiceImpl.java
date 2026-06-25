@@ -1,6 +1,7 @@
 package com.example.virtual_teacher.services;
 
 import com.example.virtual_teacher.exceptions.DuplicateEntityException;
+import com.example.virtual_teacher.models.Course;
 import com.example.virtual_teacher.models.CourseLecture;
 import com.example.virtual_teacher.models.Lecture;
 import com.example.virtual_teacher.repositories.contracts.CourseLectureRepository;
@@ -30,18 +31,27 @@ public class CourseLectureServiceImpl implements CourseLectureService {
     @Override
     public void createOrDeleteCourseLecture(CourseLecture courseLecture) {
         Lecture lecture = lectureRepository.getById(courseLecture.getLectureId());
-        boolean isLectureAddedToCourse = courseLectureRepository.isAddedToCourse(courseLecture.getCourseId(), courseLecture.getLectureId());
-        lecture.setAddedToCourse(!lecture.isAddedToCourse());
-        lectureRepository.update(lecture);
+        Course course = courseRepository.getById(courseLecture.getCourseId());
+        int courseId = course.getId();
+        int lectureId = lecture.getId();
 
-        if (isLectureAddedToCourse) {
-            CourseLecture courseLecture1 = courseLectureRepository.getByCourseAndLectureId(courseLecture.getCourseId(),
-                    courseLecture.getLectureId());
-            courseLectureRepository.delete(courseLecture1.getId());
+        if (lecture.isAddedToCourse()) {
+            lecture.setAddedToCourse(false);
+            if (courseLectureRepository.isAddedToCourse(courseId, lectureId)) {
+                CourseLecture existing = courseLectureRepository.getByCourseAndLectureId(courseId, lectureId);
+                courseLectureRepository.delete(existing.getId());
+            }
         } else {
-            courseLectureRepository.create(courseLecture);
+            lecture.setAddedToCourse(true);
+            lecture.setCourse(course);
+            if (!courseLectureRepository.isAddedToCourse(courseId, lectureId)) {
+                CourseLecture link = new CourseLecture();
+                link.setCourseId(courseId);
+                link.setLectureId(lectureId);
+                courseLectureRepository.create(link);
+            }
         }
-
+        lectureRepository.update(lecture);
     }
 
     @Override

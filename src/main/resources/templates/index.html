@@ -1,44 +1,7 @@
 <!DOCTYPE html>
 
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-
-  <!-- Basic Page Needs
-	================================================== -->
-  <meta charset="utf-8">
-  <title>Felerik Academy - Education HTML Template</title>
-
-  <!-- Mobile Specific Metas
-	================================================== -->
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="description" content="Construction Html5 Template">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-  <meta name="author" content="Themefisher">
-  <meta name="generator" content="Themefisher Educenter HTML Template v1.0">
-
-  <!-- ** ../plugins Needed for the Project ** -->
-  <!-- Bootstrap -->
-  <link rel="stylesheet" href="/plugins/bootstrap/bootstrap.min.css" th:href="@{/plugins/bootstrap/bootstrap.min.css}">
-  <!-- slick slider -->
-  <link rel="stylesheet" href="/plugins/slick/slick.css" th:href="@{/plugins/slick/slick.css}">
-  <!-- themefy-icon -->
-  <link rel="stylesheet" href="/plugins/themify-icons/themify-icons.css" th:href="@{/plugins/themify-icons/themify-icons.css}">
-  <!-- animation css -->
-  <link rel="stylesheet" href="/plugins/animate/animate.css" th:href="@{/plugins/animate/animate.css}">
-  <!-- aos -->
-  <link rel="stylesheet" href="/plugins/aos/aos.css" th:href="@{/plugins/aos/aos.css}">
-  <!-- venobox popup -->
-  <link rel="stylesheet" href="/plugins/venobox/venobox.css" th:href="@{/plugins/venobox/venobox.css}">
-
-  <!-- Main Stylesheet -->
-  <link href="/css/style.css" rel="stylesheet" th:href="@{/css/style.css}">
-  <link href="/css/styleUsers.css" rel="stylesheet" th:href="@{/css/styleUsers.css}">
-
-  <!--Favicon-->
-  <link rel="shortcut icon" href="/images/favicon.png" type="image/x-icon">
-  <link rel="icon" href="/images/favicon.png" type="image/x-icon">
-
-</head>
+<head th:replace="~{fragments/head :: head('Home')}"></head>
 
 <body>
 
@@ -150,60 +113,33 @@
       <div class="col-12">
         <h2 class="section-title">Our Teachers</h2>
       </div>
-      <!-- teacher -->
-      <div class="col-lg-4 col-sm-6 mb-5 mb-lg-0">
-        <div class="card border-0 rounded-0 hover-shadow">
-          <img class="card-img-top rounded-0 teacher-images" src="/images/teachers/Bobi.png" alt="teacher">
+    </div>
+
+    <div th:if="${#lists.isEmpty(teachers)}" class="lectures-empty-state">
+      <i class="ti-user lecture-notes-empty-icon"></i>
+      <p>No teachers to display yet.</p>
+    </div>
+
+    <div th:unless="${#lists.isEmpty(teachers)}" class="row justify-content-center">
+      <div th:each="teacher, stat : ${teachers}" th:if="${stat.index < 3}" class="col-lg-4 col-sm-6 mb-5 mb-lg-0">
+        <div class="card border-0 rounded-0 hover-shadow teacher-list-card h-100">
+          <div class="teacher-list-card-thumb">
+            <img class="teacher-list-card-img"
+                 th:src="${teacher.image}"
+                 th:alt="${teacher.firstName + ' ' + teacher.lastName}"
+                 th:attr="onerror=|this.onerror=null;this.src='@{${defaultAvatarImage}}';|">
+          </div>
           <div class="card-body">
-            <a href="teacher-single.html">
-              <h4 class="card-title">Boyan Hadjiev</h4>
+            <a th:href="@{/about/teachers/{publicId}(publicId=${teacher.publicId})}">
+              <h4 class="card-title mb-0" th:text="${teacher.firstName + ' ' + teacher.lastName}">Teacher Name</h4>
             </a>
-            <p>Teacher</p>
-            <ul class="list-inline">
-              <li class="list-inline-item"><a class="text-color" href="https://facebook.com/themefisher"><i class="ti-facebook"></i></a></li>
-              <li class="list-inline-item"><a class="text-color" href="https://twitter.com/themefisher"><i class="ti-twitter-alt"></i></a></li>
-              <li class="list-inline-item"><a class="text-color" href="https://github.com/themefisher"><i class="ti-google"></i></a></li>
-              <li class="list-inline-item"><a class="text-color" href="https://instagram.com/themefisher/"><i class="ti-linkedin"></i></a></li>
-            </ul>
           </div>
         </div>
       </div>
-      <!-- teacher -->
-      <div class="col-lg-4 col-sm-6 mb-5 mb-lg-0">
-        <div class="card border-0 rounded-0 hover-shadow">
-          <img class="card-img-top rounded-0 teacher-images" src="/images/teachers/Victor.jpg" alt="teacher">
-          <div class="card-body">
-            <a href="teacher-single.html">
-              <h4 class="card-title">Viktor Valtchev</h4>
-            </a>
-            <p>Teacher</p>
-            <ul class="list-inline">
-              <li class="list-inline-item"><a class="text-color" href="https://facebook.com/themefisher"><i class="ti-facebook"></i></a></li>
-              <li class="list-inline-item"><a class="text-color" href="https://twitter.com/themefisher"><i class="ti-twitter-alt"></i></a></li>
-              <li class="list-inline-item"><a class="text-color" href="https://github.com/themefisher"><i class="ti-google"></i></a></li>
-              <li class="list-inline-item"><a class="text-color" href="https://instagram.com/themefisher/"><i class="ti-linkedin"></i></a></li>
-            </ul>
-          </div>
-        </div>
-      </div>
-      <!-- teacher -->
-      <div class="col-lg-4 col-sm-6 mb-5 mb-lg-0">
-        <div class="card border-0 rounded-0 hover-shadow">
-          <img class="card-img-top rounded-0 teacher-images" src="/images/teachers/Pesho.jpg" alt="teacher">
-          <div class="card-body">
-            <a href="teacher-single.html">
-              <h4 class="card-title">Petar Raykov</h4>
-            </a>
-            <p>Teacher</p>
-            <ul class="list-inline">
-              <li class="list-inline-item"><a class="text-color" href="https://facebook.com/themefisher"><i class="ti-facebook"></i></a></li>
-              <li class="list-inline-item"><a class="text-color" href="https://twitter.com/themefisher"><i class="ti-twitter-alt"></i></a></li>
-              <li class="list-inline-item"><a class="text-color" href="https://github.com/themefisher"><i class="ti-google"></i></a></li>
-              <li class="list-inline-item"><a class="text-color" href="https://instagram.com/themefisher/"><i class="ti-linkedin"></i></a></li>
-            </ul>
-          </div>
-        </div>
-      </div>
+    </div>
+
+    <div th:unless="${#lists.isEmpty(teachers)}" class="text-center mt-2">
+      <a class="btn btn-primary" th:href="@{/about/teachers}">View All Teachers</a>
     </div>
   </div>
 </section>
@@ -213,24 +149,6 @@
 <div th:replace="fragments/headerAndFooter :: footer"></div>
 <!-- /footer -->
 
-<!-- jQuery -->
-<script src="/plugins/jQuery/jquery.min.js" th:href="@{/plugins/jQuery/jquery.min.js}"></script>
-<!-- Bootstrap JS -->
-<script src="/plugins/bootstrap/bootstrap.min.js" th:href="@{/plugins/bootstrap/bootstrap.min.js}"></script>
-<!-- slick slider -->
-<script src="/plugins/slick/slick.min.js" th:href="@{/plugins/slick/slick.min.js}"></script>
-<!-- aos -->
-<script src="/plugins/aos/aos.js" th:href="@{/plugins/aos/aos.js}"></script>
-<!-- venobox popup -->
-<script src="/plugins/venobox/venobox.min.js" th:href="@{/plugins/venobox/venobox.min.js}"></script>
-<!-- filter -->
-<script src="/plugins/filterizr/jquery.filterizr.min.js" th:href="@{/plugins/filterizr/jquery.filterizr.min.js}"></script>
-<!-- google map -->
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCcABaamniA6OL5YvYSpB3pFMNrXwXnLwU"></script>
-<script src="/plugins/google-map/gmap.js" th:href="@{/plugins/google-map/gmap.js}"></script>
-
-<!-- Main Script -->
-<script src="/js/script.js" th:href="@{/js/script.js}"></script>
 
 </body>
 </html>

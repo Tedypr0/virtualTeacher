@@ -1,15 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-  <meta charset="utf-8">
-  <title>My Notes</title>
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-  <link rel="stylesheet" href="/plugins/bootstrap/bootstrap.min.css" th:href="@{/plugins/bootstrap/bootstrap.min.css}">
-  <link rel="stylesheet" href="/plugins/themify-icons/themify-icons.css" th:href="@{/plugins/themify-icons/themify-icons.css}">
-  <link href="/css/style.css" rel="stylesheet" th:href="@{/css/style.css}">
-  <link href="/css/styleUsers.css" rel="stylesheet" th:href="@{/css/styleUsers.css}">
-</head>
+<head th:replace="~{fragments/head :: head('My Notes')}"></head>
 <body>
 
 <div class="preloader">
@@ -88,9 +79,6 @@
 
 <div th:replace="fragments/headerAndFooter :: footer"></div>
 
-<script src="/plugins/jQuery/jquery.min.js" th:src="@{/plugins/jQuery/jquery.min.js}"></script>
-<script src="/plugins/bootstrap/bootstrap.min.js" th:src="@{/plugins/bootstrap/bootstrap.min.js}"></script>
-<script src="/js/script.js" th:src="@{/js/script.js}"></script>
 
 </body>
 </html>

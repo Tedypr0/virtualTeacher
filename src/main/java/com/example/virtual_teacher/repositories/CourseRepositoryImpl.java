@@ -114,6 +114,13 @@ public class CourseRepositoryImpl implements CourseRepository {
     public void updateDraftStatus(int id, boolean isDraft) {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
+            Course course = session.get(Course.class, id);
+            if (course == null) {
+                throw new EntityNotFoundException("Course", id);
+            }
+            course.setDraft(isDraft);
+            session.merge(course);
+            session.getTransaction().commit();
         }
     }
 

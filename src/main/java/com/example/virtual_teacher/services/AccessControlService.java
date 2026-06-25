@@ -3,6 +3,7 @@ package com.example.virtual_teacher.services;
 import com.example.virtual_teacher.exceptions.EntityNotFoundException;
 import com.example.virtual_teacher.exceptions.UnauthorizedOperationException;
 import com.example.virtual_teacher.models.*;
+import com.example.virtual_teacher.services.contracts.CourseLectureService;
 import com.example.virtual_teacher.services.contracts.UserService;
 import org.springframework.stereotype.Service;
 
@@ -13,9 +14,11 @@ public class AccessControlService {
     private static final String ADMIN_ONLY = "Only administrators can perform this action.";
 
     private final UserService userService;
+    private final CourseLectureService courseLectureService;
 
-    public AccessControlService(UserService userService) {
+    public AccessControlService(UserService userService, CourseLectureService courseLectureService) {
         this.userService = userService;
+        this.courseLectureService = courseLectureService;
     }
 
     public void assertAdmin(User authUser) {
@@ -44,6 +47,9 @@ public class AccessControlService {
         if (canManageCourse(authUser, course)) {
             return;
         }
+        if (!lecture.isAddedToCourse()) {
+            throw new EntityNotFoundException("Lecture", lecture.getId());
+        }
         if (userService.isEnrolled(course.getId(), authUser.getId())) {
             return;
         }
@@ -52,6 +58,12 @@ public class AccessControlService {
 
     public void assertCanModifyLecture(User authUser, Course course, Lecture lecture) {
         assertCanModifyCourse(authUser, course);
+        if (lecture == null || lecture.isDeleted()) {
+            throw new EntityNotFoundException("Lecture", "unknown");
+        }
+        if (lecture.getTeacher() != null && authUser.getId() == lecture.getTeacher().getId()) {
+            return;
+        }
         assertLectureBelongsToCourse(lecture, course);
     }
 
@@ -68,6 +80,12 @@ public class AccessControlService {
 
     public void assertCanViewProfileImage(User authUser, User targetUser) {
         if (authUser.isAdmin() || authUser.getId() == targetUser.getId()) {
+            return;
+        }
+        if (authUser.isTeacher()) {
+            return;
+        }
+        if (targetUser.isTeacher()) {
             return;
         }
         throw new UnauthorizedOperationException(ACCESS_DENIED);
@@ -150,8 +168,12 @@ public class AccessControlService {
         if (lecture == null || lecture.isDeleted()) {
             throw new EntityNotFoundException("Lecture", "unknown");
         }
-        if (lecture.getCourse() == null || lecture.getCourse().getId() != course.getId()) {
-            throw new EntityNotFoundException("Lecture", lecture.getId());
+        if (lecture.getCourse() != null && lecture.getCourse().getId() == course.getId()) {
+            return;
         }
+        if (courseLectureService.isAddedToCourse(course.getId(), lecture.getId())) {
+            return;
+        }
+        throw new EntityNotFoundException("Lecture", lecture.getId());
     }
 }

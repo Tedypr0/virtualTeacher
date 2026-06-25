@@ -40,6 +40,8 @@ public interface UserRepository {
     void deleteEnrollmentsByCourseId(int courseId);
 
     long getAllTeachers();
+
+    List<User> getTeachers();
     long getAllStudents();
 
     void updateProfileImage(int userId, byte[] data, String contentType);

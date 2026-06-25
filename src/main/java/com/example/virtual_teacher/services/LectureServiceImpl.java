@@ -66,11 +66,12 @@ public class LectureServiceImpl implements LectureService {
 
     @Override
     public List<Lecture> getByCourseId(int id) {
-        try {
-            return lectureRepository.lecturesByCourseId(id);
-        } catch (EntityNotFoundException e) {
-            throw new EntityNotFoundException("Course", id);
-        }
+        return lectureRepository.lecturesByCourseId(id);
+    }
+
+    @Override
+    public List<Lecture> getPublishedByCourseId(int courseId) {
+        return lectureRepository.getPublishedByCourseId(courseId);
     }
 
     @Override
@@ -164,5 +165,10 @@ public class LectureServiceImpl implements LectureService {
         } catch (EntityNotFoundException e) {
             throw new EntityNotFoundException("Teacher", id, "lectures");
         }
+    }
+
+    @Override
+    public List<Lecture> getByCourseAndTeacher(int courseId, int teacherId) {
+        return lectureRepository.getByCourseAndTeacher(courseId, teacherId);
     }
 }

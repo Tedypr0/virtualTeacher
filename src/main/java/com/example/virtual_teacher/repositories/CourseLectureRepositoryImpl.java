@@ -1,5 +1,6 @@
 package com.example.virtual_teacher.repositories;
 
+import com.example.virtual_teacher.exceptions.EntityNotFoundException;
 import com.example.virtual_teacher.models.CourseLecture;
 
 import com.example.virtual_teacher.repositories.contracts.CourseLectureRepository;
@@ -8,6 +9,8 @@ import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository
 public class CourseLectureRepositoryImpl implements CourseLectureRepository {
@@ -23,7 +26,9 @@ public class CourseLectureRepositoryImpl implements CourseLectureRepository {
     @Override
     public void create(CourseLecture courseLecture) {
         try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
             session.persist(courseLecture);
+            session.getTransaction().commit();
         }
     }
 
@@ -65,7 +70,11 @@ public class CourseLectureRepositoryImpl implements CourseLectureRepository {
                     "and lectureId = :lectureId", CourseLecture.class);
             query.setParameter("courseId", courseId);
             query.setParameter("lectureId", lectureId);
-            return query.getResultList().get(0);
+            List<CourseLecture> results = query.getResultList();
+            if (results.isEmpty()) {
+                throw new EntityNotFoundException("CourseLecture", courseId + "/" + lectureId);
+            }
+            return results.get(0);
         }
     }
 

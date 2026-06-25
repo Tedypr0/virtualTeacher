@@ -95,7 +95,7 @@ public class LectureMvcController {
             accessControlService.assertCanViewCourse(authUser, course);
             model.addAttribute("course", course);
             model.addAttribute("coursePublicId", course.getPublicId());
-            model.addAttribute("lectures", lectureService.getAllByTeacherId(authUser.getId()));
+            model.addAttribute("lectures", lectureService.getByCourseAndTeacher(course.getId(), authUser.getId()));
             model.addAttribute("teacherApplicationsNumber", userService.getAllTeacherApplications().size());
             return "lectures";
         } catch (AuthenticationFailureException e) {
@@ -201,9 +201,10 @@ public class LectureMvcController {
                                 Model model,
                                 HttpSession session) {
         User authUser;
+        Course course;
         try {
             authUser = authenticationHelper.tryGetUser(session);
-            Course course = courseService.getByPublicId(coursePublicId);
+            course = courseService.getByPublicId(coursePublicId);
             accessControlService.assertCanModifyCourse(authUser, course);
         } catch (AuthenticationFailureException e) {
             return "redirect:/auth/login";
@@ -225,6 +226,7 @@ public class LectureMvcController {
             video.setVideoUrl(newLectureDto.getVideoUrl());
             videoService.create(video);
             Lecture lecture = lectureMapper.newLectureDtoToObj(newLectureDto, authUser, video);
+            lecture.setCourse(course);
             lectureService.create(lecture, authUser);
             return "redirect:/courses/" + coursePublicId + "/lectures";
         } catch (DuplicateEntityException e) {

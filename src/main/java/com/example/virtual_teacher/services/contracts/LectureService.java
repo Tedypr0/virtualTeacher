@@ -18,6 +18,8 @@ public interface LectureService {
 
     List<Lecture> getByCourseId(int id);
 
+    List<Lecture> getPublishedByCourseId(int courseId);
+
     Lecture create(Lecture lecture, User authUser);
     long lectureCount();
 
@@ -30,4 +32,6 @@ public interface LectureService {
     String saveHomework(MultipartFile multipartFile, Lecture lecture, User authUser) throws IOException;
 
     List<Lecture> getAllByTeacherId(int id);
+
+    List<Lecture> getByCourseAndTeacher(int courseId, int teacherId);
 }

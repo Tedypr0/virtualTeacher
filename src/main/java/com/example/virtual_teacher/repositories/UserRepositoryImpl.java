@@ -183,6 +183,16 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
+    public List<User> getTeachers() {
+        try (Session session = sessionFactory.openSession()) {
+            Query<User> query = session.createQuery(
+                    "from User u where u.role.id = 2 and u.isDeleted = false order by u.firstName, u.lastName",
+                    User.class);
+            return query.getResultList();
+        }
+    }
+
+    @Override
     public long getAllStudents() {
         try(Session session = sessionFactory.openSession()){
             Query<User> query = session.createQuery("from User u where u.role.id = 1 ", User.class);

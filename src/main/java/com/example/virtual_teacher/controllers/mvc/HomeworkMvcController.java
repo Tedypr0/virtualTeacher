@@ -51,18 +51,8 @@ public class HomeworkMvcController {
     }
 
     @GetMapping("/myCourses")
-    public String showAllCoursesByStudentId(HttpSession session, Model model) {
-
-        User authUser;
-        try {
-            authUser = authenticationHelper.tryGetUser(session);
-        } catch (AuthenticationFailureException e) {
-            model.addAttribute("error", e.getMessage());
-            return "redirect:/auth/login";
-        }
-        model.addAttribute("coursesByUserId", courseService.getByUserId(authUser.getId()));
-        model.addAttribute("currentUser", authUser);
-        return "my-courses-student";
+    public String showAllCoursesByStudentId() {
+        return "redirect:/courses/mine";
     }
 
     @GetMapping("/myHomeworks")

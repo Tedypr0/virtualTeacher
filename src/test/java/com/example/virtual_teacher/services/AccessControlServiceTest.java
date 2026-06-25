@@ -6,6 +6,7 @@ import com.example.virtual_teacher.exceptions.UnauthorizedOperationException;
 import com.example.virtual_teacher.models.Course;
 import com.example.virtual_teacher.models.Lecture;
 import com.example.virtual_teacher.models.User;
+import com.example.virtual_teacher.services.contracts.CourseLectureService;
 import com.example.virtual_teacher.services.contracts.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,6 +24,9 @@ class AccessControlServiceTest {
     @Mock
     private UserService userService;
 
+    @Mock
+    private CourseLectureService courseLectureService;
+
     private AccessControlService accessControlService;
 
     private User student;
@@ -34,12 +38,16 @@ class AccessControlServiceTest {
 
     @BeforeEach
     void setUp() {
-        accessControlService = new AccessControlService(userService);
+        accessControlService = new AccessControlService(userService, courseLectureService);
         student = Helpers.createMockStudent();
+        student.setId(10);
         teacher = Helpers.createMockTeacher();
+        teacher.setId(20);
         admin = Helpers.createMockAdmin();
+        admin.setId(30);
         publishedCourse = Helpers.createMockCourse();
         publishedCourse.setPublicId("course-published-uuid");
+        publishedCourse.setTeacher(teacher);
         draftCourse = Helpers.createMockCourse();
         draftCourse.setDraft(true);
         draftCourse.setPublicId("course-draft-uuid");
@@ -47,6 +55,7 @@ class AccessControlServiceTest {
         lecture = Helpers.createMockLecture();
         lecture.setPublicId("lecture-uuid");
         lecture.setCourse(publishedCourse);
+        lecture.setAddedToCourse(true);
     }
 
     @Test
@@ -82,8 +91,6 @@ class AccessControlServiceTest {
 
     @Test
     void assertCanViewLecture_allowsCourseTeacherWithoutEnrollment() {
-        publishedCourse.setTeacher(teacher);
-
         assertDoesNotThrow(() -> accessControlService.assertCanViewLecture(teacher, publishedCourse, lecture));
     }
 
@@ -108,16 +115,12 @@ class AccessControlServiceTest {
 
     @Test
     void assertCanGradeHomework_deniesStudent() {
-        publishedCourse.setTeacher(teacher);
-
         assertThrows(UnauthorizedOperationException.class,
                 () -> accessControlService.assertCanGradeHomework(student, publishedCourse));
     }
 
     @Test
     void assertCanGradeHomework_allowsCourseTeacher() {
-        publishedCourse.setTeacher(teacher);
-
         assertDoesNotThrow(() -> accessControlService.assertCanGradeHomework(teacher, publishedCourse));
     }
 }

@@ -38,6 +38,7 @@ public class HomeMvcController {
     public String showHomePage(Model model) {
         model.addAttribute("userList", userService.getAll());
         model.addAttribute("teacherApplicationsNumber", userService.getAllTeacherApplications().size());
+        model.addAttribute("teachers", userService.getTeachers());
         return "index";
     }
 

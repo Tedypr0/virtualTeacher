@@ -1,44 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-
-    <!-- Basic Page Needs
-      ================================================== -->
-    <meta charset="utf-8">
-    <title>Educenter - Education HTML Template</title>
-
-    <!-- Mobile Specific Metas
-      ================================================== -->
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="description" content="Construction Html5 Template">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-    <meta name="author" content="Themefisher">
-    <meta name="generator" content="Themefisher Educenter HTML Template v1.0">
-
-    <!-- ** ../plugins Needed for the Project ** -->
-    <!-- Bootstrap -->
-    <link rel="stylesheet" href="/plugins/bootstrap/bootstrap.min.css"
-          th:href="@{/plugins/bootstrap/bootstrap.min.css}">
-    <!-- slick slider -->
-    <link rel="stylesheet" href="/plugins/slick/slick.css" th:href="@{/plugins/slick/slick.css}">
-    <!-- themefy-icon -->
-    <link rel="stylesheet" href="/plugins/themify-icons/themify-icons.css"
-          th:href="@{/plugins/themify-icons/themify-icons.css}">
-    <!-- animation css -->
-    <link rel="stylesheet" href="/plugins/animate/animate.css" th:href="@{/plugins/animate/animate.css}">
-    <!-- aos -->
-    <link rel="stylesheet" href="/plugins/aos/aos.css" th:href="@{/plugins/aos/aos.css}">
-    <!-- venobox popup -->
-    <link rel="stylesheet" href="/plugins/venobox/venobox.css" th:href="@{/plugins/venobox/venobox.css}">
-
-    <!-- Main Stylesheet -->
-    <link href="/css/style.css" rel="stylesheet" th:href="@{/css/style.css}">
-    <link href="/css/styleUsers.css" rel="stylesheet" th:href="@{/css/styleUsers.css}">
-    <!--Favicon-->
-    <link rel="shortcut icon" href="/images/favicon.png" type="image/x-icon" th:href="@{/images/favicon.png}">
-    <link rel="icon" href="/images/favicon.png" type="image/x-icon" th:href="@{/images/favicon.png}">
-
-</head>
+<head th:replace="~{fragments/head :: head('Lectures')}"></head>
 
 <body>
 <!-- preloader start -->
@@ -208,25 +170,6 @@
 <div th:replace="fragments/headerAndFooter :: footer"></div>
 <!-- /footer -->
 
-<!-- jQuery -->
-<script src="/plugins/jQuery/jquery.min.js" th:href="@{/plugins/jQuery/jquery.min.js}"></script>
-<!-- Bootstrap JS -->
-<script src="/plugins/bootstrap/bootstrap.min.js" th:href="@{/plugins/bootstrap/bootstrap.min.js}"></script>
-<!-- slick slider -->
-<script src="/plugins/slick/slick.min.js" th:href="@{/plugins/slick/slick.min.js}"></script>
-<!-- aos -->
-<script src="/plugins/aos/aos.js" th:href="@{/plugins/aos/aos.js}"></script>
-<!-- venobox popup -->
-<script src="/plugins/venobox/venobox.min.js" th:href="@{/plugins/venobox/venobox.min.js}"></script>
-<!-- filter -->
-<script src="/plugins/filterizr/jquery.filterizr.min.js"
-        th:href="@{/plugins/filterizr/jquery.filterizr.min.js}"></script>
-<!-- google map -->
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCcABaamniA6OL5YvYSpB3pFMNrXwXnLwU"></script>
-<script src="/plugins/google-map/gmap.js" th:href="@{/plugins/google-map/gmap.js}"></script>
-
-<!-- Main Script -->
-<script src="/js/script.js" th:href="@{/js/script.js}"></script>
 
 </body>
 </html>

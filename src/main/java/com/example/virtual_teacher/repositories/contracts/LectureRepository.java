@@ -15,6 +15,8 @@ public interface LectureRepository {
 
     List<Lecture> lecturesByCourseId(int id);
 
+    List<Lecture> getPublishedByCourseId(int courseId);
+
     Lecture getByTitle(String title);
 
     long lectureCount();
@@ -26,4 +28,6 @@ public interface LectureRepository {
     Lecture delete(int id);
 
     List<Lecture> getAllByTeacherId(int id);
+
+    List<Lecture> getByCourseAndTeacher(int courseId, int teacherId);
 }

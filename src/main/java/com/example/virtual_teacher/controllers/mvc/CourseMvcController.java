@@ -24,6 +24,7 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/courses")
@@ -91,6 +92,21 @@ public class CourseMvcController {
         return lectureService.lectureCount();
     }
 
+    @ModelAttribute("teachers")
+    public List<User> populateTeachers() {
+        return userService.getTeachers();
+    }
+
+    @ModelAttribute("enrolledView")
+    public boolean populateEnrolledView() {
+        return false;
+    }
+
+    @ModelAttribute("enrolledCount")
+    public int populateEnrolledCount() {
+        return 0;
+    }
+
 
     @GetMapping
     public String showCourses(@ModelAttribute("filterOptions") CourseFilterDto courseFilterDto, Model model) {
@@ -114,6 +130,27 @@ public class CourseMvcController {
         model.addAttribute("coursesFiltered", courses);
         model.addAttribute("users", userService.getAll());
         model.addAttribute("teacherApplicationsNumber", userService.getAllTeacherApplications().size());
+        return "courses";
+    }
+
+    @GetMapping("/mine")
+    public String showMyEnrolledCourses(HttpSession session, Model model) {
+        User authUser;
+        try {
+            authUser = authenticationHelper.tryGetUser(session);
+        } catch (AuthenticationFailureException e) {
+            return "redirect:/auth/login";
+        }
+
+        List<Course> enrolledCourses = courseService.getByUserId(authUser.getId()).stream()
+                .map(UsersCourses::getCourse)
+                .collect(Collectors.toList());
+        ratingService.updateAvgRatingOfCourses(enrolledCourses);
+
+        model.addAttribute("coursesFiltered", enrolledCourses);
+        model.addAttribute("enrolledView", true);
+        model.addAttribute("enrolledCount", enrolledCourses.size());
+        model.addAttribute("filterOptions", new CourseFilterDto());
         return "courses";
     }
 
@@ -159,7 +196,13 @@ public class CourseMvcController {
             model.addAttribute("newReview", new RatingDto());
             model.addAttribute("ratingsByCourseId", ratingService.getByCourseId(course.getId()));
             model.addAttribute("ratingsCount", ratingService.getRatingsCount(course.getId()));
-            model.addAttribute("lectures", lectureService.getByCourseId(course.getId()));
+            boolean canManageCourse = user.isAdmin()
+                    || (course.getTeacher() != null && user.getId() == course.getTeacher().getId());
+            model.addAttribute("canManageCourse", canManageCourse);
+            List<Lecture> lectures = canManageCourse
+                    ? lectureService.getByCourseAndTeacher(course.getId(), user.getId())
+                    : lectureService.getPublishedByCourseId(course.getId());
+            model.addAttribute("lectures", lectures);
             model.addAttribute("commentsByCourseId", courseCommentService.getByCourseId(course.getId()));
             model.addAttribute("newComment", new CourseCommentDto());
             model.addAttribute("userGrade", user);

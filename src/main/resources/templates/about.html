@@ -1,42 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:border-radius="http://www.w3.org/1999/xhtml">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-    <!-- Mobile Specific Metas
-  ================================================== -->
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="description" content="Construction Html5 Template">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-    <meta name="author" content="Themefisher">
-    <meta name="generator" content="Themefisher Educenter HTML Template v1.0">
-
-    <!-- ** ../plugins Needed for the Project ** -->
-    <!-- Bootstrap -->
-    <link rel="stylesheet" href="/plugins/bootstrap/bootstrap.min.css"
-          th:href="@{/plugins/bootstrap/bootstrap.min.css}">
-    <!-- slick slider -->
-    <link rel="stylesheet" href="/plugins/slick/slick.css" th:href="@{/plugins/slick/slick.css}">
-    <!-- themefy-icon -->
-    <link rel="stylesheet" href="/plugins/themify-icons/themify-icons.css"
-          th:href="@{/plugins/themify-icons/themify-icons.css}">
-    <!-- animation css -->
-    <link rel="stylesheet" href="/plugins/animate/animate.css" th:href="@{/plugins/animate/animate.css}">
-    <!-- aos -->
-    <link rel="stylesheet" href="/plugins/aos/aos.css" th:href="@{/plugins/aos/aos.css}">
-    <!-- venobox popup -->
-    <link rel="stylesheet" href="/plugins/venobox/venobox.css" th:href="@{/plugins/venobox/venobox.css}">
-
-    <!-- Main Stylesheet -->
-    <link href="/css/style.css" rel="stylesheet" th:href="@{/css/style.css}">
-    <link href="/css/styleUsers.css" rel="stylesheet" th:href="@{/css/styleUsers.css}">
-
-    <link href="/js/script.js" rel="script" th:href="@{/js/script.js}">
-
-    <!--Favicon-->
-    <link rel="shortcut icon" href="/images/favicon.png" type="image/x-icon" th:href="@{/images/favicon.png}">
-    <link rel="icon" href="/images/favicon.png" type="image/x-icon" th:href="@{/images/favicon.png}">
-</head>
+<head th:replace="~{fragments/head :: head('About')}"></head>
 <body>
 <!-- preloader start -->
 <div class="preloader">
