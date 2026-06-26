@@ -7,7 +7,7 @@
   <img src="/images/preloader.gif" alt="preloader" th:src="@{/images/preloader.gif}">
 </div>
 
-<div th:replace="fragments/headerAndFooter :: header"></div>
+<div th:replace="~{fragments/headerAndFooter :: header}"></div>
 
 <section class="section-sm">
   <div class="container notes-page">
@@ -77,7 +77,7 @@
   </div>
 </div>
 
-<div th:replace="fragments/headerAndFooter :: footer"></div>
+<div th:replace="~{fragments/headerAndFooter :: footer}"></div>
 
 
 </body>

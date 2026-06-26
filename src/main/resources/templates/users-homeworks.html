@@ -7,7 +7,7 @@
     <img src="/images/preloader.gif" alt="preloader" th:src="@{/images/preloader.gif}">
 </div>
 
-<div th:replace="fragments/headerAndFooter :: header"></div>
+<div th:replace="~{fragments/headerAndFooter :: header}"></div>
 
 <section class="page-title-section overlay" th:attr="data-background=@{/images/backgrounds/page-title.jpg}">
     <div class="container">
@@ -129,6 +129,6 @@
     </div>
 </section>
 
-<div th:replace="fragments/headerAndFooter :: footer"></div>
+<div th:replace="~{fragments/headerAndFooter :: footer}"></div>
 </body>
 </html>

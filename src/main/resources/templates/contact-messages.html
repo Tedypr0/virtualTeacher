@@ -9,7 +9,7 @@
 </div>
 
 <!-- header -->
-<div th:replace="fragments/headerAndFooter :: header"></div>
+<div th:replace="~{fragments/headerAndFooter :: header}"></div>
 
 <!-- page title -->
 <section class="page-title-section overlay" th:attr="data-background=@{/images/backgrounds/page-title.jpg}">
@@ -75,6 +75,6 @@
 </section>
 
 <!-- footer -->
-<div th:replace="fragments/headerAndFooter :: footer"></div>
+<div th:replace="~{fragments/headerAndFooter :: footer}"></div>
 </body>
 </html>
