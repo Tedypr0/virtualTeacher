@@ -79,6 +79,52 @@
                                         <i class="ti-user" aria-hidden="true"></i>
                                         <span>Profile</span>
                                     </a>
+                                    <!-- Student links -->
+                                    <a role="menuitem" class="header-profile-menu-link"
+                                       th:if="${session.isAdmin != true and session.isTeacher != true}"
+                                       th:href="@{/courses/mine}">
+                                        <i class="ti-book" aria-hidden="true"></i>
+                                        <span>My Courses</span>
+                                    </a>
+                                    <a role="menuitem" class="header-profile-menu-link"
+                                       th:if="${session.isAdmin != true and session.isTeacher != true}"
+                                       th:href="@{/users/myHomeworks}">
+                                        <i class="ti-clipboard" aria-hidden="true"></i>
+                                        <span>My Homeworks</span>
+                                    </a>
+                                    <a role="menuitem" class="header-profile-menu-link"
+                                       th:if="${session.isAdmin != true and session.isTeacher != true}"
+                                       th:href="@{/users/myNotes}">
+                                        <i class="ti-pencil-alt" aria-hidden="true"></i>
+                                        <span>My Notes</span>
+                                    </a>
+                                    <!-- Teacher links -->
+                                    <a role="menuitem" class="header-profile-menu-link"
+                                       th:if="${session.isTeacher == true}"
+                                       th:href="@{/courses/teacher}">
+                                        <i class="ti-book" aria-hidden="true"></i>
+                                        <span>My Courses</span>
+                                    </a>
+                                    <a role="menuitem" class="header-profile-menu-link"
+                                       th:if="${session.isTeacher == true}"
+                                       th:href="@{/users/teacher/homeworks}">
+                                        <i class="ti-clipboard" aria-hidden="true"></i>
+                                        <span>View Homeworks</span>
+                                    </a>
+                                    <!-- Admin links -->
+                                    <a role="menuitem" class="header-profile-menu-link"
+                                       th:if="${session.isAdmin == true}"
+                                       th:href="@{/users}">
+                                        <i class="ti-id-badge" aria-hidden="true"></i>
+                                        <span>Users</span>
+                                    </a>
+                                    <a role="menuitem" class="header-profile-menu-link"
+                                       th:if="${session.isAdmin == true}"
+                                       th:href="@{/users/applications}">
+                                        <i class="ti-agenda" aria-hidden="true"></i>
+                                        <span>Teacher Applications</span>
+                                    </a>
+                                    <!-- Admin + Teacher shared -->
                                     <a role="menuitem" class="header-profile-menu-link"
                                        th:if="${session.isAdmin == true or session.isTeacher == true}"
                                        th:href="@{/about/contacts/messages}">
@@ -212,7 +258,7 @@
                             var CurrentYear = new Date().getFullYear()
                             document.write(CurrentYear)
                         </script>
-                        , designed &amp; developed by <span class="text-muted">A39 Java Group 07</span>
+                        , designed &amp; developed by <span class="text-muted">Teo</span>
                     </p>
                 </div>
                 <div class="col-sm-5 text-sm-right text-center">
