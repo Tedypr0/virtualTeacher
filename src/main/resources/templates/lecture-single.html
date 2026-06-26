@@ -235,13 +235,9 @@
                                     ·
                                     <span th:text="${lectureComment.creationDate}">Date</span>
                                 </p>
-                                <p class="lecture-note-preview" th:text="${#strings.abbreviate(lectureComment.content, 140)}">Comment preview…</p>
+                                <p class="lecture-note-preview" th:text="${lectureComment.content}">Comment…</p>
                             </div>
                             <div class="note-card-actions">
-                                <button type="button" class="btn btn-outline-primary btn-sm" data-toggle="modal"
-                                        th:attr="data-target='#lectureCommentViewModal' + ${lectureComment.id}">
-                                    <i class="ti-eye"></i> View
-                                </button>
                                 <button th:if="${lectureComment.user.id == user.id || session.isAdmin}"
                                         type="button" class="btn btn-outline-secondary btn-sm" data-toggle="modal"
                                         th:attr="data-target='#lectureCommentEditModal' + ${lectureComment.id}">
