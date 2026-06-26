@@ -9,36 +9,7 @@
 </head>
 <body>
 
-<div th:fragment="portal">
-    <div class="portal-bar portal-color-yellowish" th:if="${isAuthenticated == true and session.isAdmin == true}">
-      <div class="container">
-        <ul class="list-inline portal-bar-links mb-0">
-          <li class="list-inline-item"><a class="text-uppercase text-color portal-nav-link" th:href="@{/users}">Users</a></li>
-          <li class="list-inline-item"><a class="text-uppercase text-color portal-nav-link" th:href="@{/users/applications}">Teacher Applications</a></li>
-          <li class="list-inline-item"><a class="badge-notification-number badge-danger"><p class="p-application-numbers" th:text="${teacherApplicationsNumber}">0</p></a></li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="portal-bar portal-color-yellowish" th:if="${isAuthenticated == true and session.isTeacher == true}">
-      <div class="container">
-        <ul class="list-inline portal-bar-links mb-0">
-          <li class="list-inline-item"><a class="text-uppercase text-color portal-nav-link" th:href="@{/courses/teacher}">Browse My Courses</a></li>
-          <li class="list-inline-item"><a class="text-uppercase text-color portal-nav-link" th:href="@{/users/teacher/homeworks}">View Homeworks</a></li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="portal-bar portal-color-yellowish" th:if="${isAuthenticated == true and session.isAdmin != true and session.isTeacher != true}">
-      <div class="container">
-        <ul class="list-inline portal-bar-links mb-0">
-          <li class="list-inline-item"><a class="text-uppercase text-color portal-nav-link" th:href="@{/courses/mine}">My Courses</a></li>
-          <li class="list-inline-item"><a class="text-uppercase text-color portal-nav-link" th:href="@{/users/myHomeworks}">My Homeworks</a></li>
-          <li class="list-inline-item"><a class="text-uppercase text-color portal-nav-link" th:href="@{/users/myNotes}">My Notes</a></li>
-        </ul>
-      </div>
-    </div>
-</div>
+<div th:fragment="portal"></div>
 
 </body>
 </html>
